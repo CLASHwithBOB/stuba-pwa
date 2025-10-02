@@ -59,23 +59,23 @@ const linksList: EssentialLinkProps[] = [
     icon: 'rss_feed',
     link: 'https://twitter.quasar.dev',
   },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-];
+    {
+      title: 'Facebook',
+      caption: '@QuasarFramework',
+      icon: 'public',
+      link: 'https://facebook.quasar.dev',
+    },
+    {
+      title: 'Quasar Awesome',
+      caption: 'Community Quasar projects',
+      icon: 'favorite',
+      link: 'https://awesome.quasar.dev',
+    },
+  ];
 
-const leftDrawerOpen = ref(false);
+  const leftDrawerOpen = ref(false);
 
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
+  function toggleLeftDrawer() {
+    leftDrawerOpen.value = !leftDrawerOpen.value;
+  }
 </script>
