@@ -9,7 +9,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/register',
     component: () => import('layouts/auth/GuestLayout.vue'),
-    children: [{ path: '', component: () => import('pages/RegisterPage.vue') }],
+    children: [{ path: '', component: () => import('pages/auth/RegisterPage.vue') }],
   },
   {
     path: '/:catchAll(.*)*',
