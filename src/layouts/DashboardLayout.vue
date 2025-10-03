@@ -22,7 +22,7 @@ const mobileView = computed(() => (selectedUser.value ? 'chat' : 'list'));
           icon="arrow_back"
           @click="selectedUser = null"
         />
-        <q-toolbar-title>PingMe</q-toolbar-title>
+        <q-toolbar-title class="unselectable">PingMe</q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -31,15 +31,15 @@ const mobileView = computed(() => (selectedUser.value ? 'chat' : 'list'));
         <q-page
           v-if="isDesktop || mobileView === 'list'"
           class="bg-grey-2"
-          :class="isDesktop ? 'col-auto' : 'col'"
-          :style="isDesktop ? 'width:300px' : ''"
+          :class="!isDesktop && 'col'"
+          :style="isDesktop && 'width:300px'"
         >
           <q-list>
             <q-item clickable v-ripple @click="selectedUser = 'User 1'">
-              <q-item-section>User 1</q-item-section>
+              <q-item-section class="unselectable">User 1</q-item-section>
             </q-item>
             <q-item clickable v-ripple @click="selectedUser = 'User 2'">
-              <q-item-section>User 2</q-item-section>
+              <q-item-section class="unselectable">User 2</q-item-section>
             </q-item>
           </q-list>
         </q-page>
