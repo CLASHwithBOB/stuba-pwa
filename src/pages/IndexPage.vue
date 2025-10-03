@@ -12,7 +12,7 @@ interface LoginData {
 }
 
 
-import Login from 'src/pages/auth/Login.vue';
+import Login from 'src/pages/auth/LoginPage.vue'
 
 const handleLogin = (loginData : LoginData) => {
   console.log('Login data received in IndexPage:', loginData)
