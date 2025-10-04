@@ -60,7 +60,7 @@ const users = ref([
               <ChatItem
                 v-for="(user, index) in users"
                 :key="index"
-                :user="user"
+                :user="{ name: user.name, isOnline: index % 2 === 0 }"
                 @click="selectedUser = user.name"
               >
                 {{ user.name }}

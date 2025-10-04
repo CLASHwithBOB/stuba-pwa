@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  user: { name: string };
+  user: { name: string; isOnline: boolean };
 }>();
 
 const randomNum = Math.round(Math.random() * 20);
@@ -11,6 +11,12 @@ const randomNum = Math.round(Math.random() * 20);
     <q-item-section top avatar>
       <q-avatar>
         <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+        <q-icon
+          name="circle"
+          class="absolute-bottom-right"
+          size="12px"
+          :color="user.isOnline ? 'green-14' : 'grey-6'"
+        />
       </q-avatar>
     </q-item-section>
 
@@ -36,5 +42,6 @@ const randomNum = Math.round(Math.random() * 20);
   display: grid;
   gap: 2px;
   padding-top: 2px;
+  justify-content: start;
 }
 </style>
