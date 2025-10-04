@@ -3,7 +3,6 @@ import { ref } from 'vue';
 
 const email = ref('');
 const submitting = ref(false);
-
 </script>
 
 <template>
@@ -32,7 +31,6 @@ const submitting = ref(false);
                     </template>
                   </q-input>
                 </div>
-
 
                 <q-btn
                   type="submit"
@@ -67,5 +65,3 @@ const submitting = ref(false);
     </div>
   </q-page>
 </template>
-
-
