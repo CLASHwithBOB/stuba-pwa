@@ -3,30 +3,7 @@ import { ref } from 'vue';
 
 const email = ref('');
 const submitting = ref(false);
-const success = ref(false);
-const error = ref('');
 
-const sendReset = async () => {
-  error.value = '';
-  success.value = false;
-
-  const emailVal = (email.value || '').trim();
-  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailVal || !emailRe.test(emailVal)) {
-    error.value = 'Please enter a valid email address.';
-    return;
-  }
-
-  submitting.value = true;
-  try {
-    await new Promise((r) => setTimeout(r, 400));
-    success.value = true;
-  } catch {
-    error.value = 'Unable to send reset link. Try again later.';
-  } finally {
-    submitting.value = false;
-  }
-};
 </script>
 
 <template>
@@ -46,7 +23,7 @@ const sendReset = async () => {
         <div class="row">
           <q-card bordered class="q-pa-xl shadow-1" style="border-radius: 30px; width: 400px">
             <q-card-section class="q-pa-none">
-              <q-form class="q-gutter-md" @submit.prevent="sendReset">
+              <q-form class="q-gutter-md">
                 <div class="q-mb-md">
                   <label class="text-caption text-weight-medium q-mb-xs block">Email address</label>
                   <q-input outlined v-model="email" type="email" placeholder="Enter your email">
@@ -56,13 +33,6 @@ const sendReset = async () => {
                   </q-input>
                 </div>
 
-                <div v-if="error" class="text-negative q-mb-sm text-caption">
-                  {{ error }}
-                </div>
-
-                <div v-if="success" class="text-positive q-mb-sm text-caption">
-                  Reset link sent. Check your inbox.
-                </div>
 
                 <q-btn
                   type="submit"

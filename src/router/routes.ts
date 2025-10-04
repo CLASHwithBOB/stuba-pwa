@@ -12,7 +12,7 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/auth/RegisterPage.vue') }],
   },
   {
-    path: '/forgotpswd',
+    path: '/forgot-password',
     component: () => import('layouts/auth/GuestLayout.vue'),
     children: [{ path: '', component: () => import('pages/auth/ForgotPassword.vue') }],
   },
