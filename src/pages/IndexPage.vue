@@ -1,9 +1,3 @@
-<template>
- <q-page class="flex flex-center bg-grey-2">
-    <Login @login="handleLogin" />
-  </q-page>
-</template>
-
 <script setup lang="ts">
 
 interface LoginData {
@@ -18,3 +12,10 @@ const handleLogin = (loginData : LoginData) => {
   console.log('Login data received in IndexPage:', loginData)
 }
 </script>
+<template>
+ <q-page class="flex flex-center bg-grey-2">
+    <Login @login="handleLogin" />
+  </q-page>
+</template>
+
+
