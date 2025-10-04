@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useQuasar } from 'quasar';
+import ChatItem from 'src/components/ChatItem.vue';
 
 const $q = useQuasar();
 
@@ -8,6 +9,26 @@ const selectedUser = ref<string | null>(null);
 
 const isDesktop = computed(() => $q.screen.width >= 830);
 const mobileView = computed(() => (selectedUser.value ? 'chat' : 'list'));
+
+const users = ref([
+  { name: 'User 1' },
+  { name: 'User 2' },
+  { name: 'User 3' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+  { name: 'User 4' },
+]);
 </script>
 
 <template>
@@ -22,7 +43,7 @@ const mobileView = computed(() => (selectedUser.value ? 'chat' : 'list'));
           icon="arrow_back"
           @click="selectedUser = null"
         />
-        <q-toolbar-title class="unselectable">PingMe</q-toolbar-title>
+        <q-toolbar-title class="text-unselectable">PingMe</q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -34,14 +55,18 @@ const mobileView = computed(() => (selectedUser.value ? 'chat' : 'list'));
           :class="!isDesktop && 'col'"
           :style="isDesktop && 'width:300px'"
         >
-          <q-list>
-            <q-item clickable v-ripple @click="selectedUser = 'User 1'">
-              <q-item-section class="unselectable">User 1</q-item-section>
-            </q-item>
-            <q-item clickable v-ripple @click="selectedUser = 'User 2'">
-              <q-item-section class="unselectable">User 2</q-item-section>
-            </q-item>
-          </q-list>
+          <q-scroll-area class="fit">
+            <q-list>
+              <ChatItem
+                v-for="(user, index) in users"
+                :key="index"
+                :user="user"
+                @click="selectedUser = user.name"
+              >
+                {{ user.name }}
+              </ChatItem>
+            </q-list>
+          </q-scroll-area>
         </q-page>
 
         <q-page v-if="isDesktop || mobileView === 'chat'" class="col bg-white column">
