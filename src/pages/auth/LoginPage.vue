@@ -60,7 +60,7 @@ const isPwd = ref(true);
                     bordered
                     class="text-caption"
                   />
-                  <a href="#" class="text-caption text-primary text-weight-medium"
+                  <a href="forgotpswd" class="text-caption text-primary text-weight-medium"
                     >Forgot password?</a
                   >
                 </div>
