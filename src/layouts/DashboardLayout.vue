@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
 import { useQuasar } from 'quasar';
 import ChatItem from 'src/components/ChatItem.vue';
+import { computed, ref } from 'vue';
 
 const $q = useQuasar();
 
