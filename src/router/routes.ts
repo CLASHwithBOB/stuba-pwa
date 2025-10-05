@@ -22,6 +22,11 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/auth/ForgotPassword.vue') }],
   },
   {
+    path: '/reset-password',
+    component: () => import('layouts/auth/GuestLayout.vue'),
+    children: [{ path: '', component: () => import('pages/auth/ResetPassword.vue') }],
+  },
+  {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },
