@@ -2,6 +2,7 @@
 import { useQuasar } from 'quasar';
 import ChatItem from 'src/components/ChatItem.vue';
 import CommandLine from 'src/components/CommandLine.vue';
+import { USER_STATUS } from 'src/enums/status';
 import { computed, ref } from 'vue';
 
 const $q = useQuasar();
@@ -63,7 +64,10 @@ const users = ref([
               <ChatItem
                 v-for="(user, index) in users"
                 :key="index"
-                :user="{ name: user.name, isOnline: index % 2 === 0 }"
+                :user="{
+                  name: user.name,
+                  status: Object.values(USER_STATUS)[index % 3] as USER_STATUS,
+                }"
                 @click="selectedUser = user.name"
               >
                 {{ user.name }}

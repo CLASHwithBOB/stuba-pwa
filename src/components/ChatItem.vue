@@ -1,9 +1,20 @@
 <script setup lang="ts">
+import type { USER_STATUS } from 'src/enums/status';
+
 defineProps<{
-  user: { name: string; isOnline: boolean };
+  user: {
+    name: string;
+    status: USER_STATUS;
+  };
 }>();
 
 const randomNum = Math.round(Math.random() * 20);
+
+const statusColorMap: Record<USER_STATUS, string> = {
+  online: 'green-14',
+  dnd: 'red-14',
+  offline: 'grey-6',
+};
 </script>
 
 <template>
@@ -11,13 +22,12 @@ const randomNum = Math.round(Math.random() * 20);
     <q-item-section top avatar>
       <q-avatar>
         <q-img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-        <!-- TODO [PWA-22]: Make different colors based on statuses: online, dnd, offline -->
         <q-icon
-          v-if="user.isOnline"
           name="circle"
           class="absolute-bottom-right"
+          style="border: 6.5px solid #f5f5f5; border-radius: 50%"
           size="12px"
-          color="green-14"
+          :color="statusColorMap[user.status]"
         />
       </q-avatar>
     </q-item-section>
