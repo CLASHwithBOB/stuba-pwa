@@ -10,12 +10,14 @@ const randomNum = Math.round(Math.random() * 20);
   <q-item clickable v-ripple @click="$emit('click')" class="text-unselectable">
     <q-item-section top avatar>
       <q-avatar>
-        <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+        <q-img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+        <!-- TODO [PWA-22]: Make different colors based on statuses: online, dnd, offline -->
         <q-icon
+          v-if="user.isOnline"
           name="circle"
           class="absolute-bottom-right"
           size="12px"
-          :color="user.isOnline ? 'green-14' : 'grey-6'"
+          color="green-14"
         />
       </q-avatar>
     </q-item-section>
