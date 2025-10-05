@@ -1,6 +1,12 @@
 <script setup lang="ts">
+import { STATUSES } from 'src/constants/statuses';
+import type { USER_STATUS } from 'src/enums/status';
+
 defineProps<{
-  user: { name: string; isOnline: boolean };
+  user: {
+    name: string;
+    status: USER_STATUS;
+  };
 }>();
 
 const randomNum = Math.round(Math.random() * 20);
@@ -11,14 +17,17 @@ const randomNum = Math.round(Math.random() * 20);
     <q-item-section top avatar>
       <q-avatar>
         <q-img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-        <!-- TODO [PWA-22]: Make different colors based on statuses: online, dnd, offline -->
         <q-icon
-          v-if="user.isOnline"
           name="circle"
           class="absolute-bottom-right"
+          style="border: 6.5px solid #f5f5f5; border-radius: 50%"
           size="12px"
-          color="green-14"
-        />
+          :color="STATUSES[user.status].color"
+        >
+          <q-tooltip :delay="300" anchor="top middle" self="bottom middle">
+            {{ STATUSES[user.status].label }}
+          </q-tooltip>
+        </q-icon>
       </q-avatar>
     </q-item-section>
 
