@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <q-page v-if="isDesktop || mobileView === 'chat'" class="col bg-white column">
+  <q-page class="col bg-white column" v-if="isDesktop || mobileView === 'chat'">
     <div class="col scroll q-pa-md">
       <p v-if="selectedUser">Chat with {{ selectedUser }}</p>
       <p v-else>Select a chat</p>

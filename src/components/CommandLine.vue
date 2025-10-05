@@ -112,6 +112,6 @@ function validateCommand(text: string): string | null {
 
 <template>
   <q-form @submit="onSubmit" style="width: 100%; max-width: 250px">
-    <q-input dark dense standout v-model="text" placeholder="Type a command..." maxlength="128" />
+    <q-input v-model="text" dark dense standout placeholder="Type a command..." maxlength="128" />
   </q-form>
 </template>

@@ -20,12 +20,12 @@ const submitting = ref(false);
         </div>
 
         <div class="row">
-          <q-card bordered class="q-pa-xl shadow-1" style="border-radius: 30px; width: 400px">
+          <q-card class="q-pa-xl shadow-1" bordered style="border-radius: 30px; width: 400px">
             <q-card-section class="q-pa-none">
               <q-form class="q-gutter-md">
                 <div class="q-mb-md">
                   <label class="text-caption text-weight-medium q-mb-xs block">Email address</label>
-                  <q-input outlined v-model="email" type="email" placeholder="Enter your email">
+                  <q-input v-model="email" outlined type="email" placeholder="Enter your email">
                     <template v-slot:prepend>
                       <q-icon name="mail" />
                     </template>
@@ -33,12 +33,12 @@ const submitting = ref(false);
                 </div>
 
                 <q-btn
+                  class="full-width q-mb-md"
                   type="submit"
                   :loading="submitting"
                   unelevated
                   color="primary"
                   size="lg"
-                  class="full-width q-mb-md"
                   label="Send reset link"
                   style="height: 48px; font-weight: 600; border-radius: 25px"
                 />
@@ -46,7 +46,7 @@ const submitting = ref(false);
                 <div class="text-center">
                   <p class="text-caption text-grey-7 q-my-none">
                     Remembered your password?
-                    <a href="/login" class="text-primary text-weight-medium">Sign in</a>
+                    <a class="text-primary text-weight-medium" href="/login">Sign in</a>
                   </p>
                 </div>
               </q-form>

@@ -54,8 +54,8 @@ const users = ref([
     <q-page-container>
       <div class="row no-wrap full-height">
         <q-page
-          v-if="isDesktop || mobileView === 'list'"
           class="bg-grey-2"
+          v-if="isDesktop || mobileView === 'list'"
           :class="!isDesktop && 'col'"
           :style="isDesktop && 'width:300px'"
         >
