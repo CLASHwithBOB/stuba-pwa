@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 import ChatItem from 'src/components/ChatItem.vue';
+import CommandLine from 'src/components/CommandLine.vue';
 import { computed, ref } from 'vue';
 
 const $q = useQuasar();
@@ -44,6 +45,8 @@ const users = ref([
           @click="selectedUser = null"
         />
         <q-toolbar-title class="text-unselectable">PingMe</q-toolbar-title>
+
+        <CommandLine />
       </q-toolbar>
     </q-header>
 
@@ -69,14 +72,9 @@ const users = ref([
           </q-scroll-area>
         </q-page>
 
-        <q-page v-if="isDesktop || mobileView === 'chat'" class="col bg-white column">
-          <div class="col scroll q-pa-md">
-            <p v-if="selectedUser">Chat with {{ selectedUser }}</p>
-            <p v-else>Select a chat</p>
-          </div>
-
-          <div class="bg-orange q-pa-sm">Chat input here</div>
-        </q-page>
+        <router-view v-slot="{ Component }">
+          <component :is="Component" :selectedUser :isDesktop :mobileView />
+        </router-view>
       </div>
     </q-page-container>
   </q-layout>
