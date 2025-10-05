@@ -20,12 +20,12 @@ const isPwd = ref(true);
         </div>
 
         <div class="row">
-          <q-card bordered class="q-pa-xl shadow-1" style="border-radius: 30px; width: 400px">
+          <q-card class="q-pa-xl shadow-1" bordered style="border-radius: 30px; width: 400px">
             <q-card-section class="q-pa-none">
               <q-form class="q-gutter-md">
                 <div class="q-mb-md">
                   <label class="text-caption text-weight-medium q-mb-xs block">Email address</label>
-                  <q-input outlined v-model="email" type="email" placeholder="Enter your email">
+                  <q-input v-model="email" outlined type="email" placeholder="Enter your email">
                     <template v-slot:prepend>
                       <q-icon name="mail" />
                     </template>
@@ -35,8 +35,8 @@ const isPwd = ref(true);
                 <div class="q-mb-sm">
                   <label class="text-caption text-weight-medium q-mb-xs block">Password</label>
                   <q-input
-                    outlined
                     v-model="password"
+                    outlined
                     :type="isPwd ? 'password' : 'text'"
                     placeholder="Enter your password"
                   >
@@ -45,8 +45,8 @@ const isPwd = ref(true);
                     </template>
                     <template v-slot:append>
                       <q-icon
-                        :name="isPwd ? 'visibility_off' : 'visibility'"
                         class="cursor-pointer"
+                        :name="isPwd ? 'visibility_off' : 'visibility'"
                         @click="isPwd = !isPwd"
                       />
                     </template>
@@ -55,21 +55,21 @@ const isPwd = ref(true);
 
                 <div class="row justify-between items-center q-mb-lg">
                   <q-checkbox
+                    class="text-caption"
                     v-model="rememberMe"
                     label="Remember me"
                     bordered
-                    class="text-caption"
                   />
-                  <a href="/forgot-password" class="text-caption text-primary text-weight-medium"
+                  <a class="text-caption text-primary text-weight-medium" href="/forgot-password"
                     >Forgot password?</a
                   >
                 </div>
 
                 <q-btn
+                  class="full-width q-mb-md"
                   unelevated
                   color="primary"
                   size="lg"
-                  class="full-width q-mb-md"
                   label="Sign in"
                   style="height: 48px; font-weight: 600; border-radius: 25px"
                 />
@@ -77,7 +77,7 @@ const isPwd = ref(true);
                 <div class="text-center">
                   <p class="text-caption text-grey-7 q-my-none">
                     Don't have an account?
-                    <a href="/register" class="text-primary text-weight-medium">Sign up</a>
+                    <a class="text-primary text-weight-medium" href="/register">Sign up</a>
                   </p>
                 </div>
               </q-form>

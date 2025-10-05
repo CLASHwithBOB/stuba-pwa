@@ -21,7 +21,7 @@ const displayPasswordConfirm = ref(false);
       <q-card-section>
         <form class="q-gutter-md">
           <q-input v-model="nickname" label="Nickname" outlined dense />
-          <q-input type="email" v-model="email" label="Email" outlined dense />
+          <q-input v-model="email" type="email" label="Email" outlined dense />
           <q-input
             v-model="password"
             :type="displayPassword ? 'text' : 'password'"
@@ -31,8 +31,8 @@ const displayPasswordConfirm = ref(false);
           >
             <template v-slot:append>
               <q-icon
-                :name="displayPassword ? 'visibility_off' : 'visibility'"
                 class="cursor-pointer"
+                :name="displayPassword ? 'visibility_off' : 'visibility'"
                 @click="displayPassword = !displayPassword"
               />
             </template>
@@ -46,8 +46,8 @@ const displayPasswordConfirm = ref(false);
           >
             <template v-slot:append>
               <q-icon
-                :name="displayPasswordConfirm ? 'visibility_off' : 'visibility'"
                 class="cursor-pointer"
+                :name="displayPasswordConfirm ? 'visibility_off' : 'visibility'"
                 @click="displayPasswordConfirm = !displayPasswordConfirm"
               />
             </template>
@@ -55,14 +55,14 @@ const displayPasswordConfirm = ref(false);
         </form>
       </q-card-section>
 
-      <q-card-actions vertical class="q-px-md">
+      <q-card-actions class="q-px-md" vertical>
         <q-btn color="primary">Create an account</q-btn>
       </q-card-actions>
 
       <q-card-section class="text-center">
         <p class="text-grey-6">
           Already have an account?
-          <router-link to="/login" class="text-primary">Log in</router-link>
+          <router-link class="text-primary" to="/login">Log in</router-link>
         </p>
       </q-card-section>
     </q-card>

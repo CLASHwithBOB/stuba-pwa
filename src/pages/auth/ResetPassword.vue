@@ -11,13 +11,13 @@ const isConfirmPwd = ref(true);
   <q-page class="row items-center justify-center bg-purple-1 page-full">
     <div class="card-wrap">
       <q-card
-        bordered
         class="q-pa-xl shadow-1 hidden-xs hidden-sm"
+        bordered
         style="border-radius: 30px; width: 400px"
       >
         <div role="img">
           <div class="icon-inner">
-            <q-icon name="key" size="44px" class="text-white" />
+            <q-icon class="text-white" name="key" size="44px" />
           </div>
         </div>
 
@@ -34,8 +34,8 @@ const isConfirmPwd = ref(true);
             <div class="q-mb-md">
               <label class="text-caption text-weight-medium q-mb-xs block">New password</label>
               <q-input
-                outlined
                 v-model="password"
+                outlined
                 placeholder="Enter new password"
                 :type="isPwd ? 'password' : 'text'"
               >
@@ -44,8 +44,8 @@ const isConfirmPwd = ref(true);
                 </template>
                 <template v-slot:append>
                   <q-icon
-                    :name="isPwd ? 'visibility_off' : 'visibility'"
                     class="cursor-pointer"
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
                     @click="isPwd = !isPwd"
                   />
                 </template>
@@ -55,8 +55,8 @@ const isConfirmPwd = ref(true);
             <div class="q-mb-md">
               <label class="text-caption text-weight-medium q-mb-xs block">Re-enter password</label>
               <q-input
-                outlined
                 v-model="confirmPassword"
+                outlined
                 :type="isConfirmPwd ? 'password' : 'text'"
                 placeholder="Re-enter new password"
               >
@@ -65,19 +65,19 @@ const isConfirmPwd = ref(true);
                 </template>
                 <template v-slot:append>
                   <q-icon
-                    :name="isConfirmPwd ? 'visibility_off' : 'visibility'"
                     class="cursor-pointer"
+                    :name="isConfirmPwd ? 'visibility_off' : 'visibility'"
                     @click="isConfirmPwd = !isConfirmPwd"
                   />
                 </template>
               </q-input>
             </div>
             <q-btn
+              class="full-width q-mb-md"
               type="submit"
               unelevated
               color="primary"
               size="lg"
-              class="full-width q-mb-md"
               label="Reset password"
               style="height: 48px; font-weight: 600; border-radius: 25px"
             />
