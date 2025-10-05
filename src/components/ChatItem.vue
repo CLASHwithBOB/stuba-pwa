@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { STATUSES } from 'src/constants/statuses';
 import type { USER_STATUS } from 'src/enums/status';
 
 defineProps<{
@@ -9,12 +10,6 @@ defineProps<{
 }>();
 
 const randomNum = Math.round(Math.random() * 20);
-
-const statusColorMap: Record<USER_STATUS, string> = {
-  online: 'green-14',
-  dnd: 'red-14',
-  offline: 'grey-6',
-};
 </script>
 
 <template>
@@ -27,8 +22,12 @@ const statusColorMap: Record<USER_STATUS, string> = {
           class="absolute-bottom-right"
           style="border: 6.5px solid #f5f5f5; border-radius: 50%"
           size="12px"
-          :color="statusColorMap[user.status]"
-        />
+          :color="STATUSES[user.status].color"
+        >
+          <q-tooltip :delay="300" anchor="top middle" self="bottom middle">
+            {{ STATUSES[user.status].label }}
+          </q-tooltip>
+        </q-icon>
       </q-avatar>
     </q-item-section>
 
