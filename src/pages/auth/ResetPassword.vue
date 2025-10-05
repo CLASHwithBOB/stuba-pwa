@@ -16,23 +16,7 @@ const isConfirmPwd = ref(true);
         style="border-radius: 30px; width: 400px"
       >
         <div role="img">
-          <div
-            class="icon-inner"
-            :style="{
-              width: '64px',
-              height: '64px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: '#1976d2',
-              position: 'absolute',
-              top: 0,
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              overflow: 'visible',
-            }"
-          >
+          <div class="icon-inner">
             <q-icon name="key" size="44px" class="text-white" />
           </div>
         </div>
@@ -49,7 +33,12 @@ const isConfirmPwd = ref(true);
           <q-form class="q-gutter-md">
             <div class="q-mb-md">
               <label class="text-caption text-weight-medium q-mb-xs block">New password</label>
-              <q-input outlined v-model="password" placeholder="Enter new password">
+              <q-input
+                outlined
+                v-model="password"
+                placeholder="Enter new password"
+                :type="isPwd ? 'password' : 'text'"
+              >
                 <template v-slot:prepend>
                   <q-icon name="lock" />
                 </template>
@@ -98,3 +87,20 @@ const isConfirmPwd = ref(true);
     </div>
   </q-page>
 </template>
+
+<style scoped>
+.icon-inner {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1976d2;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+}
+</style>
