@@ -3,10 +3,12 @@ import { useQuasar } from 'quasar';
 import { COMMANDS } from 'src/constants/commands';
 import { commands } from 'src/lib/commands';
 import { ref } from 'vue';
+import HelpDialog from './HelpDialog.vue';
 
 const $q = useQuasar();
 
 const text = ref('');
+const showHelpDialog = ref(false);
 
 function onSubmit() {
   const trimmedText = text.value.trim();
@@ -55,21 +57,12 @@ function onSubmit() {
       $q.notify(commands.theme(trimmedText.split(' ')[1]));
       break;
     case '/help':
-      $q.notify(commands.help());
+      showHelpDialog.value = true;
       break;
   }
-}
 
-// join
-// quit
-// cancel
-// list
-// invite
-// revoke
-// kick
-// status
-// theme
-// help
+  text.value = '';
+}
 
 function validateCommand(text: string): string | null {
   if (!text.startsWith('/')) {
@@ -83,10 +76,10 @@ function validateCommand(text: string): string | null {
   let foundCommand = false;
 
   for (const command of COMMANDS) {
-    if (text.includes(`/${command.verb}`)) {
-      foundCommand = true;
+    const parts = text.split(' ');
 
-      const parts = text.split(' ');
+    if (parts[0] === `/${command.verb}`) {
+      foundCommand = true;
 
       if (!command.requireArgs && parts.length > 1) {
         return `Command /${command.verb} does not require arguments`;
@@ -114,4 +107,5 @@ function validateCommand(text: string): string | null {
   <q-form @submit="onSubmit" style="width: 100%; max-width: 250px">
     <q-input v-model="text" dark dense standout placeholder="Type a command..." maxlength="128" />
   </q-form>
+  <HelpDialog v-model="showHelpDialog" />
 </template>

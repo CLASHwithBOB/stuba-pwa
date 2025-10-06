@@ -60,8 +60,5 @@ function theme() {
 }
 
 function help() {
-  return {
-    ...success,
-    message: `Available commands: /join, /quit, /cancel, /list, /invite, /revoke, /kick, /status, /theme, /help`,
-  } as const;
+  return {};
 }
