@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { COMMANDS } from 'src/constants/commands';
+import type { COMMAND_VERB } from 'src/enums/command';
+import { generateUsage } from 'src/lib/commands';
 import { computed } from 'vue';
 
 const props = defineProps<{
@@ -25,9 +27,9 @@ const model = computed({
 
       <q-card-section>
         <q-list class="rounded-borders" dense bordered>
-          <q-item class="q-my-xs" v-for="cmd in COMMANDS" :key="cmd.verb">
+          <q-item class="q-my-xs" v-for="[verb, cmd] in Object.entries(COMMANDS)" :key="verb">
             <q-item-section>
-              <span class="text-bold text-primary">{{ cmd.usage }}</span>
+              <span class="text-bold text-primary">{{ generateUsage(verb as COMMAND_VERB) }}</span>
               <p class="text-caption text-grey-7">{{ cmd.description }}</p>
             </q-item-section>
           </q-item>

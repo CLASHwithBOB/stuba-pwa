@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-import { COMMANDS } from 'src/constants/commands';
-import { commands } from 'src/lib/commands';
+import { commands, validate } from 'src/lib/commands';
 import { ref } from 'vue';
 import HelpDialog from './HelpDialog.vue';
 
@@ -12,7 +11,7 @@ const showHelpDialog = ref(false);
 
 function onSubmit() {
   const trimmedText = text.value.trim();
-  const validationError = validateCommand(trimmedText);
+  const validationError = validate(trimmedText);
 
   if (validationError) {
     $q.notify({
@@ -26,11 +25,11 @@ function onSubmit() {
     return;
   }
 
-  const command = trimmedText.split(' ')[0];
+  const splitText = trimmedText.split(' ');
 
-  switch (command) {
+  switch (splitText[0]) {
     case '/join':
-      $q.notify(commands.join(trimmedText.split(' ')[1]));
+      $q.notify(commands.join(splitText.slice(1).join(' ')));
       break;
     case '/quit':
       $q.notify(commands.quit());
@@ -42,19 +41,19 @@ function onSubmit() {
       $q.notify(commands.list());
       break;
     case '/invite':
-      $q.notify(commands.invite(trimmedText.split(' ')[1]));
+      $q.notify(commands.invite(splitText.slice(1).join(' ')));
       break;
     case '/revoke':
-      $q.notify(commands.revoke(trimmedText.split(' ')[1]));
+      $q.notify(commands.revoke(splitText.slice(1).join(' ')));
       break;
     case '/kick':
-      $q.notify(commands.kick(trimmedText.split(' ')[1]));
+      $q.notify(commands.kick(splitText.slice(1).join(' ')));
       break;
     case '/status':
-      $q.notify(commands.status(trimmedText.split(' ')[1]));
+      $q.notify(commands.status(splitText.slice(1).join(' ')));
       break;
     case '/theme':
-      $q.notify(commands.theme(trimmedText.split(' ')[1]));
+      $q.notify(commands.theme(splitText.slice(1).join(' ')));
       break;
     case '/help':
       showHelpDialog.value = true;
@@ -62,44 +61,6 @@ function onSubmit() {
   }
 
   text.value = '';
-}
-
-function validateCommand(text: string): string | null {
-  if (!text.startsWith('/')) {
-    return 'Command must start with /';
-  }
-
-  if ((text.match(/\//g) || []).length > 1) {
-    return 'Only one command at a time is allowed';
-  }
-
-  let foundCommand = false;
-
-  for (const command of COMMANDS) {
-    const parts = text.split(' ');
-
-    if (parts[0] === `/${command.verb}`) {
-      foundCommand = true;
-
-      if (!command.requireArgs && parts.length > 1) {
-        return `Command /${command.verb} does not require arguments`;
-      }
-
-      if (command.requireArgs && parts.length === 1) {
-        return `Command /${command.verb} requires an argument`;
-      }
-
-      if (command.requireArgs && parts.length > 2) {
-        return `Command /${command.verb} requires only one argument`;
-      }
-    }
-  }
-
-  if (!foundCommand) {
-    return `Unknown command ${text.split(' ')[0]}. Type /help for a list of available commands`;
-  }
-
-  return null;
 }
 </script>
 
