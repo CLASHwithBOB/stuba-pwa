@@ -1,67 +1,62 @@
 import { COMMAND_VERB } from 'src/enums/command';
+import type { CommandDefinition } from 'src/types/commands';
 
-export const COMMANDS = [
-  {
-    verb: COMMAND_VERB.JOIN,
-    usage: '/join <channelName> [private]',
-    requireArgs: true,
+export const COMMANDS: Record<COMMAND_VERB, CommandDefinition> = Object.freeze({
+  [COMMAND_VERB.JOIN]: {
     description:
-      'Join an existing public channel or create a new one. Add private to create a private channel.',
+      'Join an existing public channel or create a new one. Add "private" to create a private channel.',
+    arg: { name: 'channelName' },
+    flags: [['private']],
   },
-  {
-    verb: COMMAND_VERB.QUIT,
-    usage: '/quit',
-    requireArgs: false,
+
+  [COMMAND_VERB.QUIT]: {
     description: 'Permanently deletes the current channel (admin-only).',
+    adminOnly: true,
   },
-  {
-    verb: COMMAND_VERB.CANCEL,
-    usage: '/cancel',
-    requireArgs: false,
+
+  [COMMAND_VERB.CANCEL]: {
     description: 'Leave the current channel. If you are admin, the channel is deleted.',
   },
-  {
-    verb: COMMAND_VERB.LIST,
-    usage: '/list',
-    requireArgs: false,
+
+  [COMMAND_VERB.LIST]: {
     description: 'Show a list of members in the current channel.',
   },
-  {
-    verb: COMMAND_VERB.INVITE,
-    usage: '/invite <nickName>',
-    requireArgs: true,
+
+  [COMMAND_VERB.INVITE]: {
     description:
       'Add a user to the channel (admin-only for private channels; any member for public).',
+    arg: { name: 'nickName' },
   },
-  {
-    verb: COMMAND_VERB.REVOKE,
-    usage: '/revoke <nickName>',
-    requireArgs: true,
+
+  [COMMAND_VERB.REVOKE]: {
     description: 'Remove a user from a private channel (admin-only).',
+    arg: { name: 'nickName' },
+    adminOnly: true,
   },
-  {
-    verb: COMMAND_VERB.KICK,
-    usage: '/kick <nickName>',
-    requireArgs: true,
+
+  [COMMAND_VERB.KICK]: {
     description:
       'Kick a user from a public channel. 3 kicks = permanent ban. Admin can kick permanently.',
+    arg: { name: 'nickName' },
   },
-  {
-    verb: COMMAND_VERB.STATUS,
-    usage: '/status <online|dnd|offline>',
-    requireArgs: true,
+
+  [COMMAND_VERB.STATUS]: {
     description: 'Change your status.',
-  }, //custom
-  {
-    verb: COMMAND_VERB.THEME,
-    usage: '/theme <light|dark>',
-    requireArgs: true,
-    description: 'Changes the theme.',
-  }, //custom
-  {
-    verb: COMMAND_VERB.HELP,
-    requireArgs: false,
-    usage: '/help',
+    arg: {
+      name: 'status',
+      allowedValues: ['online', 'dnd', 'offline'],
+    },
+  },
+
+  [COMMAND_VERB.THEME]: {
+    description: 'Change the theme.',
+    arg: {
+      name: 'theme',
+      allowedValues: ['light', 'dark'],
+    },
+  },
+
+  [COMMAND_VERB.HELP]: {
     description: 'Show this help dialog.',
-  }, //custom
-];
+  },
+});
