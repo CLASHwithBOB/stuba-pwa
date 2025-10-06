@@ -1,6 +1,21 @@
 import type { QNotifyCreateOptions } from 'quasar';
+import { COMMANDS } from 'src/constants/commands';
 import type { COMMAND_VERB } from 'src/enums/command';
 import { error, success } from './notifications';
+
+export function generateUsage(verb: COMMAND_VERB): string {
+  const command = COMMANDS[verb];
+
+  const argument = command.arg
+    ? command.arg.allowedValues
+      ? `<${command.arg.allowedValues.join('|')}>`
+      : `[${command.arg.name}]`
+    : '';
+
+  const flags = command.flags ? command.flags.map((flag) => `{${flag.join('|')}}`).join(' ') : '';
+
+  return `/${verb} ${argument} ${flags}`.trim();
+}
 
 export const commands: Record<COMMAND_VERB, (user?: string) => QNotifyCreateOptions> = {
   join,
