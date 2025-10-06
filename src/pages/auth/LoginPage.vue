@@ -6,16 +6,19 @@ const password = ref('');
 const rememberMe = ref(false);
 const isPwd = ref(true);
 </script>
-
 <template>
   <q-page class="row bg-purple-1">
     <div class="col-12 col-md-6 row justify-center items-center">
       <div class="column">
         <div class="row">
-          <q-card bordered class="q-pa-xl shadow-1" style="border-radius: 30px; width: 400px; max-height: 550px">
+          <q-card
+            class="q-pa-xl shadow-1"
+            bordered
+            style="border-radius: 30px; width: 400px; max-height: 550px"
+          >
             <div role="img">
               <div class="icon-inner">
-                <q-icon name="login" size="44px" class="text-white" />
+                <q-icon class="text-white" name="login" size="44px" />
               </div>
             </div>
             <q-card-section class="q-pa-none">
