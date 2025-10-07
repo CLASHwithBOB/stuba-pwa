@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
-const username = ref('');
+import PasswordInput from 'components/PasswordInput.vue';
+import ConfirmPasswordInput from 'components/ConfirmPasswordInput.vue';
+import CircleIcon from 'components/CircleIcon.vue';
+const nickname = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
-const isPwd = ref(true);
-const isConfirmPwd = ref(true);
 </script>
 
 <template>
@@ -23,11 +23,7 @@ const isConfirmPwd = ref(true);
       <div class="column">
         <div class="row">
           <q-card class="q-pa-lg shadow-1" bordered style="border-radius: 30px; width: 400px">
-            <div role="img">
-              <div class="icon-inner">
-                <q-icon class="text-white" name="person_add" size="44px" />
-              </div>
-            </div>
+            <CircleIcon name="person_add" />
             <q-card-section class="q-pa-none">
               <div class="row justify-center q-mb-md">
                 <h4 class="text-h4 text-weight-bold q-my-none">Create account</h4>
@@ -38,13 +34,13 @@ const isConfirmPwd = ref(true);
               </div>
               <q-form class="q-gutter-sm">
                 <div class="q-mb-sm">
-                  <label class="text-caption text-weight-medium q-mb-xs block">Username</label>
+                  <label class="text-caption text-weight-medium q-mb-xs block">Nickname</label>
                   <q-input
-                    v-model="username"
+                    v-model="nickname"
                     outlined
                     dense
                     type="text"
-                    placeholder="Enter your username"
+                    placeholder="Enter your nickname"
                   >
                     <template v-slot:prepend>
                       <q-icon name="person" size="sm" />
@@ -66,54 +62,8 @@ const isConfirmPwd = ref(true);
                     </template>
                   </q-input>
                 </div>
-
-                <div class="q-mb-sm">
-                  <label class="text-caption text-weight-medium q-mb-xs block">Password</label>
-                  <q-input
-                    v-model="password"
-                    outlined
-                    dense
-                    :type="isPwd ? 'password' : 'text'"
-                    placeholder="Enter your password"
-                  >
-                    <template v-slot:prepend>
-                      <q-icon name="lock" size="sm" />
-                    </template>
-                    <template v-slot:append>
-                      <q-icon
-                        class="cursor-pointer"
-                        size="sm"
-                        :name="isPwd ? 'visibility_off' : 'visibility'"
-                        @click="isPwd = !isPwd"
-                      />
-                    </template>
-                  </q-input>
-                </div>
-
-                <div class="q-mb-sm">
-                  <label class="text-caption text-weight-medium q-mb-xs block"
-                    >Confirm Password</label
-                  >
-                  <q-input
-                    v-model="confirmPassword"
-                    outlined
-                    dense
-                    :type="isConfirmPwd ? 'password' : 'text'"
-                    placeholder="Confirm your password"
-                  >
-                    <template v-slot:prepend>
-                      <q-icon name="lock" size="sm" />
-                    </template>
-                    <template v-slot:append>
-                      <q-icon
-                        class="cursor-pointer"
-                        size="sm"
-                        :name="isConfirmPwd ? 'visibility_off' : 'visibility'"
-                        @click="isConfirmPwd = !isConfirmPwd"
-                      />
-                    </template>
-                  </q-input>
-                </div>
+                <PasswordInput v-model="password" />
+                <ConfirmPasswordInput v-model="confirmPassword" />
 
                 <q-btn
                   class="full-width q-mb-sm"
@@ -138,20 +88,3 @@ const isConfirmPwd = ref(true);
     </div>
   </q-page>
 </template>
-
-<style scoped>
-.icon-inner {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #1976d2;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  overflow: visible;
-}
-</style>

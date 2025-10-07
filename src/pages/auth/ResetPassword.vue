@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
+import PasswordInput from 'components/PasswordInput.vue';
+import ConfirmPasswordInput from 'components/ConfirmPasswordInput.vue';
+import CircleIcon from 'components/CircleIcon.vue';
 const password = ref('');
 const confirmPassword = ref('');
-const isPwd = ref(true);
-const isConfirmPwd = ref(true);
 </script>
 
 <template>
@@ -15,11 +15,7 @@ const isConfirmPwd = ref(true);
         bordered
         style="border-radius: 30px; width: 400px"
       >
-        <div role="img">
-          <div class="icon-inner">
-            <q-icon class="text-white" name="key" size="44px" />
-          </div>
-        </div>
+        <CircleIcon name="key" />
 
         <q-card-section class="q-pa-none">
           <div class="row justify-center q-mb-lg">
@@ -31,47 +27,18 @@ const isConfirmPwd = ref(true);
           </div>
 
           <q-form class="q-gutter-md">
-            <div class="q-mb-md">
-              <label class="text-caption text-weight-medium q-mb-xs block">New password</label>
-              <q-input
-                v-model="password"
-                outlined
-                placeholder="Enter new password"
-                :type="isPwd ? 'password' : 'text'"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="lock" />
-                </template>
-                <template v-slot:append>
-                  <q-icon
-                    class="cursor-pointer"
-                    :name="isPwd ? 'visibility_off' : 'visibility'"
-                    @click="isPwd = !isPwd"
-                  />
-                </template>
-              </q-input>
-            </div>
+            <PasswordInput
+              v-model="password"
+              label="New password"
+              placeholder="Enter new password"
+            />
 
-            <div class="q-mb-md">
-              <label class="text-caption text-weight-medium q-mb-xs block">Re-enter password</label>
-              <q-input
-                v-model="confirmPassword"
-                outlined
-                :type="isConfirmPwd ? 'password' : 'text'"
-                placeholder="Re-enter new password"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="lock" />
-                </template>
-                <template v-slot:append>
-                  <q-icon
-                    class="cursor-pointer"
-                    :name="isConfirmPwd ? 'visibility_off' : 'visibility'"
-                    @click="isConfirmPwd = !isConfirmPwd"
-                  />
-                </template>
-              </q-input>
-            </div>
+            <ConfirmPasswordInput
+              v-model="confirmPassword"
+              label="Re-enter password"
+              placeholder="Re-enter new password"
+            />
+
             <q-btn
               class="full-width q-mb-md"
               type="submit"
@@ -87,20 +54,3 @@ const isConfirmPwd = ref(true);
     </div>
   </q-page>
 </template>
-
-<style scoped>
-.icon-inner {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #1976d2;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  overflow: visible;
-}
-</style>
