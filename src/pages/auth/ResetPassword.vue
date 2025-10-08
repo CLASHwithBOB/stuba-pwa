@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import PasswordInput from 'components/PasswordInput.vue';
-import ConfirmPasswordInput from 'components/ConfirmPasswordInput.vue';
 import CircleIcon from 'components/CircleIcon.vue';
 const password = ref('');
-const confirmPassword = ref('');
 </script>
 
 <template>
@@ -27,16 +25,11 @@ const confirmPassword = ref('');
           </div>
 
           <q-form class="q-gutter-md">
+            <PasswordInput v-model="password" />
             <PasswordInput
               v-model="password"
-              label="New password"
-              placeholder="Enter new password"
-            />
-
-            <ConfirmPasswordInput
-              v-model="confirmPassword"
-              label="Re-enter password"
-              placeholder="Re-enter new password"
+              label="Confirm password"
+              placeholder="Confirm your password"
             />
 
             <q-btn

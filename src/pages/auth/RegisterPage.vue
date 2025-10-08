@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import PasswordInput from 'components/PasswordInput.vue';
-import ConfirmPasswordInput from 'components/ConfirmPasswordInput.vue';
 import CircleIcon from 'components/CircleIcon.vue';
 const nickname = ref('');
 const email = ref('');
@@ -35,13 +34,7 @@ const confirmPassword = ref('');
               <q-form class="q-gutter-sm">
                 <div class="q-mb-sm">
                   <label class="text-caption text-weight-medium q-mb-xs block">Nickname</label>
-                  <q-input
-                    v-model="nickname"
-                    outlined
-                    dense
-                    type="text"
-                    placeholder="Enter your nickname"
-                  >
+                  <q-input v-model="nickname" outlined dense placeholder="Enter your nickname">
                     <template v-slot:prepend>
                       <q-icon name="person" size="sm" />
                     </template>
@@ -63,7 +56,11 @@ const confirmPassword = ref('');
                   </q-input>
                 </div>
                 <PasswordInput v-model="password" />
-                <ConfirmPasswordInput v-model="confirmPassword" />
+                <PasswordInput
+                  v-model="confirmPassword"
+                  label="Confirm password"
+                  placeholder="Confirm your password"
+                />
 
                 <q-btn
                   class="full-width q-mb-sm"

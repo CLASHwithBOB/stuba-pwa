@@ -30,7 +30,13 @@ const rememberMe = ref(false);
               <q-form class="q-gutter-md">
                 <div class="q-mb-md">
                   <label class="text-caption text-weight-medium q-mb-xs block">Email address</label>
-                  <q-input v-model="email" outlined type="email" placeholder="Enter your email">
+                  <q-input
+                    v-model="email"
+                    outlined
+                    type="email"
+                    placeholder="Enter your email"
+                    dense
+                  >
                     <template v-slot:prepend>
                       <q-icon name="mail" />
                     </template>

@@ -8,7 +8,7 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: 'Password',
+    default: 'Password'
   },
   placeholder: {
     type: String,
