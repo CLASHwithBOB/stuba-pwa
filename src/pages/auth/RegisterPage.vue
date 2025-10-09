@@ -14,7 +14,7 @@ const confirmPassword = ref('');
       <q-img
         src="https://thumbs.dreamstime.com/b/registration-online-entering-accurate-information-vital-successful-online-registration-registration-online-vector-304816947.jpg"
         alt="Woman chatting on laptop"
-        style="max-height: 100vh; object-fit: cover; width: 100%"
+        style="object-fit: cover; width: 100%; height: 100%"
       />
     </div>
 
