@@ -26,34 +26,6 @@ const messages = [
         :user="{ nickname: message.user.nickname }"
         :text="[message.text]"
       />
-      <ChatBubble
-        v-for="message in messages"
-        :key="message.id"
-        :sent="!!message.sent"
-        :user="{ nickname: message.user.nickname }"
-        :text="[message.text]"
-      />
-      <ChatBubble
-        v-for="message in messages"
-        :key="message.id"
-        :sent="!!message.sent"
-        :user="{ nickname: message.user.nickname }"
-        :text="[message.text]"
-      />
-      <ChatBubble
-        v-for="message in messages"
-        :key="message.id"
-        :sent="!!message.sent"
-        :user="{ nickname: message.user.nickname }"
-        :text="[message.text]"
-      />
-      <ChatBubble
-        v-for="message in messages"
-        :key="message.id"
-        :sent="!!message.sent"
-        :user="{ nickname: message.user.nickname }"
-        :text="[message.text]"
-      />
     </q-scroll-area>
     <div class="bg-orange q-pa-sm col-grow">Chat input here</div>
   </q-page>
