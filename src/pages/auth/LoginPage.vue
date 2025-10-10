@@ -82,7 +82,7 @@ const rememberMe = ref(false);
       <q-img
         src="https://img.freepik.com/free-vector/telecommuting-concept-woman-quarantine_23-2148481304.jpg?semt=ais_hybrid&w=740&q=80"
         alt="Woman chatting on laptop"
-        style="max-height: 100vh; object-fit: cover; width: 100%"
+        style="object-fit: cover; width: 100%; height: 100%"
       />
     </div>
   </q-page>
