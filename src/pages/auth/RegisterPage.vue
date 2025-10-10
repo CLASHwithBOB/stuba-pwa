@@ -1,11 +1,28 @@
 <script setup lang="ts">
+import CircleIcon from 'src/components/CircleIcon.vue';
+import PasswordInput from 'src/components/PasswordInput.vue';
+import { useAuthStore } from 'src/stores/auth';
 import { ref } from 'vue';
-import PasswordInput from 'components/PasswordInput.vue';
-import CircleIcon from 'components/CircleIcon.vue';
+import { useRouter } from 'vue-router';
+
+const { register } = useAuthStore();
+const router = useRouter();
+
 const nickname = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+
+async function onSubmit() {
+  await register({
+    nickname: nickname.value,
+    email: email.value,
+    password: password.value,
+    passwordConfirm: confirmPassword.value,
+  });
+
+  await router.push('/dashboard');
+}
 </script>
 
 <template>
@@ -31,7 +48,7 @@ const confirmPassword = ref('');
               <div class="row justify-center q-mb-lg">
                 <p class="text-subtitle1 text-grey-9 q-my-none">Sign up to get started</p>
               </div>
-              <q-form class="q-gutter-sm">
+              <q-form class="q-gutter-sm" @submit="onSubmit">
                 <div class="q-mb-sm">
                   <label class="text-caption text-weight-medium q-mb-xs block">Nickname</label>
                   <q-input v-model="nickname" outlined dense placeholder="Enter your nickname">
@@ -65,6 +82,7 @@ const confirmPassword = ref('');
                 <q-btn
                   class="full-width q-mb-sm"
                   unelevated
+                  type="submit"
                   color="primary"
                   size="md"
                   label="Sign up"
