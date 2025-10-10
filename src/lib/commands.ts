@@ -30,7 +30,6 @@ export function validate(text: string): string | null {
 
   for (const [verb, command] of Object.entries(COMMANDS)) {
     const parts = text.split(' ');
-    console.log(parts);
 
     if (parts[0] === `/${verb}`) {
       foundCommand = true;

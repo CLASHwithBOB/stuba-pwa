@@ -2,9 +2,24 @@
 import { ref } from 'vue';
 import PasswordInput from 'components/PasswordInput.vue';
 import CircleIcon from 'components/CircleIcon.vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from 'src/stores/auth';
+
+const { login } = useAuthStore();
+const router = useRouter();
+
 const email = ref('');
 const password = ref('');
 const rememberMe = ref(false);
+
+async function onSubmit() {
+  await login({
+    email: email.value,
+    password: password.value,
+  });
+
+  await router.push('/dashboard');
+}
 </script>
 
 <template>
@@ -27,7 +42,7 @@ const rememberMe = ref(false);
                 <p class="text-subtitle1 text-grey-9 q-my-none">Please enter your details</p>
               </div>
 
-              <q-form class="q-gutter-md">
+              <q-form class="q-gutter-md" @submit="onSubmit">
                 <div class="q-mb-md">
                   <label class="text-caption text-weight-medium q-mb-xs block">Email address</label>
                   <q-input
@@ -58,6 +73,7 @@ const rememberMe = ref(false);
 
                 <q-btn
                   class="full-width q-mb-md"
+                  type="submit"
                   unelevated
                   color="primary"
                   size="lg"

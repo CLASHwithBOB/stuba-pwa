@@ -1,4 +1,5 @@
 import { defineRouter } from '#q-app/wrappers';
+import { useAuthStore } from 'src/stores/auth';
 import {
   createMemoryHistory,
   createRouter,
@@ -31,6 +32,29 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
+
+  Router.beforeEach(async (to, from, next) => {
+    const auth = useAuthStore();
+
+    if (auth.token && !auth.user) {
+      try {
+        await auth.me();
+      } catch (err) {
+        console.error('Auth fetch failed:', err);
+        await auth.logout();
+      }
+    }
+
+    if (to.meta.auth) {
+      if (auth.token) next();
+      else next('/login');
+    } else if (to.meta.guest) {
+      if (auth.token) next('/dashboard');
+      else next();
+    } else {
+      next();
+    }
   });
 
   return Router;
