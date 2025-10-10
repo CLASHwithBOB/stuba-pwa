@@ -18,7 +18,35 @@ const messages = [
     v-if="isDesktop || mobileView === 'chat'"
     style="display: flex; flex-direction: column"
   >
-    <q-scroll-area style="height: 100%; width: 100%; max-height: 100%">
+    <q-scroll-area class="q-px-sm q-pt-sm" style="height: 100%; width: 100%; max-height: 100%">
+      <ChatBubble
+        v-for="message in messages"
+        :key="message.id"
+        :sent="!!message.sent"
+        :user="{ nickname: message.user.nickname }"
+        :text="[message.text]"
+      />
+      <ChatBubble
+        v-for="message in messages"
+        :key="message.id"
+        :sent="!!message.sent"
+        :user="{ nickname: message.user.nickname }"
+        :text="[message.text]"
+      />
+      <ChatBubble
+        v-for="message in messages"
+        :key="message.id"
+        :sent="!!message.sent"
+        :user="{ nickname: message.user.nickname }"
+        :text="[message.text]"
+      />
+      <ChatBubble
+        v-for="message in messages"
+        :key="message.id"
+        :sent="!!message.sent"
+        :user="{ nickname: message.user.nickname }"
+        :text="[message.text]"
+      />
       <ChatBubble
         v-for="message in messages"
         :key="message.id"
