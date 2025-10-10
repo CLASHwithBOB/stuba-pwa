@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import { api } from 'src/boot/axios';
+import type { User } from 'src/types/models';
 import { ref } from 'vue';
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<any | null>(null);
+  const user = ref<User | null>(null);
   const token = ref<string | null>(localStorage.getItem('auth_token'));
 
   function authenticate(newToken: string): void {
@@ -51,7 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function me(): Promise<any | null> {
+  async function me(): Promise<User | null> {
     try {
       const result = await api.get('/auth/me', {
         headers: {
@@ -62,6 +63,7 @@ export const useAuthStore = defineStore('auth', () => {
       return user.value;
     } catch (error) {
       console.error('Fetching user failed:', error);
+      return null;
     }
   }
 

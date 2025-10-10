@@ -36,7 +36,6 @@ export default defineRouter(function (/* { store, ssrContext } */) {
 
   Router.beforeEach(async (to, from, next) => {
     const auth = useAuthStore();
-    console.log(auth);
 
     if (auth.token && !auth.user) {
       try {
