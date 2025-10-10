@@ -77,7 +77,7 @@ const users = ref([
         </q-page>
 
         <router-view v-slot="{ Component }">
-          <component :is="Component" :selectedUser :isDesktop :mobileView />
+          <component :is="Component" :isDesktop :mobileView />
         </router-view>
       </div>
     </q-page-container>
