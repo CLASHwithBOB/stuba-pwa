@@ -18,7 +18,7 @@ const input = ref('');
 
 <template>
   <q-page
-    class="col bg-white"
+    class="col"
     v-if="isDesktop || mobileView === 'chat'"
     style="display: flex; flex-direction: column"
   >
@@ -31,6 +31,15 @@ const input = ref('');
         :text="[message.text]"
       />
     </q-scroll-area>
-    <ChatInput class="col-grow q-pa-sm" v-model="input" />
+    <div class="q-pa-sm flex items-end" style="background-color: #2c3e50">
+      <ChatInput class="col-grow" v-model="input" />
+      <q-btn
+        class="q-ml-sm"
+        rounded
+        outlined
+        icon="send"
+        style="bottom: 3px; right: 3px; background-color: #5dade2"
+      />
+    </div>
   </q-page>
 </template>

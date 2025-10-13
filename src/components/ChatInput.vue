@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
 const props = defineProps<{ modelValue: string }>();
 const emit = defineEmits(['update:modelValue', 'send']);
@@ -14,28 +14,27 @@ function scrollToBottom() {
   if (!inputRef.value) return;
   inputRef.value.scrollIntoView({ behavior: 'smooth' });
 }
+
+onMounted(() => {
+  if (inputRef.value) {
+    inputRef.value.focus();
+  }
+});
 </script>
 
 <template>
-  <q-input
-    v-model="localValue"
-    ref="inputRef"
-    @update:model-value="scrollToBottom"
-    autogrow
-    outlined
-    rounded
-    placeholder="Type a message..."
-    style="max-height: 200px; overflow-y: auto"
-  >
-    <template v-slot:append>
-      <q-btn
-        flat
-        round
-        dense
-        color="primary"
-        icon="send"
-        style="position: absolute; bottom: 2px; right: 2px"
-      />
-    </template>
-  </q-input>
+  <div style="border-radius: 15px; overflow: hidden">
+    <q-input
+      v-model="localValue"
+      ref="inputRef"
+      @update:model-value="scrollToBottom"
+      autogrow
+      borderless
+      dense
+      placeholder="Type a message..."
+      style="overflow-y: auto; background-color: #3498db; padding-left: 15px"
+      input-style="max-height: 150px; color: #ecf0f1; font-size: 16px; overflow-y: auto;"
+    >
+    </q-input>
+  </div>
 </template>
