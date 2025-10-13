@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { api } from 'src/boot/axios';
+import { axios } from 'src/boot/axios';
 import type { User } from 'src/types/models';
 import { ref } from 'vue';
 
@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function login(payload: { email: string; password: string }): Promise<void> {
     try {
-      const result = await api.post('/auth/login', payload);
+      const result = await axios.post('/auth/login', payload);
 
       authenticate(result.data.token);
     } catch (error) {
@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', () => {
     passwordConfirm: string;
   }): Promise<void> {
     try {
-      const result = await api.post('/auth/register', payload);
+      const result = await axios.post('/auth/register', payload);
       authenticate(result.data.token);
     } catch (error) {
       console.error('Registration failed:', error);
@@ -38,7 +38,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout(): Promise<void> {
     try {
-      await api.delete('/auth/logout', {
+      await axios.delete('/auth/logout', {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
@@ -54,7 +54,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function me(): Promise<User | null> {
     try {
-      const result = await api.get('/auth/me', {
+      const result = await axios.get('/auth/me', {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
