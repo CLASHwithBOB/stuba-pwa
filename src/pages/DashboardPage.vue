@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import ChatBubble from 'src/components/ChatBubble.vue';
+import ChatInput from 'src/components/ChatInput.vue';
+import { ref } from 'vue';
 
 defineProps<{
   isDesktop: boolean;
@@ -10,11 +12,13 @@ const messages = [
   { id: 1, text: 'Hello!', user: { nickname: 'Gosho' } },
   { id: 2, text: 'Hi!', sent: true, user: { nickname: 'Pesho' } },
 ];
+
+const input = ref('');
 </script>
 
 <template>
   <q-page
-    class="col bg-white"
+    class="col"
     v-if="isDesktop || mobileView === 'chat'"
     style="display: flex; flex-direction: column"
   >
@@ -27,6 +31,15 @@ const messages = [
         :text="[message.text]"
       />
     </q-scroll-area>
-    <div class="bg-orange q-pa-sm col-grow">Chat input here</div>
+    <div class="q-pa-sm flex items-end" style="background-color: #2c3e50">
+      <ChatInput v-model="input" />
+      <q-btn
+        class="q-ml-sm"
+        rounded
+        outlined
+        icon="send"
+        style="bottom: 3px; right: 3px; background-color: #5dade2"
+      />
+    </div>
   </q-page>
 </template>
