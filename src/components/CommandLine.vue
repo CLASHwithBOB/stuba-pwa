@@ -3,8 +3,10 @@ import { useQuasar } from 'quasar';
 import { commands, validate } from 'src/lib/commands';
 import { ref } from 'vue';
 import HelpDialog from './HelpDialog.vue';
+import { useRouter } from 'vue-router';
 
 const $q = useQuasar();
+const router = useRouter();
 
 const text = ref('');
 const showHelpDialog = ref(false);
@@ -25,38 +27,48 @@ async function onSubmit() {
   }
 
   const splitText = trimmedText.split(' ');
+  let res = null;
 
   switch (splitText[0]) {
     case '/join':
-      $q.notify(await commands.join(splitText.slice(1).join(' ')));
+      res = await commands.join(splitText.slice(1).join(' '));
       break;
     case '/quit':
-      $q.notify(await commands.quit());
+      // $q.notify(await commands.quit());
       break;
     case '/cancel':
-      $q.notify(await commands.cancel());
+      // $q.notify(await commands.cancel());
       break;
     case '/list':
-      $q.notify(await commands.list());
+      // $q.notify(await commands.list());
       break;
     case '/invite':
-      $q.notify(await commands.invite(splitText.slice(1).join(' ')));
+      // $q.notify(await commands.invite(splitText.slice(1).join(' ')));
       break;
     case '/revoke':
-      $q.notify(await commands.revoke(splitText.slice(1).join(' ')));
+      // $q.notify(await commands.revoke(splitText.slice(1).join(' ')));
       break;
     case '/kick':
-      $q.notify(await commands.kick(splitText.slice(1).join(' ')));
+      // $q.notify(await commands.kick(splitText.slice(1).join(' ')));
       break;
     case '/status':
       $q.notify(await commands.status(splitText.slice(1).join(' ')));
       break;
     case '/theme':
-      $q.notify(await commands.theme(splitText.slice(1).join(' ')));
+      // $q.notify(await commands.theme(splitText.slice(1).join(' ')));
       break;
     case '/help':
       showHelpDialog.value = true;
       break;
+  }
+
+  if (res) {
+    if ('notification' in res && res.notification) {
+      $q.notify(res.notification);
+    }
+    if ('redirectUrl' in res && res.redirectUrl) {
+      await router.push(res.redirectUrl);
+    }
   }
 
   text.value = '';
