@@ -31,8 +31,6 @@ const input = ref('');
         :text="[message.text]"
       />
     </q-scroll-area>
-    <div class="q-pa-sm col-grow">
-      <ChatInput v-model="input" />
-    </div>
+    <ChatInput class="col-grow q-pa-sm" v-model="input" />
   </q-page>
 </template>
