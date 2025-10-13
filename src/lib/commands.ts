@@ -1,6 +1,8 @@
 import type { QNotifyCreateOptions } from 'quasar';
+import { api } from 'src/api/api';
 import { COMMANDS } from 'src/constants/commands';
 import type { COMMAND_VERB } from 'src/enums/command';
+import type { USER_STATUS } from 'src/enums/status';
 import { error, success } from './notifications';
 
 export function generateUsage(verb: COMMAND_VERB): string {
@@ -50,6 +52,13 @@ export function validate(text: string): string | null {
         return `Command /${verb} accepts only one argument and at most ${command.flags.length} flag(s)`;
       }
 
+      if (command.arg && command.arg.allowedValues && parts.length >= 2) {
+        const arg = parts[1]!;
+        if (!command.arg.allowedValues.includes(arg)) {
+          return `Invalid argument "${arg}" for /${verb}. Allowed values are: ${command.arg.allowedValues.join(', ')}`;
+        }
+      }
+
       if (command.flags && parts.length > 2) {
         const flags = parts.slice(2);
 
@@ -70,7 +79,10 @@ export function validate(text: string): string | null {
   return null;
 }
 
-export const commands: Record<COMMAND_VERB, (user?: string) => QNotifyCreateOptions> = {
+export const commands: Record<
+  COMMAND_VERB,
+  (user?: string) => QNotifyCreateOptions | Promise<QNotifyCreateOptions>
+> = {
   join,
   quit,
   cancel,
@@ -119,8 +131,14 @@ function kick(user?: string) {
     : ({ ...error, message: `Error: No user specified.` } as const);
 }
 
-function status() {
-  return { ...success, message: `You are online.` } as const;
+async function status(status?: string) {
+  if (!status) {
+    return { ...error, message: `Error: No status specified.` } as const;
+  }
+
+  await api.user.update({ status: status as USER_STATUS });
+
+  return { ...success, message: `You are ${status}.` } as const;
 }
 
 function theme() {
