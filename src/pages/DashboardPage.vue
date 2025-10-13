@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import ChatBubble from 'src/components/ChatBubble.vue';
+import ChatInput from 'src/components/ChatInput.vue';
+import { ref } from 'vue';
 
 defineProps<{
   isDesktop: boolean;
@@ -10,6 +12,8 @@ const messages = [
   { id: 1, text: 'Hello!', user: { nickname: 'Gosho' } },
   { id: 2, text: 'Hi!', sent: true, user: { nickname: 'Pesho' } },
 ];
+
+const input = ref('');
 </script>
 
 <template>
@@ -27,6 +31,8 @@ const messages = [
         :text="[message.text]"
       />
     </q-scroll-area>
-    <div class="bg-orange q-pa-sm col-grow">Chat input here</div>
+    <div class="q-pa-sm col-grow">
+      <ChatInput v-model="input" />
+    </div>
   </q-page>
 </template>
