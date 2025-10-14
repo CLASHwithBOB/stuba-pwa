@@ -23,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div style="border-radius: 15px; overflow: hidden">
+  <div class="col-grow" style="border-radius: 15px; overflow: hidden">
     <q-input
       v-model="localValue"
       ref="inputRef"
