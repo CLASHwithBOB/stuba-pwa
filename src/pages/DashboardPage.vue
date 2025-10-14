@@ -34,11 +34,11 @@ const input = ref('');
     <div class="q-pa-sm flex items-end" style="background-color: #2c3e50">
       <ChatInput v-model="input" />
       <q-btn
-        class="q-ml-sm"
+        class="q-ml-sm full-height"
         rounded
         outlined
         icon="send"
-        style="bottom: 3px; right: 3px; background-color: #5dade2"
+        style="background-color: #5dade2"
       />
     </div>
   </q-page>
