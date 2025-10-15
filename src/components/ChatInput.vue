@@ -22,7 +22,6 @@ function toggleEmojiPicker() {
 }
 function onSelectEmoji(emoji: { i: string }) {
   localValue.value += emoji.i;
-  showEmojiPicker.value = false;
 
   if (inputRef.value) {
     inputRef.value.focus();
