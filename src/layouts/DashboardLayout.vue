@@ -3,11 +3,10 @@ import { useQuasar } from 'quasar';
 import ChatItem from 'src/components/ChatItem.vue';
 import { USER_STATUS } from 'src/enums/status';
 import { computed, ref } from 'vue';
+import OptionsDropdown from 'src/components/OptionsDropdown.vue';
 
 const $q = useQuasar();
-
 const selectedUser = ref<string | null>(null);
-
 const isDesktop = computed(() => $q.screen.width >= 830);
 const mobileView = computed(() => (selectedUser.value ? 'chat' : 'list'));
 
@@ -15,7 +14,6 @@ const users = ref([
   { name: 'User 1' },
   { name: 'User 2' },
   { name: 'User 3' },
-  { name: 'User 4' },
   { name: 'User 4' },
   { name: 'User 4' },
   { name: 'User 4' },
@@ -45,8 +43,7 @@ const users = ref([
           @click="selectedUser = null"
         />
         <q-toolbar-title class="text-unselectable">PingMe</q-toolbar-title>
-
-        <CommandLine />
+        <OptionsDropdown :is-admin="true" />
       </q-toolbar>
     </q-header>
 
