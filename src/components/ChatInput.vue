@@ -46,7 +46,7 @@ onMounted(() => {
         borderless
         dense
         placeholder="Type a message..."
-        style="overflow-y: auto; background-color: #3498db; padding-left: 15px"
+        style="overflow-y: auto; background-color: #3498db; padding-left: 15px; padding-right: 32px"
         input-style="max-height: 150px; color: #ecf0f1; font-size: 16px; overflow-y: auto;"
       >
         <template v-slot:append>
@@ -56,7 +56,7 @@ onMounted(() => {
             dense
             icon="sentiment_satisfied_alt"
             @click="toggleEmojiPicker"
-            style="color: #ecf0f1"
+            style="color: #ecf0f1; position: absolute; right: -25px; bottom: 3px"
           />
         </template>
       </q-input>
