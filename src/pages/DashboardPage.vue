@@ -33,13 +33,7 @@ const input = ref('');
     </q-scroll-area>
     <div class="q-pa-sm flex items-end" style="background-color: #2c3e50">
       <ChatInput v-model="input" />
-      <q-btn
-        class="q-ml-sm full-height"
-        rounded
-        outlined
-        icon="send"
-        style="background-color: #5dade2"
-      />
+      <q-btn class="q-ml-sm" rounded outlined icon="send" style="background-color: #5dade2" />
     </div>
   </q-page>
 </template>
