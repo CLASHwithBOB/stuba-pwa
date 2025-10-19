@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 import ChatItem from 'src/components/ChatItem.vue';
-import CommandLine from 'src/components/CommandLine.vue';
 import { USER_STATUS } from 'src/enums/status';
 import { computed, ref } from 'vue';
 
