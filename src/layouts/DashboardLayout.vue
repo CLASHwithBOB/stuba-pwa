@@ -4,11 +4,18 @@ import ChatItem from 'src/components/ChatItem.vue';
 import { USER_STATUS } from 'src/enums/status';
 import { computed, ref } from 'vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
+import UserDropdown from 'src/components/UserDropdown.vue';
 
 const $q = useQuasar();
 const selectedUser = ref<string | null>(null);
 const isDesktop = computed(() => $q.screen.width >= 830);
 const mobileView = computed(() => (selectedUser.value ? 'chat' : 'list'));
+
+const currentUser = ref({
+  name: 'John Doe',
+  avatar: '',
+  status: USER_STATUS.ONLINE,
+});
 
 const users = ref([
   { name: 'User 1' },
@@ -50,12 +57,12 @@ const users = ref([
     <q-page-container>
       <div class="row no-wrap full-height">
         <q-page
-          class="bg-grey-2"
+          class="bg-grey-2 column"
           v-if="isDesktop || mobileView === 'list'"
           :class="!isDesktop && 'col'"
           :style="isDesktop && 'width:300px'"
         >
-          <q-scroll-area class="fit">
+          <q-scroll-area class="col">
             <q-list>
               <ChatItem
                 v-for="(user, index) in users"
@@ -70,6 +77,14 @@ const users = ref([
               </ChatItem>
             </q-list>
           </q-scroll-area>
+
+          <div>
+            <UserDropdown
+              :user-name="currentUser.name"
+              :user-avatar="currentUser.avatar"
+              :user-status="currentUser.status"
+            />
+          </div>
         </q-page>
 
         <router-view v-slot="{ Component }">
