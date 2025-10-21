@@ -4,14 +4,13 @@ import ChatItem from 'src/components/ChatItem.vue';
 import { USER_STATUS } from 'src/enums/status';
 import { computed, ref } from 'vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
-import UserControlsBar from 'src/components/UserControlsBar.vue';
+import UserDropdown from 'src/components/UserDropdown.vue';
 
 const $q = useQuasar();
 const selectedUser = ref<string | null>(null);
 const isDesktop = computed(() => $q.screen.width >= 830);
 const mobileView = computed(() => (selectedUser.value ? 'chat' : 'list'));
 
-// Current user data (this should come from your auth/state management)
 const currentUser = ref({
   name: 'John Doe',
   avatar: '',
@@ -63,7 +62,6 @@ const users = ref([
           :class="!isDesktop && 'col'"
           :style="isDesktop && 'width:300px'"
         >
-          <!-- Users List -->
           <q-scroll-area class="col">
             <q-list>
               <ChatItem
@@ -80,9 +78,8 @@ const users = ref([
             </q-list>
           </q-scroll-area>
 
-          <!-- User Controls Bar at bottom -->
           <div>
-            <UserControlsBar
+            <UserDropdown
               :user-name="currentUser.name"
               :user-avatar="currentUser.avatar"
               :user-status="currentUser.status"
@@ -97,18 +94,3 @@ const users = ref([
     </q-page-container>
   </q-layout>
 </template>
-
-<style scoped>
-/* Ensure the sidebar takes full height and the footer stays at bottom */
-.q-page.column {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Make sure the scroll area takes available space */
-.q-scroll-area.col {
-  flex: 1;
-  min-height: 0;
-}
-</style>

@@ -27,7 +27,6 @@ function handleLogout() {
     position: 'top',
     timeout: 2000,
   });
-  // Add your logout logic here
   showDropdown.value = false;
 }
 
