@@ -18,11 +18,6 @@ const inputRef = ref<HTMLElement | null>(null);
 
 watch(localValue, (val) => emit('update:modelValue', val));
 
-function scrollToBottom() {
-  if (!inputRef.value) return;
-  inputRef.value.scrollIntoView({ behavior: 'smooth' });
-}
-
 function toggleEmojiPicker() {
   showEmojiPicker.value = !showEmojiPicker.value;
 }
@@ -32,9 +27,7 @@ function onSelectEmoji(emoji: { i: string }) {
   inputRef.value?.focus();
 }
 
-onMounted(() => {
-  inputRef.value?.focus();
-});
+onMounted(() => inputRef.value?.focus());
 
 async function onSubmit() {
   const trimmedText = localValue.value.trim();
@@ -101,8 +94,7 @@ async function onSubmit() {
       <q-input
         v-model="localValue"
         ref="inputRef"
-        @keyup.enter="onSubmit"
-        @update:model-value="scrollToBottom"
+        @keydown.enter="onSubmit"
         autogrow
         borderless
         dense
@@ -135,7 +127,6 @@ async function onSubmit() {
       @click="showEmojiPicker = false"
       style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 999"
     />
-
-    <HelpDialog v-model="showHelpDialog" />
   </div>
+  <HelpDialog v-model="showHelpDialog" />
 </template>

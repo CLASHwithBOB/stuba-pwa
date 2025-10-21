@@ -9,27 +9,19 @@ const routes: RouteRecordRaw[] = [
     meta: { auth: true },
   },
   {
+    path: '/channels/:channelId',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ChannelPage.vue') }],
+    meta: { auth: true },
+  },
+  {
     path: '/login',
-    component: () => import('layouts/auth/GuestLayout.vue'),
-    children: [{ path: '', component: () => import('pages/auth/LoginPage.vue') }],
+    component: () => import('pages/auth/LoginPage.vue'),
     meta: { guest: true },
   },
   {
     path: '/register',
-    component: () => import('layouts/auth/GuestLayout.vue'),
-    children: [{ path: '', component: () => import('pages/auth/RegisterPage.vue') }],
-    meta: { guest: true },
-  },
-  {
-    path: '/forgot-password',
-    component: () => import('layouts/auth/GuestLayout.vue'),
-    children: [{ path: '', component: () => import('pages/auth/ForgotPassword.vue') }],
-    meta: { guest: true },
-  },
-  {
-    path: '/reset-password',
-    component: () => import('layouts/auth/GuestLayout.vue'),
-    children: [{ path: '', component: () => import('pages/auth/ResetPassword.vue') }],
+    component: () => import('pages/auth/RegisterPage.vue'),
     meta: { guest: true },
   },
   {
