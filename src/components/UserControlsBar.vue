@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
+import { USER_STATUS } from 'src/enums/status';
 import UserProfile from './UserProfile.vue';
 
 const $q = useQuasar();
@@ -8,18 +9,13 @@ const $q = useQuasar();
 interface Props {
   userName: string;
   userAvatar?: string;
-  userStatus?: 'online' | 'do not disturb' | 'offline';
+  userStatus?: USER_STATUS;
 }
 
 withDefaults(defineProps<Props>(), {
   userAvatar: '',
-  userStatus: 'online',
+  userStatus: USER_STATUS.ONLINE,
 });
-
-const emit = defineEmits<{
-  logout: [];
-  settings: [];
-}>();
 
 const showDropdown = ref(false);
 const profileRef = ref();
@@ -31,7 +27,7 @@ function handleLogout() {
     position: 'top',
     timeout: 2000,
   });
-  emit('logout');
+  // Add your logout logic here
   showDropdown.value = false;
 }
 
@@ -42,21 +38,17 @@ function handleSettings() {
     position: 'top',
     timeout: 2000,
   });
-  emit('settings');
   showDropdown.value = false;
 }
 </script>
 
 <template>
-  <!-- Clickable user profile area only -->
-  <div ref="profileRef" style="width: 100%; position: relative;" class="user-profile-content">
+  <div class="user-profile-content" ref="profileRef" style="width: 100%; position: relative">
     <UserProfile :name="userName" :avatar="userAvatar" :status="userStatus" />
   </div>
 
-  <!-- Dropdown Menu Content -->
   <q-menu v-model="showDropdown" :target="profileRef" anchor="top end" self="bottom end">
     <q-list style="width: 200px">
-      <!-- Logout Option -->
       <q-item class="dropdown-item" v-close-popup clickable @click="handleLogout">
         <q-item-section avatar>
           <q-icon name="logout" color="negative" />
@@ -66,7 +58,6 @@ function handleSettings() {
         </q-item-section>
       </q-item>
 
-      <!-- Settings Option -->
       <q-item class="dropdown-item" v-close-popup clickable @click="handleSettings">
         <q-item-section avatar>
           <q-icon name="settings" color="grey-7" />
@@ -83,4 +74,3 @@ function handleSettings() {
   background-color: #c3ccdb;
 }
 </style>
-  

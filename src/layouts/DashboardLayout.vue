@@ -15,7 +15,7 @@ const mobileView = computed(() => (selectedUser.value ? 'chat' : 'list'));
 const currentUser = ref({
   name: 'John Doe',
   avatar: '',
-  status: 'online' as 'online' | 'do not disturb' | 'offline',
+  status: USER_STATUS.ONLINE,
 });
 
 const users = ref([
@@ -36,16 +36,6 @@ const users = ref([
   { name: 'User 4' },
   { name: 'User 4' },
 ]);
-
-function handleLogout() {
-  // Handle logout logic
-  console.log('Logout action triggered');
-}
-
-function handleSettings() {
-  // Handle settings logic
-  console.log('Settings action triggered');
-}
 </script>
 
 <template>
@@ -96,8 +86,6 @@ function handleSettings() {
               :user-name="currentUser.name"
               :user-avatar="currentUser.avatar"
               :user-status="currentUser.status"
-              @logout="handleLogout"
-              @settings="handleSettings"
             />
           </div>
         </q-page>
