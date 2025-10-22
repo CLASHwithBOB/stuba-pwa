@@ -20,13 +20,11 @@ const options = props.isAdmin
       action: 'leave',
     };
 
-// Dialog visibility states
 const showJoinDialog = ref(false);
 const showCreateTypeDialog = ref(false);
 const showCreateNameDialog = ref(false);
 const showDeleteDialog = ref(false);
 
-// Form data
 const joinChannelCode = ref('');
 const channelType = ref('public');
 const channelName = ref('');
@@ -112,8 +110,6 @@ function handleDeleteChannel() {
     dropdown-icon="none"
     style="position: relative"
   >
-    <!-- Create Channel Button -->
-
     <q-list style="min-width: 140px">
       <q-item class="q-pa-sm" v-close-popup clickable @click="onCreateChannel">
         <q-item-section avatar>
@@ -121,7 +117,6 @@ function handleDeleteChannel() {
         </q-item-section>
         <q-item-section class="text-primary"> Create Channel </q-item-section>
       </q-item>
-      <!-- Join Channel Button -->
 
       <q-item class="q-pa-sm" v-close-popup clickable @click="onJoinChannel">
         <q-item-section avatar>
@@ -130,10 +125,8 @@ function handleDeleteChannel() {
         <q-item-section class="text-primary"> Join Channel </q-item-section>
       </q-item>
 
-      <!-- Separator -->
       <q-separator />
 
-      <!-- Delete/Leave Option -->
       <q-item
         class="q-pa-sm"
         v-close-popup
@@ -151,7 +144,6 @@ function handleDeleteChannel() {
     </q-list>
   </q-btn-dropdown>
 
-  <!-- Join Channel Dialog -->
   <q-dialog v-model="showJoinDialog" persistent>
     <q-card style="min-width: 350px">
       <q-card-section>
@@ -175,7 +167,6 @@ function handleDeleteChannel() {
     </q-card>
   </q-dialog>
 
-  <!-- Create Channel - Type Selection Dialog -->
   <q-dialog v-model="showCreateTypeDialog" persistent>
     <q-card style="min-width: 350px">
       <q-card-section>
@@ -201,7 +192,6 @@ function handleDeleteChannel() {
     </q-card>
   </q-dialog>
 
-  <!-- Create Channel - Name Input Dialog -->
   <q-dialog v-model="showCreateNameDialog" persistent>
     <q-card style="min-width: 350px">
       <q-card-section>
@@ -227,7 +217,6 @@ function handleDeleteChannel() {
     </q-card>
   </q-dialog>
 
-  <!-- Delete Confirmation Dialog -->
   <q-dialog v-model="showDeleteDialog" persistent>
     <q-card style="min-width: 350px">
       <q-card-section>
