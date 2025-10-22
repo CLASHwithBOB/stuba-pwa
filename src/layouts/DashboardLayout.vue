@@ -4,7 +4,6 @@ import ChatItem from 'src/components/ChatItem.vue';
 import { USER_STATUS } from 'src/enums/status';
 import { computed, ref } from 'vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
-import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import UserDropdown from 'src/components/UserDropdown.vue';
 
