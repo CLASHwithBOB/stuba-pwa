@@ -1,4 +1,4 @@
-import { USER_STATUS } from 'src/enums/status';
+import { USER_STATUS } from 'src/enums/user-status';
 
 export const STATUSES = Object.freeze({
   [USER_STATUS.ONLINE]: { color: 'green-14', label: 'Online' },

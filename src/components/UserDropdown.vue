@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
-import { USER_STATUS } from 'src/enums/status';
+import { USER_STATUS } from 'src/enums/user-status';
 import UserProfile from './UserProfile.vue';
 
 const $q = useQuasar();

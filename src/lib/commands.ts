@@ -2,7 +2,7 @@ import type { QNotifyCreateOptions } from 'quasar';
 import { api } from 'src/api/api';
 import { COMMANDS } from 'src/constants/commands';
 import type { COMMAND_VERB } from 'src/enums/command';
-import type { USER_STATUS } from 'src/enums/status';
+import type { USER_STATUS } from 'src/enums/user-status';
 import { error, success } from './notifications';
 
 export function generateUsage(verb: COMMAND_VERB): string {
