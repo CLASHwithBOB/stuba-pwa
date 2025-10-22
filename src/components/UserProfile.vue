@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { USER_STATUS } from 'src/enums/status';
+import { USER_STATUS } from 'src/enums/user-status';
 import { STATUSES } from 'src/constants/statuses';
 
 interface Props {

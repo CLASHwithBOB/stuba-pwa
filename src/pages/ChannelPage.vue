@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import ChatBubble from 'src/components/ChatBubble.vue';
 import ChatInput from 'src/components/ChatInput.vue';
-import { ref } from 'vue';
+import { useChannel } from 'src/stores/channels';
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 defineProps<{
   isDesktop: boolean;
 }>();
+
+const route = useRoute();
+const channelStore = useChannel();
+
+watch(
+  () => route.params.channelId,
+  () => channelStore.setCurrentChannel(Number(route.params.channelId)),
+  { immediate: true },
+);
 
 const messages = [
   { id: 1, text: 'Hello!', user: { nickname: 'Gosho' } },
@@ -25,6 +36,10 @@ const input = ref('');
         :user="{ nickname: message.user.nickname }"
         :text="[message.text]"
       />
+      <div v-if="channelStore.currentChannel">
+        {{ channelStore.currentChannel.name }}
+      </div>
+      <div v-else>penis</div>
     </q-scroll-area>
     <div class="q-pa-sm flex items-end" style="background-color: #2c3e50">
       <ChatInput v-model="input" />

@@ -1,5 +1,5 @@
 import { defineRouter } from '#q-app/wrappers';
-import { useAuthStore } from 'src/stores/auth';
+import { useAuth } from 'src/stores/auth';
 import {
   createMemoryHistory,
   createRouter,
@@ -35,7 +35,7 @@ export default defineRouter(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach(async (to, from, next) => {
-    const auth = useAuthStore();
+    const auth = useAuth();
 
     if (auth.token && !auth.user) {
       try {

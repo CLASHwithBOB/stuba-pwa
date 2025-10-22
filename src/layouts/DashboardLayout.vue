@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 import ChatItem from 'src/components/ChatItem.vue';
-import { USER_STATUS } from 'src/enums/status';
-import { computed, ref } from 'vue';
+import { USER_STATUS } from 'src/enums/user-status';
+import { computed, onMounted, ref } from 'vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
 import { useRoute, useRouter } from 'vue-router';
 import UserDropdown from 'src/components/UserDropdown.vue';
+import { useChannel } from 'src/stores/channels';
 
 const $q = useQuasar();
 const router = useRouter();
 const route = useRoute();
+const channelStore = useChannel();
 
 const selectedChannelId = computed(() => route.params?.channelId);
 const isDesktop = computed(() => $q.screen.width >= 830);
@@ -19,6 +21,10 @@ const currentUser = ref({
   name: 'John Doe',
   avatar: '',
   status: USER_STATUS.ONLINE,
+});
+
+onMounted(async () => {
+  if (!channelStore.channels?.length) await channelStore.loadChannels();
 });
 
 const channels = ref([
@@ -54,6 +60,9 @@ const channels = ref([
           @click="router.push('/')"
         />
         <q-toolbar-title class="text-unselectable">PingMe</q-toolbar-title>
+        <q-toolbar-title class="text-unselectable">{{
+          channelStore.currentChannel?.name || 'penis'
+        }}</q-toolbar-title>
         <OptionsDropdown :is-admin="true" />
       </q-toolbar>
     </q-header>

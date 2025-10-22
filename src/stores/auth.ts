@@ -3,7 +3,7 @@ import { axios } from 'src/boot/axios';
 import type { User } from 'src/types/models';
 import { ref } from 'vue';
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuth = defineStore('auth', () => {
   const user = ref<User | null>(null);
   const token = ref<string | null>(localStorage.getItem('auth_token'));
 

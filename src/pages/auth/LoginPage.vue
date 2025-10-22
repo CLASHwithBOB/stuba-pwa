@@ -3,9 +3,9 @@ import { ref } from 'vue';
 import PasswordInput from 'components/PasswordInput.vue';
 import CircleIcon from 'components/CircleIcon.vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from 'src/stores/auth';
+import { useAuth } from 'src/stores/auth';
 
-const { login } = useAuthStore();
+const { login } = useAuth();
 const router = useRouter();
 
 const email = ref('');

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import CircleIcon from 'src/components/CircleIcon.vue';
 import PasswordInput from 'src/components/PasswordInput.vue';
-import { useAuthStore } from 'src/stores/auth';
+import { useAuth } from 'src/stores/auth';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const { register } = useAuthStore();
+const { register } = useAuth();
 const router = useRouter();
 
 const nickname = ref('');
