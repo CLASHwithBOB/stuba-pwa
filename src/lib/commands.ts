@@ -69,6 +69,11 @@ export function validate(text: string): string | null {
           }
         }
       }
+
+      if (command.channelOnly) {
+        //&& not in a channel route (ex: dashboard)
+        // return `Command /${verb} can only be used within a channel.`;
+      }
     }
   }
 
