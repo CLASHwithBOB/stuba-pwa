@@ -3,14 +3,14 @@ import { useQuasar } from 'quasar';
 import ChannelItem from 'src/components/ChannelItem.vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
 import UserDropdown from 'src/components/UserDropdown.vue';
-import { useChannel } from 'src/stores/channels';
+import { useChannels } from 'src/stores/channels';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const $q = useQuasar();
 const router = useRouter();
 const route = useRoute();
-const channelStore = useChannel();
+const channelStore = useChannels();
 
 const selectedChannelId = computed(() => route.params?.channelId);
 const isDesktop = computed(() => $q.screen.width >= 830);
