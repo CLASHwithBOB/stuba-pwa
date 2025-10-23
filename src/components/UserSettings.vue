@@ -64,13 +64,6 @@ function handleSave() {
     timeout: 2000,
   });
 
-  // Add your save logic here
-  console.log('Settings saved:', {
-    userName: editedUserName.value,
-    userAvatar: editedUserAvatar.value,
-    userStatus: editedUserStatus.value,
-  });
-
   showDialog.value = false;
 }
 
@@ -99,13 +92,7 @@ defineExpose({
               <span v-else>{{ editedUserName.charAt(0).toUpperCase() }}</span>
             </q-avatar>
             <div class="col">
-              <q-input
-                v-model="editedUserAvatar"
-                dense
-                outlined
-                label="Avatar URL"
-                placeholder="https://example.com/avatar.jpg"
-              />
+              <q-input v-model="editedUserAvatar" dense outlined label="Avatar URL" />
             </div>
           </div>
         </div>
