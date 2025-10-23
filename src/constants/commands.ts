@@ -62,16 +62,6 @@ export const COMMANDS: Record<COMMAND_VERB, CommandDefinition> = Object.freeze({
     channelOnly: false,
   },
 
-  [COMMAND_VERB.THEME]: {
-    description: 'Change the theme.',
-    arg: {
-      name: 'theme',
-      allowedValues: ['light', 'dark'],
-    },
-    adminOnly: false,
-    channelOnly: false,
-  },
-
   [COMMAND_VERB.HELP]: {
     description: 'Show this help dialog.',
     adminOnly: false,

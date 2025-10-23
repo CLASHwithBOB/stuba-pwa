@@ -1,6 +1,7 @@
 import type { QNotifyCreateOptions } from 'quasar';
 import { api } from 'src/api/api';
 import { COMMANDS } from 'src/constants/commands';
+import { CHANNEL_TYPE } from 'src/enums/channel-type';
 import type { COMMAND_VERB } from 'src/enums/command';
 import type { USER_STATUS } from 'src/enums/user-status';
 import { error, success } from './notifications';
@@ -83,10 +84,7 @@ export function validate(text: string, isChatOpen: boolean): string | null {
   return null;
 }
 
-export const commands: Record<
-  COMMAND_VERB,
-  (user?: string) => QNotifyCreateOptions | Promise<QNotifyCreateOptions>
-> = {
+export const commands = {
   join,
   quit,
   cancel,
@@ -95,14 +93,30 @@ export const commands: Record<
   revoke,
   kick,
   status,
-  theme,
   help,
 };
 
-function join(channel?: string) {
-  return channel
-    ? ({ ...success, message: `Successfully joined the channel ${channel}.` } as const)
-    : ({ ...error, message: `Channel ${channel} not found.` } as const);
+async function join(
+  args?: string,
+): Promise<{ notification: QNotifyCreateOptions } | { redirectUrl: string }> {
+  if (!args)
+    return await Promise.resolve({
+      notification: { ...error, message: 'Error: No channel name specified.' },
+    } as const);
+
+  const split = args.split(' ');
+  const name = split[0]!;
+  const type = split[1] === CHANNEL_TYPE.PRIVATE ? CHANNEL_TYPE.PRIVATE : CHANNEL_TYPE.PUBLIC;
+
+  const res = await api.channels.join({ name, type });
+
+  if ('error' in res) {
+    return { notification: { ...error, message: res.error } } as const;
+  }
+
+  return await Promise.resolve({
+    redirectUrl: `/channels/${name}`,
+  });
 }
 
 function quit() {
@@ -143,10 +157,6 @@ async function status(status?: string) {
   await api.user.update({ status: status as USER_STATUS });
 
   return { ...success, message: `You are ${status}.` } as const;
-}
-
-function theme() {
-  return { ...success, message: `Theme changed successfully.` } as const;
 }
 
 function help() {

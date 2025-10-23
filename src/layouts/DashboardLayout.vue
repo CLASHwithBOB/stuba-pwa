@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 import ChannelItem from 'src/components/ChannelItem.vue';
-import { USER_STATUS } from 'src/enums/user-status';
-import { computed, onMounted, ref } from 'vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
-import { useRoute, useRouter } from 'vue-router';
 import UserDropdown from 'src/components/UserDropdown.vue';
+import { USER_STATUS } from 'src/enums/user-status';
 import { useChannel } from 'src/stores/channels';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const $q = useQuasar();
 const router = useRouter();

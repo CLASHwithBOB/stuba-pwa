@@ -7,6 +7,5 @@ export const enum COMMAND_VERB {
   REVOKE = 'revoke',
   KICK = 'kick',
   STATUS = 'status',
-  THEME = 'theme',
   HELP = 'help',
 }

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
+import { commands, validate } from 'src/lib/commands';
+import { useChannel } from 'src/stores/channels';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import EmojiPicker from 'vue3-emoji-picker';
 import 'vue3-emoji-picker/css';
-
-import { commands, validate } from 'src/lib/commands';
 import HelpDialog from './HelpDialog.vue';
-import { useChannel } from 'src/stores/channels';
 
 const props = withDefaults(defineProps<{ modelValue: string; button?: boolean }>(), {
   button: true,
@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<{ modelValue: string; button?: boolean }>
 
 const $q = useQuasar();
 const channelStore = useChannel();
+const router = useRouter();
 
 const localValue = ref(props.modelValue);
 const showEmojiPicker = ref(false);
@@ -49,38 +50,42 @@ async function onSubmit() {
     }
 
     const splitText = trimmedText.split(' ');
+    let res = null;
 
     switch (splitText[0]) {
       case '/join':
-        $q.notify(await commands.join(splitText.slice(1).join(' ')));
+        res = await commands.join(splitText.slice(1).join(' '));
         break;
       case '/quit':
-        $q.notify(await commands.quit());
+        // $q.notify(await commands.quit());
         break;
       case '/cancel':
-        $q.notify(await commands.cancel());
+        // $q.notify(await commands.cancel());
         break;
       case '/list':
-        $q.notify(await commands.list());
+        // $q.notify(await commands.list());
         break;
       case '/invite':
-        $q.notify(await commands.invite(splitText.slice(1).join(' ')));
+        // $q.notify(await commands.invite(splitText.slice(1).join(' ')));
         break;
       case '/revoke':
-        $q.notify(await commands.revoke(splitText.slice(1).join(' ')));
+        // $q.notify(await commands.revoke(splitText.slice(1).join(' ')));
         break;
       case '/kick':
-        $q.notify(await commands.kick(splitText.slice(1).join(' ')));
+        // $q.notify(await commands.kick(splitText.slice(1).join(' ')));
         break;
       case '/status':
         $q.notify(await commands.status(splitText.slice(1).join(' ')));
         break;
-      case '/theme':
-        $q.notify(await commands.theme(splitText.slice(1).join(' ')));
-        break;
       case '/help':
         showHelpDialog.value = true;
         break;
+    }
+
+    if (res) {
+      if ('redirectUrl' in res && res.redirectUrl) {
+        await router.push(res.redirectUrl);
+      }
     }
   } else {
     // Send message

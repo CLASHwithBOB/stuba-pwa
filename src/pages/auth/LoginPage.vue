@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import PasswordInput from 'components/PasswordInput.vue';
 import CircleIcon from 'components/CircleIcon.vue';
-import { useRouter } from 'vue-router';
+import PasswordInput from 'components/PasswordInput.vue';
 import { useAuth } from 'src/stores/auth';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const { login } = useAuth();
 const router = useRouter();
