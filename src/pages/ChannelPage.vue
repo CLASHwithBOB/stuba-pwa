@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ChatBubble from 'src/components/ChatBubble.vue';
 import ChatInput from 'src/components/ChatInput.vue';
-import { useChannel } from 'src/stores/channels';
+import { useChannels } from 'src/stores/channels';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -10,7 +10,7 @@ defineProps<{
 }>();
 
 const route = useRoute();
-const channelStore = useChannel();
+const channelStore = useChannels();
 
 watch(
   () => route.params.channelId,

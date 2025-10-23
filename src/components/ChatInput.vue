@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
+import { RESPONSE_TYPE } from 'src/enums/response';
 import { commands, validate } from 'src/lib/commands';
-import { useChannel } from 'src/stores/channels';
+import { useChannels } from 'src/stores/channels';
+import { useNotifications } from 'src/stores/notifications';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import EmojiPicker from 'vue3-emoji-picker';
@@ -13,8 +15,9 @@ const props = withDefaults(defineProps<{ modelValue: string; button?: boolean }>
 });
 
 const $q = useQuasar();
-const channelStore = useChannel();
+const channelStore = useChannels();
 const router = useRouter();
+const { setNotification } = useNotifications();
 
 const localValue = ref(props.modelValue);
 const showEmojiPicker = ref(false);
@@ -82,11 +85,11 @@ async function onSubmit() {
         break;
     }
 
-    if (res) {
-      if ('redirectUrl' in res && res.redirectUrl) {
-        await router.push(res.redirectUrl);
-      }
-    }
+    if (res?.type === RESPONSE_TYPE.REDIRECT) {
+      if (res.notification) setNotification(res.notification);
+
+      await router.push(res.url);
+    } else if (res?.type === RESPONSE_TYPE.ERROR) $q.notify(res.notification);
   } else {
     // Send message
   }

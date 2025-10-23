@@ -3,7 +3,7 @@ import { api } from 'src/api/api';
 import type { Channel } from 'src/types/models';
 import { ref } from 'vue';
 
-export const useChannel = defineStore('channel', () => {
+export const useChannels = defineStore('channels', () => {
   const channels = ref<Channel[] | null>([]);
   const currentChannel = ref<Channel | null>(null);
 

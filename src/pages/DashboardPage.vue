@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import ChatInput from 'src/components/ChatInput.vue';
-import { useChannel } from 'src/stores/channels';
+import { useChannels } from 'src/stores/channels';
 import { onMounted, ref } from 'vue';
 
 defineProps<{
   isDesktop: boolean;
 }>();
 
-const channelStore = useChannel();
+const channelStore = useChannels();
 
 onMounted(() => channelStore.setCurrentChannel(null));
 

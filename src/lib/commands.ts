@@ -1,9 +1,10 @@
-import type { QNotifyCreateOptions } from 'quasar';
 import { api } from 'src/api/api';
 import { COMMANDS } from 'src/constants/commands';
 import { CHANNEL_TYPE } from 'src/enums/channel-type';
 import type { COMMAND_VERB } from 'src/enums/command';
+import { RESPONSE_TYPE } from 'src/enums/response';
 import type { USER_STATUS } from 'src/enums/user-status';
+import type { ErrorResponse, RedirectResponse } from 'src/types/responses';
 import { error, success } from './notifications';
 
 export function generateUsage(verb: COMMAND_VERB): string {
@@ -96,11 +97,10 @@ export const commands = {
   help,
 };
 
-async function join(
-  args?: string,
-): Promise<{ notification: QNotifyCreateOptions } | { redirectUrl: string }> {
+async function join(args?: string): Promise<RedirectResponse | ErrorResponse> {
   if (!args)
     return await Promise.resolve({
+      type: RESPONSE_TYPE.ERROR,
       notification: { ...error, message: 'Error: No channel name specified.' },
     } as const);
 
@@ -108,15 +108,7 @@ async function join(
   const name = split[0]!;
   const type = split[1] === CHANNEL_TYPE.PRIVATE ? CHANNEL_TYPE.PRIVATE : CHANNEL_TYPE.PUBLIC;
 
-  const res = await api.channels.join({ name, type });
-
-  if ('error' in res) {
-    return { notification: { ...error, message: res.error } } as const;
-  }
-
-  return await Promise.resolve({
-    redirectUrl: `/channels/${name}`,
-  });
+  return await api.channels.join({ name, type });
 }
 
 function quit() {
