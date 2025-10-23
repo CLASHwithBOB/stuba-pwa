@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
-import { USER_STATUS } from 'src/enums/user-status';
+import type { USER_STATUS } from 'src/enums/user-status';
 import UserProfile from './UserProfile.vue';
+import UserSettings from './UserSettings.vue';
 
 const $q = useQuasar();
 
 interface Props {
   userName: string;
   userAvatar?: string;
-  userStatus?: USER_STATUS;
+  userStatus: USER_STATUS;
 }
 
-withDefaults(defineProps<Props>(), {
-  userAvatar: '',
-  userStatus: USER_STATUS.ONLINE,
-});
+defineProps<Props>();
 
 const showDropdown = ref(false);
 const profileRef = ref();
+const settingsRef = ref();
 
 function handleLogout() {
   $q.notify({
@@ -31,19 +30,16 @@ function handleLogout() {
 }
 
 function handleSettings() {
-  $q.notify({
-    message: 'Opening settings...',
-    color: 'info',
-    position: 'top',
-    timeout: 2000,
-  });
   showDropdown.value = false;
+  if (settingsRef.value) {
+    settingsRef.value.showDialog = true;
+  }
 }
 </script>
 
 <template>
   <div class="user-profile-content" ref="profileRef" style="width: 100%; position: relative">
-    <UserProfile :name="userName" :avatar="userAvatar" :status="userStatus" />
+    <UserProfile :name="userName" :avatar="userAvatar || ''" :status="userStatus" />
   </div>
 
   <q-menu v-model="showDropdown" :target="profileRef" anchor="top end" self="bottom end">
@@ -67,6 +63,13 @@ function handleSettings() {
       </q-item>
     </q-list>
   </q-menu>
+
+  <UserSettings
+    ref="settingsRef"
+    :user-name="userName"
+    :user-avatar="userAvatar || ''"
+    :user-status="userStatus"
+  />
 </template>
 <style scoped>
 .dropdown-item:hover {
