@@ -1,11 +1,9 @@
 <script setup lang="ts">
+import type { Channel } from 'src/types/models';
 import { useRouter } from 'vue-router';
 
 defineProps<{
-  channel: {
-    id: number;
-    name: string;
-  };
+  channel: Channel;
 }>();
 
 const router = useRouter();
