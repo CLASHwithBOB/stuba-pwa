@@ -51,7 +51,12 @@ onMounted(async () => {
         >
           <q-scroll-area class="col">
             <q-list>
-              <ChannelItem v-for="channel in channelStore.channels" :key="channel.id" :channel />
+              <ChannelItem
+                v-for="channel in channelStore.channels"
+                :key="channel.id"
+                :channel
+                :highlight="channel.id === 1"
+              />
             </q-list>
           </q-scroll-area>
 
