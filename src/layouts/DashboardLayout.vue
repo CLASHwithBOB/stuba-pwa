@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-import ChatItem from 'src/components/ChatItem.vue';
+import ChannelItem from 'src/components/ChannelItem.vue';
 import { USER_STATUS } from 'src/enums/user-status';
 import { computed, onMounted, ref } from 'vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
@@ -60,9 +60,9 @@ const channels = ref([
           @click="router.push('/')"
         />
         <q-toolbar-title class="text-unselectable">PingMe</q-toolbar-title>
-        <q-toolbar-title class="text-unselectable">{{
-          channelStore.currentChannel?.name || 'penis'
-        }}</q-toolbar-title>
+        <q-toolbar-title class="text-unselectable">
+          {{ channelStore.currentChannel?.name }}
+        </q-toolbar-title>
         <OptionsDropdown :is-admin="true" />
       </q-toolbar>
     </q-header>
@@ -77,13 +77,13 @@ const channels = ref([
         >
           <q-scroll-area class="col">
             <q-list>
-              <ChatItem
+              <ChannelItem
                 v-for="channel in channels"
+                :key="channel.id"
                 :channel="{
+                  id: channel.id,
                   name: channel.name,
                 }"
-                @click="router.push(`/channels/${channel.id}`)"
-                :key="channel.id"
               />
             </q-list>
           </q-scroll-area>

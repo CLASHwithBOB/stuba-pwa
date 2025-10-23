@@ -7,5 +7,6 @@ export interface CommandDefinition {
   description: string;
   arg?: CommandArgument;
   flags?: string[][];
-  adminOnly?: boolean;
+  adminOnly: boolean;
+  channelOnly: boolean;
 }
