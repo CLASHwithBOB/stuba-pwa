@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { USER_STATUS } from 'src/enums/user-status';
 import UserProfile from './UserProfile.vue';
+import UserSettings from './UserSettings.vue';
 
 const $q = useQuasar();
 
@@ -12,13 +13,14 @@ interface Props {
   userStatus?: USER_STATUS;
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   userAvatar: '',
   userStatus: USER_STATUS.ONLINE,
 });
 
 const showDropdown = ref(false);
 const profileRef = ref();
+const settingsRef = ref();
 
 function handleLogout() {
   $q.notify({
@@ -31,13 +33,8 @@ function handleLogout() {
 }
 
 function handleSettings() {
-  $q.notify({
-    message: 'Opening settings...',
-    color: 'info',
-    position: 'top',
-    timeout: 2000,
-  });
   showDropdown.value = false;
+  settingsRef.value?.open();
 }
 </script>
 
@@ -67,6 +64,13 @@ function handleSettings() {
       </q-item>
     </q-list>
   </q-menu>
+
+  <UserSettings
+    ref="settingsRef"
+    :user-name="props.userName"
+    :user-avatar="props.userAvatar"
+    :user-status="props.userStatus"
+  />
 </template>
 <style scoped>
 .dropdown-item:hover {
