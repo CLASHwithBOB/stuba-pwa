@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import EmojiPicker from 'vue3-emoji-picker';
 import 'vue3-emoji-picker/css';
@@ -8,8 +8,9 @@ import { commands, validate } from 'src/lib/commands';
 import HelpDialog from './HelpDialog.vue';
 import { useChannel } from 'src/stores/channels';
 
-const props = defineProps<{ modelValue: string }>();
-const emit = defineEmits(['update:modelValue', 'send']);
+const props = withDefaults(defineProps<{ modelValue: string; button?: boolean }>(), {
+  button: true,
+});
 
 const $q = useQuasar();
 const channelStore = useChannel();
@@ -18,8 +19,6 @@ const localValue = ref(props.modelValue);
 const showEmojiPicker = ref(false);
 const showHelpDialog = ref(false);
 const inputRef = ref<HTMLElement | null>(null);
-
-watch(localValue, (val) => emit('update:modelValue', val));
 
 function toggleEmojiPicker() {
   showEmojiPicker.value = !showEmojiPicker.value;
@@ -84,7 +83,7 @@ async function onSubmit() {
         break;
     }
   } else {
-    emit('send', trimmedText);
+    // Send message
   }
 
   localValue.value = '';
@@ -92,18 +91,19 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="col-grow relative">
-    <div style="overflow: hidden; border-radius: 15px">
+  <q-form style="display: flex; width: 100%" @submit="onSubmit">
+    <div style="overflow: hidden; border-radius: 15px; flex: 1">
       <q-input
         v-model="localValue"
         ref="inputRef"
-        @keydown.enter="onSubmit"
         autogrow
         borderless
         dense
         placeholder="Type a message or command..."
-        style="overflow-y: auto; background-color: #3498db; padding-left: 15px; padding-right: 32px"
-        input-style="max-height: 150px; color: #ecf0f1; font-size: 16px; overflow-y: auto;"
+        style="background-color: #3498db; padding-left: 15px; padding-right: 32px"
+        input-style="max-height: 150px; color: #ecf0f1; font-size: 16px;"
+        @keydown.enter.exact.prevent="onSubmit"
+        @keydown.shift.enter.stop
       >
         <template v-slot:append>
           <q-btn
@@ -130,6 +130,14 @@ async function onSubmit() {
       @click="showEmojiPicker = false"
       style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 999"
     />
-  </div>
+    <q-btn
+      class="q-ml-sm q-mt-auto"
+      type="submit"
+      rounded
+      outlined
+      icon="send"
+      style="background-color: #5dade2; height: 40px"
+    />
+  </q-form>
   <HelpDialog v-model="showHelpDialog" />
 </template>
