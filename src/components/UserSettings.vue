@@ -2,24 +2,16 @@
 import { useQuasar } from 'quasar';
 import { STATUSES } from 'src/constants/statuses';
 import { USER_STATUS } from 'src/enums/user-status';
+import { useAuth } from 'src/stores/auth';
 import { ref } from 'vue';
 
-interface Props {
-  userName: string;
-  userAvatar?: string;
-  userStatus: USER_STATUS;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  userAvatar: '',
-});
-
 const $q = useQuasar();
+const { user } = useAuth();
 
 const showDialog = ref(false);
-const editedUserName = ref(props.userName);
-const editedUserAvatar = ref(props.userAvatar);
-const editedUserStatus = ref(props.userStatus);
+const editedUserName = ref(user?.nickname);
+const editedUserAvatar = ref('');
+const editedUserStatus = ref(user?.status);
 
 const statusOptions = [
   {
@@ -40,7 +32,7 @@ const statusOptions = [
 ];
 
 function handleSave() {
-  if (!editedUserName.value.trim()) {
+  if (!editedUserName.value?.trim()) {
     $q.notify({
       message: 'Username cannot be empty',
       color: 'negative',
@@ -80,7 +72,7 @@ defineExpose({
           <div class="row items-center q-gutter-md">
             <q-avatar size="64px" color="primary" text-color="white">
               <img v-if="editedUserAvatar" :src="editedUserAvatar" alt="User avatar" />
-              <span v-else>{{ editedUserName.charAt(0).toUpperCase() }}</span>
+              <span v-else>{{ editedUserName?.charAt(0).toUpperCase() }}</span>
             </q-avatar>
             <div class="col">
               <q-input v-model="editedUserAvatar" dense outlined label="Avatar URL" />

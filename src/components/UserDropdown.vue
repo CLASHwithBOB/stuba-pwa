@@ -1,19 +1,12 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-import type { USER_STATUS } from 'src/enums/user-status';
+import { useAuth } from 'src/stores/auth';
 import { ref } from 'vue';
 import UserProfile from './UserProfile.vue';
 import UserSettings from './UserSettings.vue';
 
 const $q = useQuasar();
-
-interface Props {
-  userName: string;
-  userAvatar?: string;
-  userStatus: USER_STATUS;
-}
-
-defineProps<Props>();
+const { user } = useAuth();
 
 const showDropdown = ref(false);
 const profileRef = ref();
@@ -38,8 +31,13 @@ function handleSettings() {
 </script>
 
 <template>
-  <div class="user-profile-content" ref="profileRef" style="width: 100%; position: relative">
-    <UserProfile :name="userName" :avatar="userAvatar || ''" :status="userStatus" />
+  <div
+    v-if="user"
+    class="user-profile-content"
+    ref="profileRef"
+    style="width: 100%; position: relative"
+  >
+    <UserProfile :name="user.nickname" :avatar="false || ''" :status="user.status" />
   </div>
 
   <q-menu v-model="showDropdown" :target="profileRef" anchor="top end" self="bottom end">
@@ -64,12 +62,7 @@ function handleSettings() {
     </q-list>
   </q-menu>
 
-  <UserSettings
-    ref="settingsRef"
-    :user-name="userName"
-    :user-avatar="userAvatar || ''"
-    :user-status="userStatus"
-  />
+  <UserSettings ref="settingsRef" />
 </template>
 <style scoped>
 .dropdown-item:hover {

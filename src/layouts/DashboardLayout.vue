@@ -3,7 +3,6 @@ import { useQuasar } from 'quasar';
 import ChannelItem from 'src/components/ChannelItem.vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
 import UserDropdown from 'src/components/UserDropdown.vue';
-import { USER_STATUS } from 'src/enums/user-status';
 import { useChannel } from 'src/stores/channels';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -16,12 +15,6 @@ const channelStore = useChannel();
 const selectedChannelId = computed(() => route.params?.channelId);
 const isDesktop = computed(() => $q.screen.width >= 830);
 const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
-
-const currentUser = ref({
-  name: 'John Doe',
-  avatar: '',
-  status: USER_STATUS.ONLINE,
-});
 
 onMounted(async () => {
   if (!channelStore.channels?.length) await channelStore.loadChannels();
@@ -89,11 +82,7 @@ const channels = ref([
           </q-scroll-area>
 
           <div>
-            <UserDropdown
-              :user-name="currentUser.name"
-              :user-avatar="currentUser.avatar"
-              :user-status="currentUser.status"
-            />
+            <UserDropdown />
           </div>
         </q-page>
 
