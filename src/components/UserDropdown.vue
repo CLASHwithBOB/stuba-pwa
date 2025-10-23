@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 import type { USER_STATUS } from 'src/enums/user-status';
+import { ref } from 'vue';
 import UserProfile from './UserProfile.vue';
 import UserSettings from './UserSettings.vue';
 
