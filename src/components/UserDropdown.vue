@@ -9,7 +9,7 @@ const $q = useQuasar();
 
 interface Props {
   userName: string;
-  userAvatar: string;
+  userAvatar?: string;
   userStatus: USER_STATUS;
 }
 
@@ -39,7 +39,7 @@ function handleSettings() {
 
 <template>
   <div class="user-profile-content" ref="profileRef" style="width: 100%; position: relative">
-    <UserProfile :name="userName" :avatar="userAvatar" :status="userStatus" />
+    <UserProfile :name="userName" :avatar="userAvatar || ''" :status="userStatus" />
   </div>
 
   <q-menu v-model="showDropdown" :target="profileRef" anchor="top end" self="bottom end">
@@ -67,7 +67,7 @@ function handleSettings() {
   <UserSettings
     ref="settingsRef"
     :user-name="userName"
-    :user-avatar="userAvatar"
+    :user-avatar="userAvatar || ''"
     :user-status="userStatus"
   />
 </template>
