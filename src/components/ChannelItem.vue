@@ -1,13 +1,23 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
 defineProps<{
   channel: {
+    id: number;
     name: string;
   };
 }>();
+
+const router = useRouter();
 </script>
 
 <template>
-  <q-item class="text-unselectable" v-ripple clickable @click="$emit('click')">
+  <q-item
+    class="text-unselectable"
+    v-ripple
+    clickable
+    @click="router.push(`/channels/${channel.id}`)"
+  >
     <q-item-section avatar>
       <q-avatar>
         <q-img src="https://cdn.quasar.dev/img/boy-avatar.png" />
