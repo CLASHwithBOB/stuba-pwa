@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useQuasar } from 'quasar';
-import { USER_STATUS } from 'src/enums/user-status';
 import { STATUSES } from 'src/constants/statuses';
+import { USER_STATUS } from 'src/enums/user-status';
+import { ref } from 'vue';
 
 interface Props {
   userName: string;
