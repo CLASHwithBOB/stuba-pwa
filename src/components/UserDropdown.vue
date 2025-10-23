@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
-import { USER_STATUS } from 'src/enums/user-status';
+import type { USER_STATUS } from 'src/enums/user-status';
 import UserProfile from './UserProfile.vue';
 import UserSettings from './UserSettings.vue';
 
@@ -9,14 +9,11 @@ const $q = useQuasar();
 
 interface Props {
   userName: string;
-  userAvatar?: string;
-  userStatus?: USER_STATUS;
+  userAvatar: string;
+  userStatus: USER_STATUS;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  userAvatar: '',
-  userStatus: USER_STATUS.ONLINE,
-});
+defineProps<Props>();
 
 const showDropdown = ref(false);
 const profileRef = ref();
@@ -34,7 +31,9 @@ function handleLogout() {
 
 function handleSettings() {
   showDropdown.value = false;
-  settingsRef.value?.open();
+  if (settingsRef.value) {
+    settingsRef.value.showDialog = true;
+  }
 }
 </script>
 
@@ -67,9 +66,9 @@ function handleSettings() {
 
   <UserSettings
     ref="settingsRef"
-    :user-name="props.userName"
-    :user-avatar="props.userAvatar"
-    :user-status="props.userStatus"
+    :user-name="userName"
+    :user-avatar="userAvatar"
+    :user-status="userStatus"
   />
 </template>
 <style scoped>

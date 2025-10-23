@@ -17,9 +17,9 @@ const props = withDefaults(defineProps<Props>(), {
 const $q = useQuasar();
 
 const showDialog = ref(false);
-const editedUserName = ref('');
-const editedUserAvatar = ref('');
-const editedUserStatus = ref(USER_STATUS.ONLINE);
+const editedUserName = ref(props.userName);
+const editedUserAvatar = ref(props.userAvatar);
+const editedUserStatus = ref(props.userStatus);
 
 const statusOptions = [
   {
@@ -39,13 +39,6 @@ const statusOptions = [
   },
 ];
 
-function open() {
-  editedUserName.value = props.userName;
-  editedUserAvatar.value = props.userAvatar;
-  editedUserStatus.value = props.userStatus;
-  showDialog.value = true;
-}
-
 function handleSave() {
   if (!editedUserName.value.trim()) {
     $q.notify({
@@ -63,8 +56,6 @@ function handleSave() {
     position: 'top',
     timeout: 2000,
   });
-
-  showDialog.value = false;
 }
 
 function handleCancel() {
@@ -72,7 +63,7 @@ function handleCancel() {
 }
 
 defineExpose({
-  open,
+  showDialog,
 });
 </script>
 
