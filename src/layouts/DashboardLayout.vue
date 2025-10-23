@@ -81,9 +81,7 @@ const channels = ref([
             </q-list>
           </q-scroll-area>
 
-          <div>
-            <UserDropdown />
-          </div>
+          <UserDropdown />
         </q-page>
 
         <router-view v-slot="{ Component }">
