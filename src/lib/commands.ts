@@ -19,7 +19,7 @@ export function generateUsage(verb: COMMAND_VERB): string {
   return `/${verb} ${argument} ${flags}`.trim();
 }
 
-export function validate(text: string): string | null {
+export function validate(text: string, isChatOpen: boolean): string | null {
   if (!text.startsWith('/')) {
     return 'Command must start with /';
   }
@@ -70,9 +70,8 @@ export function validate(text: string): string | null {
         }
       }
 
-      if (command.channelOnly) {
-        //&& not in a channel route (ex: dashboard)
-        // return `Command /${verb} can only be used within a channel.`;
+      if (command.channelOnly && !isChatOpen) {
+        return `Command /${verb} can only be used within a channel.`;
       }
     }
   }

@@ -60,9 +60,9 @@ const channels = ref([
           @click="router.push('/')"
         />
         <q-toolbar-title class="text-unselectable">PingMe</q-toolbar-title>
-        <q-toolbar-title class="text-unselectable">{{
-          channelStore.currentChannel?.name || 'penis'
-        }}</q-toolbar-title>
+        <q-toolbar-title class="text-unselectable">
+          {{ channelStore.currentChannel?.name }}
+        </q-toolbar-title>
         <OptionsDropdown :is-admin="true" />
       </q-toolbar>
     </q-header>

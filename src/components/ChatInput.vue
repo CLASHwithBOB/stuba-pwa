@@ -6,11 +6,14 @@ import 'vue3-emoji-picker/css';
 
 import { commands, validate } from 'src/lib/commands';
 import HelpDialog from './HelpDialog.vue';
+import { useChannel } from 'src/stores/channels';
 
 const props = defineProps<{ modelValue: string }>();
 const emit = defineEmits(['update:modelValue', 'send']);
 
 const $q = useQuasar();
+const channelStore = useChannel();
+
 const localValue = ref(props.modelValue);
 const showEmojiPicker = ref(false);
 const showHelpDialog = ref(false);
@@ -34,7 +37,7 @@ async function onSubmit() {
   if (!trimmedText) return;
 
   if (trimmedText.startsWith('/')) {
-    const validationError = validate(trimmedText);
+    const validationError = validate(trimmedText, channelStore.currentChannel !== null);
     if (validationError) {
       $q.notify({
         color: 'red-5',

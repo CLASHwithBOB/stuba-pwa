@@ -36,10 +36,6 @@ const input = ref('');
         :user="{ nickname: message.user.nickname }"
         :text="[message.text]"
       />
-      <div v-if="channelStore.currentChannel">
-        {{ channelStore.currentChannel.name }}
-      </div>
-      <div v-else>penis</div>
     </q-scroll-area>
     <div class="q-pa-sm flex items-end" style="background-color: #2c3e50">
       <ChatInput v-model="input" />
