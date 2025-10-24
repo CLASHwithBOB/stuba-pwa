@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 
 defineProps<{
   channel: Channel;
+  highlight?: boolean;
 }>();
 
 const router = useRouter();
@@ -12,6 +13,7 @@ const router = useRouter();
 <template>
   <q-item
     class="text-unselectable"
+    :class="{ 'highlighted-item': highlight }"
     v-ripple
     clickable
     @click="router.push(`/channels/${channel.id}`)"
@@ -45,5 +47,9 @@ const router = useRouter();
   gap: 2px;
   padding-top: 2px;
   justify-content: start;
+}
+
+.highlighted-item .q-item__label {
+  font-weight: bold;
 }
 </style>
