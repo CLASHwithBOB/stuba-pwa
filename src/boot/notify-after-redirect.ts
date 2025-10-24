@@ -5,7 +5,7 @@ import { useNotifications } from 'src/stores/notifications';
 export default boot(({ router }) => {
   router.afterEach(() => {
     const $q = useQuasar();
-    const { notification } = useNotifications();
+    const { notification, setNotification } = useNotifications();
 
     if (notification && notification.message)
       $q.notify({
@@ -14,5 +14,7 @@ export default boot(({ router }) => {
         position: notification?.position ?? 'top',
         timeout: notification?.timeout ?? 2000,
       });
+
+    setNotification(null);
   });
 });

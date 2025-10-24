@@ -4,7 +4,7 @@ import ChannelItem from 'src/components/ChannelItem.vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
 import UserDropdown from 'src/components/user/UserDropdown.vue';
 import { useChannels } from 'src/stores/channels';
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const $q = useQuasar();
@@ -15,10 +15,6 @@ const channelStore = useChannels();
 const selectedChannelId = computed(() => route.params?.channelId);
 const isDesktop = computed(() => $q.screen.width >= 830);
 const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
-
-onMounted(async () => {
-  if (!channelStore.channels?.length) await channelStore.loadChannels();
-});
 </script>
 
 <template>
