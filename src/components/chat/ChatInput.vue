@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
+import HelpDialog from 'src/components/HelpDialog.vue';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { commands, validate } from 'src/lib/commands';
 import { useChannels } from 'src/stores/channels';
@@ -8,7 +9,6 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import EmojiPicker from 'vue3-emoji-picker';
 import 'vue3-emoji-picker/css';
-import HelpDialog from './HelpDialog.vue';
 
 const props = withDefaults(defineProps<{ modelValue: string; button?: boolean }>(), {
   button: true,

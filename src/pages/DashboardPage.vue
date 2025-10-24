@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ChatInput from 'src/components/ChatInput.vue';
+import ChatInput from 'src/components/chat/ChatInput.vue';
 import { useChannels } from 'src/stores/channels';
 import { onMounted, ref } from 'vue';
 
