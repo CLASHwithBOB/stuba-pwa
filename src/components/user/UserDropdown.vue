@@ -37,7 +37,7 @@ function handleSettings() {
     ref="profileRef"
     style="width: 100%; position: relative"
   >
-    <UserProfile :name="user.nickname" :avatar="false || ''" :status="user.status" />
+    <UserProfile :user />
   </div>
 
   <q-menu v-model="showDropdown" :target="profileRef" anchor="top end" self="bottom end">

@@ -6,6 +6,7 @@ export interface User {
   nickname: string;
   email: string;
   status: USER_STATUS;
+  avatar?: string;
   createdAt: string;
   updatedAt: string;
 }
