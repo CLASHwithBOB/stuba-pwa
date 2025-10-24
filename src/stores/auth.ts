@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { axios } from 'src/boot/axios';
+import { axios } from 'src/lib/axios';
 import type { User } from 'src/types/models';
 import { ref } from 'vue';
 

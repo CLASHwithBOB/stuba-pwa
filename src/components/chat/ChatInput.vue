@@ -1,26 +1,30 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
+import HelpDialog from 'src/components/HelpDialog.vue';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { commands, validate } from 'src/lib/commands';
+import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
 import { useNotifications } from 'src/stores/notifications';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import EmojiPicker from 'vue3-emoji-picker';
 import 'vue3-emoji-picker/css';
-import HelpDialog from './HelpDialog.vue';
+import MembersDialog from './MembersDialog.vue';
 
 const props = withDefaults(defineProps<{ modelValue: string; button?: boolean }>(), {
   button: true,
 });
 
 const $q = useQuasar();
+const { user } = useAuth();
 const channelStore = useChannels();
 const router = useRouter();
 const { setNotification } = useNotifications();
 
 const localValue = ref(props.modelValue);
 const showEmojiPicker = ref(false);
+const showMembersDialog = ref(false);
 const showHelpDialog = ref(false);
 const inputRef = ref<HTMLElement | null>(null);
 
@@ -66,7 +70,7 @@ async function onSubmit() {
         // $q.notify(await commands.cancel());
         break;
       case '/list':
-        // $q.notify(await commands.list());
+        showMembersDialog.value = true;
         break;
       case '/invite':
         // $q.notify(await commands.invite(splitText.slice(1).join(' ')));
@@ -148,4 +152,10 @@ async function onSubmit() {
     />
   </q-form>
   <HelpDialog v-model="showHelpDialog" />
+  <MembersDialog
+    v-if="user && channelStore.currentChannel"
+    :channel="channelStore.currentChannel"
+    :members="[user, user, user, user]"
+    v-model="showMembersDialog"
+  />
 </template>

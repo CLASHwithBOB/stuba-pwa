@@ -2,7 +2,7 @@
 import { useQuasar } from 'quasar';
 import ChannelItem from 'src/components/ChannelItem.vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
-import UserDropdown from 'src/components/UserDropdown.vue';
+import UserDropdown from 'src/components/user/UserDropdown.vue';
 import { useChannels } from 'src/stores/channels';
 import { computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';

@@ -6,13 +6,14 @@ export interface User {
   nickname: string;
   email: string;
   status: USER_STATUS;
+  avatar?: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface Channel {
   id: number;
-  user_id: string;
+  userId: number;
   name: string;
   type: CHANNEL_TYPE;
   createdAt: string;

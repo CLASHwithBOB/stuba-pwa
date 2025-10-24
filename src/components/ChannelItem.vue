@@ -18,12 +18,6 @@ const router = useRouter();
     clickable
     @click="router.push(`/channels/${channel.id}`)"
   >
-    <q-item-section avatar>
-      <q-avatar>
-        <q-img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-      </q-avatar>
-    </q-item-section>
-
     <q-item-section class="column message-grid">
       <q-item-label class="text-ellipsis">
         {{ channel.name }}

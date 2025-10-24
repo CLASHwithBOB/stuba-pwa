@@ -1,5 +1,5 @@
-import { axios } from 'src/boot/axios';
 import type { USER_STATUS } from 'src/enums/user-status';
+import { axios } from 'src/lib/axios';
 
 export default { update };
 

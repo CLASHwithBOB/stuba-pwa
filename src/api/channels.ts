@@ -1,6 +1,6 @@
-import { axios } from 'src/boot/axios';
 import type { CHANNEL_TYPE } from 'src/enums/channel-type';
 import { RESPONSE_TYPE } from 'src/enums/response';
+import { axios } from 'src/lib/axios';
 import type { Channel } from 'src/types/models';
 import type { ErrorResponse, RedirectResponse } from 'src/types/responses';
 

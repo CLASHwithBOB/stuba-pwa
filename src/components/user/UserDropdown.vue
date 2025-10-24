@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
+import UserProfile from 'src/components/user/UserProfile.vue';
+import UserSettings from 'src/components/user/UserSettings.vue';
 import { useAuth } from 'src/stores/auth';
 import { ref } from 'vue';
-import UserProfile from './UserProfile.vue';
-import UserSettings from './UserSettings.vue';
 
 const $q = useQuasar();
 const { user } = useAuth();
@@ -37,7 +37,7 @@ function handleSettings() {
     ref="profileRef"
     style="width: 100%; position: relative"
   >
-    <UserProfile :name="user.nickname" :avatar="false || ''" :status="user.status" />
+    <UserProfile :user />
   </div>
 
   <q-menu v-model="showDropdown" :target="profileRef" anchor="top end" self="bottom end">

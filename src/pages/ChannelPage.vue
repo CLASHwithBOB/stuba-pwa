@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ChatBubble from 'src/components/ChatBubble.vue';
-import ChatInput from 'src/components/ChatInput.vue';
+import ChatBubble from 'src/components/chat/ChatBubble.vue';
+import ChatInput from 'src/components/chat/ChatInput.vue';
 import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
 import { ref, watch } from 'vue';

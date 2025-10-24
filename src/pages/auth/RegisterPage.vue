@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import CircleIcon from 'src/components/CircleIcon.vue';
-import PasswordInput from 'src/components/PasswordInput.vue';
+import CircleIcon from 'src/components/ui/CircleIcon.vue';
+import PasswordInput from 'src/components/ui/PasswordInput.vue';
 import { useAuth } from 'src/stores/auth';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
