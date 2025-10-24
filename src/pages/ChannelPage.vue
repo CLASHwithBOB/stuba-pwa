@@ -18,10 +18,15 @@ watch(
   { immediate: true },
 );
 
-const messages = [
+const currentUserNickname = '@Pesho';
+
+const messages = ref([
   { id: 1, text: 'Hello!', user: { nickname: 'Gosho' } },
   { id: 2, text: 'Hi!', sent: true, user: { nickname: 'Pesho' } },
-];
+  { id: 3, text: 'Hey @Pesho, how are you doing?', user: { nickname: 'Gosho' } },
+  { id: 4, text: 'I am doing great, thanks!', sent: true, user: { nickname: 'Pesho' } },
+  { id: 5, text: 'Pesho, did you see the latest updates?', user: { nickname: 'Gosho' } },
+]);
 
 const input = ref('');
 </script>
@@ -35,6 +40,7 @@ const input = ref('');
         :sent="!!message.sent"
         :user="{ nickname: message.user.nickname }"
         :text="[message.text]"
+        :highlight="!message.sent && message.text.includes(currentUserNickname)"
       />
     </q-scroll-area>
     <div class="q-pa-sm" style="background-color: #2c3e50">
