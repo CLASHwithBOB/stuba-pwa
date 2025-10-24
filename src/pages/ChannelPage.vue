@@ -11,12 +11,12 @@ defineProps<{
 }>();
 
 const route = useRoute();
-const channelStore = useChannels();
+const { setCurrentChannel } = useChannels();
 const { user } = useAuth();
 
 watch(
   () => route.params.channelId,
-  () => channelStore.setCurrentChannel(Number(route.params.channelId)),
+  () => setCurrentChannel(Number(route.params.channelId)),
   { immediate: true },
 );
 

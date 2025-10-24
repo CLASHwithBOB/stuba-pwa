@@ -12,6 +12,10 @@ export const useChannels = defineStore('channels', () => {
     if (res) channels.value = res;
   }
 
+  function addChannel(channel: Channel) {
+    channels.value?.unshift(channel);
+  }
+
   function setCurrentChannel(channelId: number | null) {
     if (!channelId) {
       currentChannel.value = null;
@@ -23,5 +27,5 @@ export const useChannels = defineStore('channels', () => {
     currentChannel.value = channels.value.find((c) => c.id === channelId) || null;
   }
 
-  return { channels, currentChannel, loadChannels, setCurrentChannel };
+  return { channels, currentChannel, loadChannels, addChannel, setCurrentChannel };
 });

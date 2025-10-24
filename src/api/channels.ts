@@ -1,6 +1,7 @@
 import type { CHANNEL_TYPE } from 'src/enums/channel-type';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { axios } from 'src/lib/axios';
+import { useChannels } from 'src/stores/channels';
 import type { Channel } from 'src/types/models';
 import type { ErrorResponse, RedirectResponse } from 'src/types/responses';
 
@@ -21,13 +22,18 @@ async function join(params: {
   type: CHANNEL_TYPE;
 }): Promise<RedirectResponse | ErrorResponse> {
   try {
-    await axios.post(`/api/channels`, params);
+    const res = await axios.post(`/api/channels`, params);
+    const channel = res.data.channel as Channel;
+
+    const { addChannel } = useChannels();
+
+    addChannel(channel);
 
     return {
       type: RESPONSE_TYPE.REDIRECT,
-      url: `/channels/${params.name}`,
+      url: `/channels/${channel.id}`,
       notification: {
-        message: `You have joined the channel ${params.name}.`,
+        message: `You have joined the channel ${channel.name}.`,
         color: 'positive',
         position: 'top',
         timeout: 2000,

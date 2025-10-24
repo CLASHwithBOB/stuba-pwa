@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<{ modelValue: string; button?: boolean }>
 
 const $q = useQuasar();
 const { user } = useAuth();
-const channelStore = useChannels();
+const { currentChannel } = useChannels();
 const router = useRouter();
 const { setNotification } = useNotifications();
 
@@ -44,7 +44,7 @@ async function onSubmit() {
   if (!trimmedText) return;
 
   if (trimmedText.startsWith('/')) {
-    const validationError = validate(trimmedText, channelStore.currentChannel !== null);
+    const validationError = validate(trimmedText, currentChannel !== null);
     if (validationError) {
       $q.notify({
         color: 'red-5',
@@ -153,8 +153,8 @@ async function onSubmit() {
   </q-form>
   <HelpDialog v-model="showHelpDialog" />
   <MembersDialog
-    v-if="user && channelStore.currentChannel"
-    :channel="channelStore.currentChannel"
+    v-if="user && currentChannel"
+    :channel="currentChannel"
     :members="[user, user, user, user]"
     v-model="showMembersDialog"
   />
