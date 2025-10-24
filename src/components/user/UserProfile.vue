@@ -12,7 +12,7 @@ defineProps<{ user: User }>();
   >
     <UserAvatar :user />
 
-    <div class="user-info" style="flex: 1; min-width: 0">
+    <div style="flex: 1">
       <div class="text-white text-weight-medium">{{ user.nickname }}</div>
     </div>
 

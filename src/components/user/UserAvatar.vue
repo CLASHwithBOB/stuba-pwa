@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { STATUSES } from 'src/constants/statuses';
-import { User } from 'src/types/models';
+import type { User } from 'src/types/models';
 import { computed } from 'vue';
 
 const props = defineProps<{ user: User }>();
@@ -16,8 +16,8 @@ const initials = computed(() => {
 </script>
 
 <template>
-  <div class="avatar-container relative-position">
-    <q-avatar class="q-mr-sm" size="32px" color="primary" text-color="white">
+  <div class="avatar-container relative-position" style="width: 38px">
+    <q-avatar size="32px" color="primary" text-color="white">
       <q-img v-if="user.avatar" :src="user.avatar" :alt="user.nickname" />
       <span v-else>{{ initials }}</span>
     </q-avatar>
@@ -32,8 +32,8 @@ const initials = computed(() => {
         border-radius: 50%;
         border: 2px solid #2c2f33;
         position: absolute;
-        bottom: -2px;
-        right: 2px;
+        bottom: 0px;
+        right: 4px;
       "
     />
   </div>

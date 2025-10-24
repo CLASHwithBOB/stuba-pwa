@@ -13,7 +13,7 @@ export interface User {
 
 export interface Channel {
   id: number;
-  user_id: string;
+  userId: number;
   name: string;
   type: CHANNEL_TYPE;
   createdAt: string;
