@@ -4,7 +4,8 @@ import { CHANNEL_TYPE } from 'src/enums/channel-type';
 import type { COMMAND_VERB } from 'src/enums/command';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import type { USER_STATUS } from 'src/enums/user-status';
-import type { ErrorResponse, RedirectResponse } from 'src/types/responses';
+import { useChannels } from 'src/stores/channels';
+import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 import { error, success } from './notifications';
 
 export function generateUsage(verb: COMMAND_VERB): string {
@@ -97,10 +98,10 @@ export const commands = {
   help,
 };
 
-async function join(args?: string): Promise<RedirectResponse | ErrorResponse> {
+async function join(args?: string): Promise<RedirectResponse | NotificationResponse> {
   if (!args)
     return await Promise.resolve({
-      type: RESPONSE_TYPE.ERROR,
+      type: RESPONSE_TYPE.NOTIFICATION,
       notification: { ...error, message: 'Error: No channel name specified.' },
     } as const);
 
@@ -135,10 +136,16 @@ function revoke(user?: string) {
     : ({ ...error, message: `Error: No user specified.` } as const);
 }
 
-function kick(user?: string) {
-  return user
-    ? ({ ...success, message: `User ${user} successfully kicked from the channel.` } as const)
-    : ({ ...error, message: `Error: No user specified.` } as const);
+async function kick(userNickname: string): Promise<NotificationResponse> {
+  const { currentChannel } = useChannels();
+  if (!currentChannel) {
+    return {
+      type: RESPONSE_TYPE.NOTIFICATION,
+      notification: { ...error, message: `Error: No channel is currently open.` },
+    } as const;
+  }
+
+  return await api.channels.kickMember(currentChannel.id, userNickname);
 }
 
 async function status(status?: string) {

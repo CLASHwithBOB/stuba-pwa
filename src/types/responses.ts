@@ -7,7 +7,7 @@ export interface RedirectResponse {
   notification?: QNotifyCreateOptions;
 }
 
-export interface ErrorResponse {
-  type: RESPONSE_TYPE.ERROR;
+export interface NotificationResponse {
+  type: RESPONSE_TYPE.NOTIFICATION;
   notification: QNotifyCreateOptions;
 }

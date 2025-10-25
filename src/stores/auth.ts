@@ -1,10 +1,9 @@
-import { isAxiosError } from 'axios';
 import { defineStore } from 'pinia';
+import { api } from 'src/api/api';
 import { RESPONSE_TYPE } from 'src/enums/response';
-import { axios } from 'src/lib/axios';
 import { error } from 'src/lib/notifications';
 import type { User } from 'src/types/models';
-import type { ErrorResponse, RedirectResponse } from 'src/types/responses';
+import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 import { ref } from 'vue';
 
 export const useAuth = defineStore('auth', () => {
@@ -18,95 +17,56 @@ export const useAuth = defineStore('auth', () => {
     return { type: RESPONSE_TYPE.REDIRECT, url: '/dashboard' };
   }
 
+  function notifyError(message: string): NotificationResponse {
+    return {
+      type: RESPONSE_TYPE.NOTIFICATION,
+      notification: {
+        ...error,
+        message,
+      },
+    };
+  }
+
   async function login(payload: {
     email: string;
     password: string;
-  }): Promise<RedirectResponse | ErrorResponse> {
-    try {
-      const result = await axios.post('/auth/login', payload);
+  }): Promise<RedirectResponse | NotificationResponse> {
+    const res = await api.auth.login(payload);
 
-      return authenticate(result.data.token);
-    } catch (e) {
-      const message = isAxiosError(e)
-        ? e?.response?.data?.errors?.[0].message
-        : 'An unknown error occurred during login.';
-
-      return {
-        type: RESPONSE_TYPE.ERROR,
-        notification: {
-          ...error,
-          message,
-        },
-      };
-    }
+    return 'token' in res ? authenticate(res.token) : notifyError(res.error);
   }
 
-  async function register(payload: {
+  async function register(params: {
     nickname: string;
     email: string;
     password: string;
     passwordConfirm: string;
-  }): Promise<RedirectResponse | ErrorResponse> {
-    try {
-      const result = await axios.post('/auth/register', payload);
+  }): Promise<RedirectResponse | NotificationResponse> {
+    const res = await api.auth.register(params);
 
-      return authenticate(result.data.token);
-    } catch (e) {
-      const message = isAxiosError(e)
-        ? e?.response?.data?.errors?.[0].message
-        : 'An unknown error occurred during registration.';
-
-      return {
-        type: RESPONSE_TYPE.ERROR,
-        notification: {
-          ...error,
-          message,
-        },
-      };
-    }
+    return 'token' in res ? authenticate(res.token) : notifyError(res.error);
   }
 
-  async function logout(): Promise<RedirectResponse | ErrorResponse> {
-    try {
-      await axios.delete('/auth/logout', {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      });
+  async function logout(): Promise<RedirectResponse | NotificationResponse> {
+    const res = await api.auth.logout(token.value);
 
+    if ('success' in res) {
       user.value = null;
       token.value = null;
       localStorage.removeItem('auth_token');
 
       return { type: RESPONSE_TYPE.REDIRECT, url: '/login' };
-    } catch (e) {
-      const message = isAxiosError(e)
-        ? e?.response?.data?.errors?.[0].message
-        : 'An unknown error occurred during logout.';
-
-      return {
-        type: RESPONSE_TYPE.ERROR,
-        notification: {
-          ...error,
-          message,
-        },
-      };
+    } else {
+      return notifyError(res.error);
     }
   }
 
   async function me(): Promise<User | null> {
-    try {
-      const result = await axios.get('/auth/me', {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      });
-      user.value = result.data.user;
-      return user.value;
-    } catch (error) {
-      console.error('Fetching user failed:', error);
-      return null;
-    }
+    const res = await api.auth.me(token.value);
+
+    user.value = res;
+
+    return res;
   }
 
   return { user, token, login, register, logout, me };

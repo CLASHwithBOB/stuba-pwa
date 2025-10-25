@@ -1,11 +1,23 @@
+import { isAxiosError } from 'axios';
 import type { CHANNEL_TYPE } from 'src/enums/channel-type';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { axios } from 'src/lib/axios';
+import { error, success } from 'src/lib/notifications';
 import { useChannels } from 'src/stores/channels';
 import type { Channel } from 'src/types/models';
-import type { ErrorResponse, RedirectResponse } from 'src/types/responses';
+import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 
-export default { getAll, join };
+export default { getAll, join, kickMember };
+
+function notifyError(message: string): NotificationResponse {
+  return {
+    type: RESPONSE_TYPE.NOTIFICATION,
+    notification: {
+      ...error,
+      message,
+    },
+  };
+}
 
 async function getAll(): Promise<Channel[] | undefined> {
   try {
@@ -20,7 +32,7 @@ async function getAll(): Promise<Channel[] | undefined> {
 async function join(params: {
   name: string;
   type: CHANNEL_TYPE;
-}): Promise<RedirectResponse | ErrorResponse> {
+}): Promise<RedirectResponse | NotificationResponse> {
   try {
     const res = await axios.post(`/api/channels`, params);
     const channel = res.data.channel as Channel;
@@ -33,23 +45,36 @@ async function join(params: {
       type: RESPONSE_TYPE.REDIRECT,
       url: `/channels/${channel.id}`,
       notification: {
+        ...success,
         message: `You have joined the channel ${channel.name}.`,
-        color: 'positive',
-        position: 'top',
-        timeout: 2000,
       },
     };
-  } catch (error) {
-    console.error('Failed to join the channel.', error);
+  } catch (e) {
+    console.error('Failed to join the channel.', e);
+
+    return notifyError('Failed to join the channel.');
+  }
+}
+
+async function kickMember(
+  channelId: number,
+  memberNickname: string,
+): Promise<NotificationResponse> {
+  try {
+    const res = await axios.delete(`/api/channels/${channelId}/members/${memberNickname}`);
 
     return {
-      type: RESPONSE_TYPE.ERROR,
+      type: RESPONSE_TYPE.NOTIFICATION,
       notification: {
-        message: `Failed to join the channel ${params.name}.`,
-        color: 'negative',
-        position: 'top',
-        timeout: 2000,
+        ...success,
+        message: res.data.message,
       },
     };
+  } catch (e) {
+    const message = isAxiosError(e)
+      ? e.response?.data.message
+      : 'An unknown error occurred while kicking the member from the channel.';
+
+    return notifyError(message);
   }
 }
