@@ -234,7 +234,6 @@ function handleDeleteChannel() {
     </q-card>
   </q-dialog>
 </template>
-
 <style scoped>
 .dropdown-menu > :nth-child(2) {
   position: absolute;

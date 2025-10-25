@@ -112,8 +112,8 @@ async function onSubmit() {
         borderless
         dense
         placeholder="Type a message or command..."
-        style="background-color: #3498db; padding-left: 15px; padding-right: 32px"
-        input-style="max-height: 150px; color: #ecf0f1; font-size: 16px;"
+        class="chat-input"
+        input-style="max-height: 150px; font-size: 16px;"
         @keydown.enter.exact.prevent="onSubmit"
         @keydown.shift.enter.stop
       >
@@ -124,7 +124,7 @@ async function onSubmit() {
             dense
             icon="sentiment_satisfied_alt"
             @click="toggleEmojiPicker"
-            style="color: #ecf0f1; position: absolute; right: -25px; bottom: 3px"
+            class="emoji-btn"
           />
         </template>
       </q-input>
@@ -142,14 +142,7 @@ async function onSubmit() {
       @click="showEmojiPicker = false"
       style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 999"
     />
-    <q-btn
-      class="q-ml-sm q-mt-auto"
-      type="submit"
-      rounded
-      outlined
-      icon="send"
-      style="background-color: #5dade2; height: 40px"
-    />
+    <q-btn class="q-ml-sm q-mt-auto send-btn" type="submit" rounded icon="send" />
   </q-form>
   <HelpDialog v-model="showHelpDialog" />
   <MembersDialog
@@ -159,3 +152,21 @@ async function onSubmit() {
     v-model="showMembersDialog"
   />
 </template>
+<style lang="sass" scoped>
+.chat-input
+  background-color: #e6ebf5
+  padding-left: 15px
+  padding-right: 32px
+  color: $text-primary
+
+.emoji-btn
+  color: $text-secondary
+  position: absolute
+  right: -25px
+  bottom: 3px
+
+.send-btn
+  background-color: $primary
+  color: $text-light
+  height: 40px
+</style>

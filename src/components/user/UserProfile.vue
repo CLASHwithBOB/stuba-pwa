@@ -20,6 +20,11 @@ defineProps<{ user: User }>();
   </div>
 </template>
 <style scoped>
+.user-profile {
+  background-color: #e6ebf5;
+  height: 56px;
+}
+
 .clickable-area:hover {
   background-color: #3c4043;
 }

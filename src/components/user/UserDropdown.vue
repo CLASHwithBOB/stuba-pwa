@@ -68,8 +68,7 @@ function handleSettings() {
 
   <UserSettings ref="settingsRef" />
 </template>
-<style scoped>
-.dropdown-item:hover {
-  background-color: #c3ccdb;
-}
+<style lang="sass" scoped>
+.dropdown-item:hover
+  background-color: $gray-100
 </style>

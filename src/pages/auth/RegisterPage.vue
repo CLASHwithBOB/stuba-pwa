@@ -28,7 +28,7 @@ async function onSubmit() {
 <template>
   <q-layout>
     <q-page-container>
-      <q-page class="row bg-purple-1">
+      <q-page class="row auth-page">
         <div class="col-md-6 hidden-xs hidden-sm">
           <q-img
             src="https://thumbs.dreamstime.com/b/registration-online-entering-accurate-information-vital-successful-online-registration-registration-online-vector-304816947.jpg"
@@ -109,3 +109,7 @@ async function onSubmit() {
     </q-page-container>
   </q-layout>
 </template>
+<style lang="sass" scoped>
+.auth-page
+  background-color: $bg-auth
+</style>
