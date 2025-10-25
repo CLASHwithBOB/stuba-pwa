@@ -40,7 +40,7 @@ const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
     <q-page-container>
       <div class="row no-wrap full-height">
         <q-page
-          class="bg-grey-2 column"
+          class="sidebar-page column"
           v-if="isDesktop || mobileView === 'list'"
           :class="!isDesktop && 'col'"
           :style="isDesktop && 'width:300px'"
@@ -66,3 +66,8 @@ const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
     </q-page-container>
   </q-layout>
 </template>
+<style lang="sass" scoped>
+.sidebar-page
+  background-color: #f5f7fb
+  border-right: 1px solid $gray-200
+</style>

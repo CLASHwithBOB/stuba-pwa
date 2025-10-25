@@ -10,9 +10,9 @@ defineProps<{
   <q-chat-message
     :text
     :sent
-    :text-color="sent ? 'white' : 'black'"
-    :bg-color="highlight ? 'orange' : 'primary'"
-    :class="{ 'text-weight-bold': highlight }"
+    text-color="white"
+    :bg-color="highlight ? 'info' : 'primary'"
+    :class="{ 'highlighted-message': highlight }"
   >
     <template v-slot:name>{{ user.nickname }}</template>
     <template v-slot:stamp>7 minutes ago</template>
@@ -25,3 +25,8 @@ defineProps<{
     </template>
   </q-chat-message>
 </template>
+
+<style lang="sass" scoped>
+.highlighted-message :deep(.q-message-text)
+  font-weight: bold
+</style>

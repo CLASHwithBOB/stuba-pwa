@@ -26,15 +26,18 @@ const initials = computed(() => {
       v-if="user.status"
       class="status-indicator absolute-bottom-right"
       :class="`bg-${STATUSES[user.status].color}`"
-      style="
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        border: 2px solid #2c2f33;
-        position: absolute;
-        bottom: 0px;
-        right: 4px;
-      "
     />
   </div>
 </template>
+
+<style scoped>
+.status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #2c2f33;
+  position: absolute;
+  bottom: 0px;
+  right: 4px;
+}
+</style>

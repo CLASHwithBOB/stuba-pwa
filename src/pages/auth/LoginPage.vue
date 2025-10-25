@@ -32,7 +32,7 @@ async function onSubmit() {
 <template>
   <q-layout>
     <q-page-container>
-      <q-page class="row bg-purple-1">
+      <q-page class="row auth-page">
         <div class="col-12 col-md-6 row justify-center items-center">
           <div class="column">
             <div class="row">
@@ -111,3 +111,7 @@ async function onSubmit() {
     </q-page-container>
   </q-layout>
 </template>
+<style lang="sass" scoped>
+.auth-page
+  background-color: $bg-auth
+</style>

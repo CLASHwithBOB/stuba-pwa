@@ -34,7 +34,7 @@ const input = ref('');
 </script>
 
 <template>
-  <q-page v-if="user" class="col" style="display: flex; flex-direction: column">
+  <q-page v-if="user" class="col chat-page" style="display: flex; flex-direction: column">
     <q-scroll-area class="q-px-sm q-pt-sm" style="height: 100%; width: 100%; max-height: 100%">
       <ChatBubble
         v-for="message in messages"
@@ -45,8 +45,17 @@ const input = ref('');
         :highlight="!message.sent && message.text.includes(currentUserNickname)"
       />
     </q-scroll-area>
-    <div class="q-pa-sm" style="background-color: #2c3e50">
+    <div class="q-pa-sm chat-footer">
       <ChatInput v-model="input" />
     </div>
   </q-page>
 </template>
+<style lang="sass" scoped>
+.chat-page
+  background-color: $bg-chat
+
+.chat-footer
+  background-color: $bg-footer
+  padding-top: 8px
+  border-top: 1px solid $gray-200
+</style>
