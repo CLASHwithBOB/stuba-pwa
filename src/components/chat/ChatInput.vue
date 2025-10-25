@@ -79,7 +79,7 @@ async function onSubmit() {
         // $q.notify(await commands.revoke(splitText.slice(1).join(' ')));
         break;
       case '/kick':
-        // $q.notify(await commands.kick(splitText.slice(1).join(' ')));
+        res = await commands.kick(splitText.slice(1).join(' '));
         break;
       case '/status':
         $q.notify(await commands.status(splitText.slice(1).join(' ')));
@@ -93,7 +93,7 @@ async function onSubmit() {
       if (res.notification) setNotification(res.notification);
 
       await router.push(res.url);
-    } else if (res?.type === RESPONSE_TYPE.ERROR) $q.notify(res.notification);
+    } else if (res?.type === RESPONSE_TYPE.NOTIFICATION) $q.notify(res.notification);
   } else {
     // Send message
   }

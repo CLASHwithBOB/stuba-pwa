@@ -3,7 +3,7 @@ import { api } from 'src/api/api';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { error } from 'src/lib/notifications';
 import type { User } from 'src/types/models';
-import type { ErrorResponse, RedirectResponse } from 'src/types/responses';
+import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 import { ref } from 'vue';
 
 export const useAuth = defineStore('auth', () => {
@@ -17,9 +17,9 @@ export const useAuth = defineStore('auth', () => {
     return { type: RESPONSE_TYPE.REDIRECT, url: '/dashboard' };
   }
 
-  function notifyError(message: string): ErrorResponse {
+  function notifyError(message: string): NotificationResponse {
     return {
-      type: RESPONSE_TYPE.ERROR,
+      type: RESPONSE_TYPE.NOTIFICATION,
       notification: {
         ...error,
         message,
@@ -30,7 +30,7 @@ export const useAuth = defineStore('auth', () => {
   async function login(payload: {
     email: string;
     password: string;
-  }): Promise<RedirectResponse | ErrorResponse> {
+  }): Promise<RedirectResponse | NotificationResponse> {
     const res = await api.auth.login(payload);
 
     return 'token' in res ? authenticate(res.token) : notifyError(res.error);
@@ -41,13 +41,13 @@ export const useAuth = defineStore('auth', () => {
     email: string;
     password: string;
     passwordConfirm: string;
-  }): Promise<RedirectResponse | ErrorResponse> {
+  }): Promise<RedirectResponse | NotificationResponse> {
     const res = await api.auth.register(params);
 
     return 'token' in res ? authenticate(res.token) : notifyError(res.error);
   }
 
-  async function logout(): Promise<RedirectResponse | ErrorResponse> {
+  async function logout(): Promise<RedirectResponse | NotificationResponse> {
     const res = await api.auth.logout(token.value);
 
     if ('success' in res) {
