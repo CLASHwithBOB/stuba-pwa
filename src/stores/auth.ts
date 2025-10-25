@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
+import { RESPONSE_TYPE } from 'src/enums/response';
 import { axios } from 'src/lib/axios';
 import type { User } from 'src/types/models';
+import type { RedirectResponse } from 'src/types/responses';
 import { ref } from 'vue';
 
 export const useAuth = defineStore('auth', () => {
@@ -36,7 +38,7 @@ export const useAuth = defineStore('auth', () => {
     }
   }
 
-  async function logout(): Promise<void> {
+  async function logout(): Promise<RedirectResponse | undefined> {
     try {
       await axios.delete('/auth/logout', {
         headers: {
@@ -47,6 +49,8 @@ export const useAuth = defineStore('auth', () => {
       user.value = null;
       token.value = null;
       localStorage.removeItem('auth_token');
+
+      return { type: RESPONSE_TYPE.REDIRECT, url: '/login' };
     } catch (error) {
       console.error('Logout failed:', error);
     }

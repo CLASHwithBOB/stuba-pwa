@@ -2,24 +2,31 @@
 import { useQuasar } from 'quasar';
 import UserProfile from 'src/components/user/UserProfile.vue';
 import UserSettings from 'src/components/user/UserSettings.vue';
+import { RESPONSE_TYPE } from 'src/enums/response';
 import { useAuth } from 'src/stores/auth';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const $q = useQuasar();
+const router = useRouter();
+const { logout } = useAuth();
 const { user } = useAuth();
 
 const showDropdown = ref(false);
 const profileRef = ref();
 const settingsRef = ref();
 
-function handleLogout() {
-  $q.notify({
-    message: 'Logging out...',
-    color: 'primary',
-    position: 'top',
-    timeout: 2000,
-  });
-  showDropdown.value = false;
+async function handleLogout() {
+  const res = await logout();
+
+  if (res?.type === RESPONSE_TYPE.REDIRECT) {
+    await router.push(res.url);
+  } else {
+    $q.notify({
+      type: 'negative',
+      message: 'Logout failed. Please try again.',
+    });
+  }
 }
 
 function handleSettings() {
