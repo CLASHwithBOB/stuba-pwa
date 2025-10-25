@@ -35,15 +35,16 @@ const router = useRouter();
   </q-item>
 </template>
 
-<style scoped>
-.message-grid {
-  display: grid;
-  gap: 2px;
-  padding-top: 2px;
-  justify-content: start;
-}
+<style lang="sass" scoped>
+.message-grid
+  display: grid
+  gap: 2px
+  padding-top: 2px
+  justify-content: start
 
-.highlighted-item .q-item__label {
-  font-weight: bold;
-}
+.highlighted-item
+  background-color: $positive
+
+  .q-item__label
+    font-weight: bold
 </style>
