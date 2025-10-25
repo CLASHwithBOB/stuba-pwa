@@ -22,10 +22,7 @@ async function handleLogout() {
   if (res?.type === RESPONSE_TYPE.REDIRECT) {
     await router.push(res.url);
   } else {
-    $q.notify({
-      type: 'negative',
-      message: 'Logout failed. Please try again.',
-    });
+    $q.notify(res.notification);
   }
 }
 

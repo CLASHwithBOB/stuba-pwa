@@ -1,26 +1,43 @@
+import { isAxiosError } from 'axios';
 import { defineStore } from 'pinia';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { axios } from 'src/lib/axios';
+import { error } from 'src/lib/notifications';
 import type { User } from 'src/types/models';
-import type { RedirectResponse } from 'src/types/responses';
+import type { ErrorResponse, RedirectResponse } from 'src/types/responses';
 import { ref } from 'vue';
 
 export const useAuth = defineStore('auth', () => {
   const user = ref<User | null>(null);
   const token = ref<string | null>(localStorage.getItem('auth_token'));
 
-  function authenticate(newToken: string): void {
+  function authenticate(newToken: string): RedirectResponse {
     token.value = newToken;
     localStorage.setItem('auth_token', newToken);
+
+    return { type: RESPONSE_TYPE.REDIRECT, url: '/dashboard' };
   }
 
-  async function login(payload: { email: string; password: string }): Promise<void> {
+  async function login(payload: {
+    email: string;
+    password: string;
+  }): Promise<RedirectResponse | ErrorResponse> {
     try {
       const result = await axios.post('/auth/login', payload);
 
-      authenticate(result.data.token);
-    } catch (error) {
-      console.error('Login failed:', error);
+      return authenticate(result.data.token);
+    } catch (e) {
+      const message = isAxiosError(e)
+        ? e?.response?.data?.errors?.[0].message
+        : 'An unknown error occurred during login.';
+
+      return {
+        type: RESPONSE_TYPE.ERROR,
+        notification: {
+          ...error,
+          message,
+        },
+      };
     }
   }
 
@@ -29,16 +46,27 @@ export const useAuth = defineStore('auth', () => {
     email: string;
     password: string;
     passwordConfirm: string;
-  }): Promise<void> {
+  }): Promise<RedirectResponse | ErrorResponse> {
     try {
       const result = await axios.post('/auth/register', payload);
-      authenticate(result.data.token);
-    } catch (error) {
-      console.error('Registration failed:', error);
+
+      return authenticate(result.data.token);
+    } catch (e) {
+      const message = isAxiosError(e)
+        ? e?.response?.data?.errors?.[0].message
+        : 'An unknown error occurred during registration.';
+
+      return {
+        type: RESPONSE_TYPE.ERROR,
+        notification: {
+          ...error,
+          message,
+        },
+      };
     }
   }
 
-  async function logout(): Promise<RedirectResponse | undefined> {
+  async function logout(): Promise<RedirectResponse | ErrorResponse> {
     try {
       await axios.delete('/auth/logout', {
         headers: {
@@ -51,8 +79,18 @@ export const useAuth = defineStore('auth', () => {
       localStorage.removeItem('auth_token');
 
       return { type: RESPONSE_TYPE.REDIRECT, url: '/login' };
-    } catch (error) {
-      console.error('Logout failed:', error);
+    } catch (e) {
+      const message = isAxiosError(e)
+        ? e?.response?.data?.errors?.[0].message
+        : 'An unknown error occurred during logout.';
+
+      return {
+        type: RESPONSE_TYPE.ERROR,
+        notification: {
+          ...error,
+          message,
+        },
+      };
     }
   }
 
