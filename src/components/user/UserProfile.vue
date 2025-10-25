@@ -6,26 +6,22 @@ defineProps<{ user: User }>();
 </script>
 
 <template>
-  <div
-    class="user-profile row items-center q-pa-sm cursor-pointer clickable-area"
-    style="background-color: #2c2f33; height: 56px"
-  >
+  <div class="user-profile row items-center q-pa-sm cursor-pointer">
     <UserAvatar :user />
 
     <div style="flex: 1">
-      <div class="text-white text-weight-medium">{{ user.nickname }}</div>
+      <div class="text-weight-medium">{{ user.nickname }}</div>
     </div>
 
-    <q-icon class="q-ml-sm" name="expand_more" color="white" size="16px" />
+    <q-icon class="q-ml-sm" name="expand_more" size="16px" />
   </div>
 </template>
-<style scoped>
-.user-profile {
+<style lang="sass" scoped>
+.user-profile
   background-color: #e6ebf5;
   height: 56px;
-}
 
-.clickable-area:hover {
-  background-color: #3c4043;
-}
+
+.user-profile:hover
+  background-color: $gray-300
 </style>

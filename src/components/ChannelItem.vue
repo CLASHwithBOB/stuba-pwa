@@ -43,8 +43,11 @@ const router = useRouter();
   justify-content: start
 
 .highlighted-item
-  background-color: $positive
+  background-color: $highlighted  
+  color: white
+
 
   .q-item__label
     font-weight: bold
+    color: white
 </style>

@@ -11,7 +11,7 @@ defineProps<{
     :text
     :sent
     text-color="white"
-    :bg-color="highlight ? 'positive' : 'primary'"
+    :bg-color="highlight ? 'info' : 'primary'"
     :class="{ 'highlighted-message': highlight }"
   >
     <template v-slot:name>{{ user.nickname }}</template>
