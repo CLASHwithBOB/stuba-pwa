@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ChatBubble from 'src/components/chat/ChatBubble.vue';
 import ChatInput from 'src/components/chat/ChatInput.vue';
+import TypingIndicator from 'src/components/chat/TypingIndicator.vue';
 import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
 import { ref, watch } from 'vue';
@@ -31,6 +32,11 @@ const messages = ref([
 ]);
 
 const input = ref('');
+
+const typingUsers = ref([
+  { id: 2, nickname: 'Gosho' },
+  { id: 3, nickname: 'Sasho' },
+]);
 </script>
 
 <template>
@@ -46,6 +52,7 @@ const input = ref('');
       />
     </q-scroll-area>
     <div class="q-pa-sm chat-footer">
+      <TypingIndicator :users="typingUsers" />
       <ChatInput v-model="input" />
     </div>
   </q-page>
