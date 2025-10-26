@@ -4,10 +4,10 @@ import { RESPONSE_TYPE } from 'src/enums/response';
 import { axios } from 'src/lib/axios';
 import { error, success } from 'src/lib/notifications';
 import { useChannels } from 'src/stores/channels';
-import type { Channel } from 'src/types/models';
+import type { Channel, User } from 'src/types/models';
 import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 
-export default { getAll, join, kickMember };
+export default { getAll, join, getMembers, kickMember };
 
 function notifyError(message: string): NotificationResponse {
   return {
@@ -21,9 +21,9 @@ function notifyError(message: string): NotificationResponse {
 
 async function getAll(): Promise<Channel[] | undefined> {
   try {
-    const { data } = await axios.get(`/api/channels`);
+    const res = await axios.get(`/api/channels`);
 
-    return data.channels;
+    return res.data;
   } catch (error) {
     console.error(error);
   }
@@ -35,7 +35,7 @@ async function join(params: {
 }): Promise<RedirectResponse | NotificationResponse> {
   try {
     const res = await axios.post(`/api/channels`, params);
-    const channel = res.data.channel as Channel;
+    const channel = res.data as Channel;
 
     const { addChannel } = useChannels();
 
@@ -76,5 +76,15 @@ async function kickMember(
       : 'An unknown error occurred while kicking the member from the channel.';
 
     return notifyError(message);
+  }
+}
+
+async function getMembers(channelId: number): Promise<User[] | undefined> {
+  try {
+    const res = await axios.get(`/api/channels/${channelId}/members`);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
   }
 }
