@@ -35,27 +35,27 @@ async function onSubmit() {
       <q-page class="row auth-page">
         <div class="col-md-6 hidden-xs hidden-sm">
           <q-img
-            src="https://thumbs.dreamstime.com/b/registration-online-entering-accurate-information-vital-successful-online-registration-registration-online-vector-304816947.jpg"
-            alt="Woman chatting on laptop"
+            src="https://img.freepik.com/premium-vector/apply-jobs-abstract-concept-vector-illustration_107173-24641.jpg"
+            alt="Man registering on the app"
             style="object-fit: cover; width: 100%; height: 100%"
           />
         </div>
 
         <div class="col-12 col-md-6 row justify-center items-center">
-          <div class="column">
+          <div class="column" style="margin-top: -30px">
             <div class="row">
-              <q-card class="q-pa-lg shadow-1" bordered style="border-radius: 30px; width: 400px">
+              <q-card class="q-pa-md shadow-1" bordered style="border-radius: 30px; width: 400px">
                 <CircleIcon name="person_add" />
-                <q-card-section class="q-pa-none">
-                  <div class="row justify-center q-mb-md">
-                    <h4 class="text-h4 text-weight-bold q-my-none">Create account</h4>
+                <q-card-section class="q-pa-none q-mt-sm">
+                  <div class="row justify-center q-mb-xs">
+                    <h5 class="text-h5 text-weight-bold q-my-none">Create account</h5>
                   </div>
 
-                  <div class="row justify-center q-mb-lg">
-                    <p class="text-subtitle1 text-grey-9 q-my-none">Sign up to get started</p>
+                  <div class="row justify-center q-mb-sm">
+                    <p class="text-subtitle2 text-grey-9 q-my-none">Sign up to get started</p>
                   </div>
-                  <q-form class="q-gutter-sm" @submit="onSubmit">
-                    <div class="q-mb-sm">
+                  <q-form @submit="onSubmit">
+                    <div class="q-mb-xs">
                       <label class="text-caption text-weight-medium q-mb-xs block"
                         >First Name</label
                       >
@@ -71,7 +71,7 @@ async function onSubmit() {
                       </q-input>
                     </div>
 
-                    <div class="q-mb-sm">
+                    <div class="q-mb-xs">
                       <label class="text-caption text-weight-medium q-mb-xs block">Last Name</label>
                       <q-input v-model="lastName" outlined dense placeholder="Enter your last name">
                         <template v-slot:prepend>
@@ -80,7 +80,7 @@ async function onSubmit() {
                       </q-input>
                     </div>
 
-                    <div class="q-mb-sm">
+                    <div class="q-mb-xs">
                       <label class="text-caption text-weight-medium q-mb-xs block">Nickname</label>
                       <q-input v-model="nickname" outlined dense placeholder="Enter your nickname">
                         <template v-slot:prepend>
@@ -89,7 +89,7 @@ async function onSubmit() {
                       </q-input>
                     </div>
 
-                    <div class="q-mb-sm">
+                    <div class="q-mb-xs">
                       <label class="text-caption text-weight-medium q-mb-xs block"
                         >Email address</label
                       >
@@ -113,13 +113,13 @@ async function onSubmit() {
                     />
 
                     <q-btn
-                      class="full-width q-mb-sm"
+                      class="full-width q-mt-xs q-mb-xs"
                       unelevated
                       type="submit"
                       color="primary"
                       size="md"
                       label="Sign up"
-                      style="height: 42px; font-weight: 600; border-radius: 25px"
+                      style="height: 38px; font-weight: 600; border-radius: 25px"
                     />
 
                     <div class="text-center">
@@ -141,4 +141,6 @@ async function onSubmit() {
 <style lang="sass" scoped>
 .auth-page
   background-color: $bg-auth
+  height: 100vh
+  overflow: hidden
 </style>
