@@ -8,6 +8,8 @@ import { useRouter } from 'vue-router';
 const { register } = useAuth();
 const router = useRouter();
 
+const firstName = ref('');
+const lastName = ref('');
 const nickname = ref('');
 const email = ref('');
 const password = ref('');
@@ -15,6 +17,8 @@ const confirmPassword = ref('');
 
 async function onSubmit() {
   await register({
+    firstName: firstName.value,
+    lastName: lastName.value,
     nickname: nickname.value,
     email: email.value,
     password: password.value,
@@ -52,10 +56,35 @@ async function onSubmit() {
                   </div>
                   <q-form class="q-gutter-sm" @submit="onSubmit">
                     <div class="q-mb-sm">
+                      <label class="text-caption text-weight-medium q-mb-xs block"
+                        >First Name</label
+                      >
+                      <q-input
+                        v-model="firstName"
+                        outlined
+                        dense
+                        placeholder="Enter your first name"
+                      >
+                        <template v-slot:prepend>
+                          <q-icon name="person" size="sm" />
+                        </template>
+                      </q-input>
+                    </div>
+
+                    <div class="q-mb-sm">
+                      <label class="text-caption text-weight-medium q-mb-xs block">Last Name</label>
+                      <q-input v-model="lastName" outlined dense placeholder="Enter your last name">
+                        <template v-slot:prepend>
+                          <q-icon name="person" size="sm" />
+                        </template>
+                      </q-input>
+                    </div>
+
+                    <div class="q-mb-sm">
                       <label class="text-caption text-weight-medium q-mb-xs block">Nickname</label>
                       <q-input v-model="nickname" outlined dense placeholder="Enter your nickname">
                         <template v-slot:prepend>
-                          <q-icon name="person" size="sm" />
+                          <q-icon name="tag" size="sm" />
                         </template>
                       </q-input>
                     </div>

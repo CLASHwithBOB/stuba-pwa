@@ -22,6 +22,8 @@ async function login(params: {
 }
 
 async function register(params: {
+  firstName: string;
+  lastName: string;
   nickname: string;
   email: string;
   password: string;
@@ -32,8 +34,6 @@ async function register(params: {
       ...params,
       avatar:
         'https://scontent.fbts12-1.fna.fbcdn.net/v/t39.30808-6/526297249_2210856226089804_6042065527610702923_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=aa7b47&_nc_ohc=QvvHJZCUGoIQ7kNvwHU-Y8i&_nc_oc=AdlXduEpNY-boFiKRxGolP4dTag0xDjBLv0urDZfm7Mvn5UWBNaw6OeHBty58LE5vbw&_nc_zt=23&_nc_ht=scontent.fbts12-1.fna&_nc_gid=FrVt_rPyUNVG1K6VVhwEkw&oh=00_AffPYhFeRg8MMz4ZJrmiEGAHOgYDktEjURgbaIyzeZZx5g&oe=69028F80',
-      firstName: 'John',
-      lastName: 'Doe',
     };
     const res = await axios.post('/auth/register', p);
 

@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 
 const props = defineProps<{
-  users: Array<{ id: number; nickname: string }>;
+  users: { id: number; nickname: string }[];
 }>();
 
 const selectedUser = ref<{ id: number; nickname: string } | null>(null);
