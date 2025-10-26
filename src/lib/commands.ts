@@ -5,6 +5,7 @@ import type { COMMAND_VERB } from 'src/enums/command';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import type { USER_STATUS } from 'src/enums/user-status';
 import { useChannels } from 'src/stores/channels';
+import type { User } from 'src/types/models';
 import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 import { error, success } from './notifications';
 
@@ -120,8 +121,13 @@ function cancel() {
   return { ...success, message: `Successfully left the channel.` } as const;
 }
 
-function list() {
-  return { ...success, message: `Available channels: #general, #random, #help` } as const;
+async function list(): Promise<User[] | undefined> {
+  const { currentChannel } = useChannels();
+  if (!currentChannel) {
+    return undefined;
+  }
+
+  return await api.channels.getMembers(currentChannel.id);
 }
 
 function invite(user?: string) {

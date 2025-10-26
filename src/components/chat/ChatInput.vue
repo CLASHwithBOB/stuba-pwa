@@ -6,6 +6,7 @@ import { commands, validate } from 'src/lib/commands';
 import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
 import { useNotifications } from 'src/stores/notifications';
+import type { User } from 'src/types/models';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import EmojiPicker from 'vue3-emoji-picker';
@@ -24,6 +25,7 @@ const { setNotification } = useNotifications();
 
 const localValue = ref(props.modelValue);
 const showEmojiPicker = ref(false);
+const members = ref<User[]>([]);
 const showMembersDialog = ref(false);
 const showHelpDialog = ref(false);
 const inputRef = ref<HTMLElement | null>(null);
@@ -71,6 +73,7 @@ async function onSubmit() {
         break;
       case '/list':
         showMembersDialog.value = true;
+        members.value = (await commands.list()) as User[];
         break;
       case '/invite':
         // $q.notify(await commands.invite(splitText.slice(1).join(' ')));
@@ -148,7 +151,7 @@ async function onSubmit() {
   <MembersDialog
     v-if="user && currentChannel"
     :channel="currentChannel"
-    :members="[user, user, user, user]"
+    :members
     v-model="showMembersDialog"
   />
 </template>
