@@ -34,25 +34,21 @@ async function onSubmit() {
     <q-page-container>
       <q-page class="row auth-page">
         <div class="col-12 col-md-6 row justify-center items-center">
-          <div class="column">
+          <div class="column q-mt-md">
             <div class="row">
-              <q-card
-                class="q-pa-xl shadow-1"
-                bordered
-                style="border-radius: 30px; width: 400px; max-height: 550px"
-              >
+              <q-card class="q-pa-xl shadow-1" bordered style="border-radius: 30px; width: 400px">
                 <CircleIcon name="login" />
-                <q-card-section class="q-pa-none">
-                  <div class="row justify-center q-mb-lg">
-                    <h4 class="text-h4 text-weight-bold q-my-none">Welcome back</h4>
+                <q-card-section class="q-pa-none q-mt-sm">
+                  <div class="row justify-center q-mb-xs">
+                    <h5 class="text-h5 text-weight-bold q-my-none">Welcome back</h5>
                   </div>
 
-                  <div class="row justify-center q-mb-xl">
-                    <p class="text-subtitle1 text-grey-9 q-my-none">Please enter your details</p>
+                  <div class="row justify-center q-mb-sm">
+                    <p class="text-subtitle2 text-grey-9 q-my-none">Please enter your details</p>
                   </div>
 
-                  <q-form class="q-gutter-md" @submit="onSubmit">
-                    <div class="q-mb-md">
+                  <q-form @submit="onSubmit">
+                    <div class="q-mb-xs">
                       <label class="text-caption text-weight-medium q-mb-xs block"
                         >Email address</label
                       >
@@ -78,13 +74,13 @@ async function onSubmit() {
                     />
 
                     <q-btn
-                      class="full-width q-mb-md"
+                      class="full-width q-mt-xs q-mb-xs"
                       type="submit"
                       unelevated
                       color="primary"
-                      size="lg"
+                      size="md"
                       label="Sign in"
-                      style="height: 48px; font-weight: 600; border-radius: 25px"
+                      style="height: 38px; font-weight: 600; border-radius: 25px"
                     />
 
                     <div class="text-center">
@@ -114,4 +110,6 @@ async function onSubmit() {
 <style lang="sass" scoped>
 .auth-page
   background-color: $bg-auth
+  height: 100vh
+  overflow: hidden
 </style>
