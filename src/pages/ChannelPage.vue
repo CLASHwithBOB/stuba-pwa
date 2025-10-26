@@ -36,6 +36,7 @@ const input = ref('');
 const typingUsers = ref([
   { id: 2, nickname: 'Gosho' },
   { id: 3, nickname: 'Sasho' },
+  { id: 4, nickname: 'Sasho' },
 ]);
 </script>
 

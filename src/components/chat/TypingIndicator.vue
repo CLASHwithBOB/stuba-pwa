@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import ChatBubblePreview from './ChatBubblePreview.vue';
 
 const props = defineProps<{
   users: Array<{ id: number; nickname: string }>;
@@ -49,7 +48,7 @@ function togglePreview(user: { id: number; nickname: string }, event: MouseEvent
     </div>
 
     <div v-if="selectedUser" class="preview-popup" :style="{ left: `${popupLeft}px` }">
-      <ChatBubblePreview :user="selectedUser" :text="['This is a preview message']" />
+      <q-chat-message :text="['This is a preview message']" text-color="white" bg-color="primary" />
     </div>
 
     <div v-if="selectedUser" class="preview-backdrop" @click="selectedUser = null" />
