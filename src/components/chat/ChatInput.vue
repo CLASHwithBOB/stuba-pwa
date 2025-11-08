@@ -69,7 +69,7 @@ async function onSubmit() {
         // $q.notify(await commands.quit());
         break;
       case '/cancel':
-        // $q.notify(await commands.cancel());
+        res = await commands.cancel();
         break;
       case '/list':
         showMembersDialog.value = true;
