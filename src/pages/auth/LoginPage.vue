@@ -22,10 +22,9 @@ async function onSubmit() {
   });
 
   if (res.type === RESPONSE_TYPE.REDIRECT) {
-    await router.push('/dashboard');
-  } else {
-    $q.notify(res.notification);
-  }
+    await router.push(res.url);
+    router.go(0);
+  } else $q.notify(res.notification);
 }
 </script>
 

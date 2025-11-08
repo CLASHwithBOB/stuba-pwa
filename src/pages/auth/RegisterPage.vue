@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { useQuasar } from 'quasar';
 import CircleIcon from 'src/components/ui/CircleIcon.vue';
 import PasswordInput from 'src/components/ui/PasswordInput.vue';
+import { RESPONSE_TYPE } from 'src/enums/response';
 import { useAuth } from 'src/stores/auth';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+const $q = useQuasar();
 const { register } = useAuth();
 const router = useRouter();
 
@@ -16,7 +19,7 @@ const password = ref('');
 const confirmPassword = ref('');
 
 async function onSubmit() {
-  await register({
+  const res = await register({
     firstName: firstName.value,
     lastName: lastName.value,
     nickname: nickname.value,
@@ -25,7 +28,10 @@ async function onSubmit() {
     passwordConfirm: confirmPassword.value,
   });
 
-  await router.push('/dashboard');
+  if (res.type === RESPONSE_TYPE.REDIRECT) {
+    await router.push(res.url);
+    router.go(0);
+  } else if (res.type === RESPONSE_TYPE.NOTIFICATION) $q.notify(res.notification);
 }
 </script>
 
