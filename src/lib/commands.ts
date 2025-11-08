@@ -117,8 +117,16 @@ function quit() {
   return { ...success, message: `Successfully quit the channel.` } as const;
 }
 
-function cancel() {
-  return { ...success, message: `Successfully left the channel.` } as const;
+async function cancel(): Promise<RedirectResponse | NotificationResponse> {
+  const { currentChannel } = useChannels();
+  if (!currentChannel) {
+    return {
+      type: RESPONSE_TYPE.NOTIFICATION,
+      notification: { ...error, message: `Error: No channel is currently open.` },
+    } as const;
+  }
+
+  return await api.members.cancel(currentChannel.id);
 }
 
 async function list(): Promise<User[] | undefined> {
@@ -127,7 +135,7 @@ async function list(): Promise<User[] | undefined> {
     return undefined;
   }
 
-  return await api.channels.getMembers(currentChannel.id);
+  return await api.members.getAll(currentChannel.id);
 }
 
 function invite(user?: string) {
@@ -151,7 +159,7 @@ async function kick(userNickname: string): Promise<NotificationResponse> {
     } as const;
   }
 
-  return await api.channels.kickMember(currentChannel.id, userNickname);
+  return await api.members.kick(currentChannel.id, userNickname);
 }
 
 async function status(status?: string) {
