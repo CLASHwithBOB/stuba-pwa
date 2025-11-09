@@ -16,6 +16,14 @@ export const useChannels = defineStore('channels', () => {
     channels.value?.unshift(channel);
   }
 
+  function removeChannel(channelId: number) {
+    if (!channels.value) return;
+    channels.value = channels.value.filter((c) => c.id !== channelId);
+    if (currentChannel.value?.id === channelId) {
+      currentChannel.value = null;
+    }
+  }
+
   function setCurrentChannel(channelId: number | null) {
     if (!channelId) {
       currentChannel.value = null;
@@ -27,5 +35,5 @@ export const useChannels = defineStore('channels', () => {
     currentChannel.value = channels.value.find((c) => c.id === channelId) || null;
   }
 
-  return { channels, currentChannel, loadChannels, addChannel, setCurrentChannel };
+  return { channels, currentChannel, loadChannels, addChannel, removeChannel, setCurrentChannel };
 });

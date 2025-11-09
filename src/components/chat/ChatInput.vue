@@ -66,7 +66,7 @@ async function onSubmit() {
         res = await commands.join(splitText.slice(1).join(' '));
         break;
       case '/quit':
-        // $q.notify(await commands.quit());
+        res = await commands.quit();
         break;
       case '/cancel':
         res = await commands.cancel();
