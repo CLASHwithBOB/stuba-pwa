@@ -113,8 +113,16 @@ async function join(args?: string): Promise<RedirectResponse | NotificationRespo
   return await api.channels.join({ name, type });
 }
 
-function quit() {
-  return { ...success, message: `Successfully quit the channel.` } as const;
+async function quit(): Promise<RedirectResponse | NotificationResponse> {
+  const { currentChannel } = useChannels();
+  if (!currentChannel) {
+    return {
+      type: RESPONSE_TYPE.NOTIFICATION,
+      notification: { ...error, message: `Error: No channel is currently open.` },
+    } as const;
+  }
+
+  return await api.channels.quit(currentChannel.id);
 }
 
 async function cancel(): Promise<RedirectResponse | NotificationResponse> {

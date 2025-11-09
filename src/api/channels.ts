@@ -6,7 +6,7 @@ import { useChannels } from 'src/stores/channels';
 import type { Channel } from 'src/types/models';
 import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 
-export default { getAll, join };
+export default { getAll, join, quit };
 
 function notifyError(message: string): NotificationResponse {
   return {
@@ -50,6 +50,28 @@ async function join(params: {
     };
   } catch (e) {
     console.error('Failed to join the channel.', e);
+
+    return notifyError('Failed to join the channel.');
+  }
+}
+
+async function quit(id: number): Promise<RedirectResponse | NotificationResponse> {
+  try {
+    await axios.delete(`/api/channels/${id}`);
+    const { removeChannel } = useChannels();
+
+    removeChannel(id);
+
+    return {
+      type: RESPONSE_TYPE.REDIRECT,
+      url: '/dashboard',
+      notification: {
+        ...success,
+        message: `You have quit and deleted the channel.`,
+      },
+    };
+  } catch (e) {
+    console.error('Failed to quit the channel.', e);
 
     return notifyError('Failed to join the channel.');
   }
