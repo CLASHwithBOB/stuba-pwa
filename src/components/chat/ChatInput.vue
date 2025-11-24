@@ -76,7 +76,7 @@ async function onSubmit() {
         members.value = (await commands.list()) as User[];
         break;
       case '/invite':
-        // $q.notify(await commands.invite(splitText.slice(1).join(' ')));
+        res = await commands.invite(splitText.slice(1).join(' '));
         break;
       case '/revoke':
         // $q.notify(await commands.revoke(splitText.slice(1).join(' ')));

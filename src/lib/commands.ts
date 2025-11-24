@@ -146,10 +146,16 @@ async function list(): Promise<User[] | undefined> {
   return await api.members.getAll(currentChannel.id);
 }
 
-function invite(user?: string) {
-  return user
-    ? ({ ...success, message: `Invitation sent to user ${user}.` } as const)
-    : ({ ...error, message: `Error: No user specified.` } as const);
+async function invite(userNickname: string): Promise<NotificationResponse> {
+  const { currentChannel } = useChannels();
+  if (!currentChannel) {
+    return {
+      type: RESPONSE_TYPE.NOTIFICATION,
+      notification: { ...error, message: `Error: No channel is currently open.` },
+    } as const;
+  }
+
+  return await api.members.invite(currentChannel.id, userNickname);
 }
 
 function revoke(user?: string) {
