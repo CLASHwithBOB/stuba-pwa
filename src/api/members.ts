@@ -5,7 +5,7 @@ import { error, success } from 'src/lib/notifications';
 import type { User } from 'src/types/models';
 import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 
-export default { getAll, invite, kick, cancel };
+export default { getAll, invite, kick, revoke, cancel };
 
 function notifyError(message: string): NotificationResponse {
   return {
@@ -42,6 +42,26 @@ async function invite(channelId: number, memberNickname: string): Promise<Notifi
     const message = isAxiosError(e)
       ? e.response?.data.message
       : 'An unknown error occurred while inviting the member to the channel.';
+
+    return notifyError(message);
+  }
+}
+
+async function revoke(channelId: number, memberNickname: string): Promise<NotificationResponse> {
+  try {
+    const res = await axios.put(`/api/channels/${channelId}/members/${memberNickname}`);
+
+    return {
+      type: RESPONSE_TYPE.NOTIFICATION,
+      notification: {
+        ...success,
+        message: res.data.message,
+      },
+    };
+  } catch (e) {
+    const message = isAxiosError(e)
+      ? e.response?.data.message
+      : 'An unknown error occurred while revoking the member from the channel.';
 
     return notifyError(message);
   }

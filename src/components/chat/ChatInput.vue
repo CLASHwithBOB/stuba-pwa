@@ -79,7 +79,7 @@ async function onSubmit() {
         res = await commands.invite(splitText.slice(1).join(' '));
         break;
       case '/revoke':
-        // $q.notify(await commands.revoke(splitText.slice(1).join(' ')));
+        res = await commands.revoke(splitText.slice(1).join(' '));
         break;
       case '/kick':
         res = await commands.kick(splitText.slice(1).join(' '));
