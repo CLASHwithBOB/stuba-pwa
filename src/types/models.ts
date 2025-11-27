@@ -16,6 +16,7 @@ export interface Channel {
   userId: number;
   name: string;
   type: CHANNEL_TYPE;
+  invitedRecently?: boolean;
   createdAt: string;
   updatedAt: string;
 }

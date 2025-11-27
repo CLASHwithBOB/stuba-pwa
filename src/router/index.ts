@@ -39,7 +39,11 @@ export default defineRouter(function (/* { store, ssrContext } */) {
 
     if (auth.token && !auth.user) {
       try {
-        await auth.me();
+        const me = await auth.me();
+
+        if (!me) {
+          localStorage.removeItem('auth_token');
+        }
       } catch (err) {
         console.error('Auth fetch failed:', err);
         await auth.logout();
