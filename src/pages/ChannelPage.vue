@@ -1,27 +1,53 @@
 <script setup lang="ts">
 import ChatBubble from 'src/components/chat/ChatBubble.vue';
 import ChatInput from 'src/components/chat/ChatInput.vue';
+import type { TypingUser } from 'src/components/chat/TypingIndicator.vue';
 import TypingIndicator from 'src/components/chat/TypingIndicator.vue';
+import { socket } from 'src/services/socket';
 import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
-import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 defineProps<{
   isDesktop: boolean;
 }>();
 
 const route = useRoute();
-const { setCurrentChannel } = useChannels();
+const typingUsers = ref<TypingUser[]>([]);
+const { loadChannel, currentChannel } = useChannels();
 const { user } = useAuth();
 
-watch(
-  () => route.params.channelId,
-  () => setCurrentChannel(Number(route.params.channelId)),
-  { immediate: true },
-);
+onMounted(() => {
+  socket.emit('join-channel', Number(route.params.channelId));
 
-const currentUserNickname = `@${user?.nickname}`;
+  socket.on('typing', ({ channelId, text, userId }) => {
+    if (channelId !== Number(route.params.channelId)) return;
+    if (user!.id === userId) return;
+
+    typingUsers.value = typingUsers.value.filter((u) => u.id !== userId);
+    typingUsers.value.push({
+      id: userId,
+      nickname:
+        currentChannel?.members.find((member) => member.id === userId)?.nickname || 'Unknown',
+      message: text,
+    });
+
+    console.log(typingUsers.value);
+  });
+});
+
+onUnmounted(() => {
+  socket.emit('leave-channel', Number(route.params.channelId));
+  socket.off('typing');
+});
+
+onBeforeRouteUpdate(async (to) => {
+  const channelId = Number(to.params.channelId);
+
+  await loadChannel(channelId);
+  socket.emit('join-channel', channelId);
+});
 
 const messages = ref([
   { id: 1, text: 'Hello!', user: { nickname: 'Gosho' } },
@@ -32,12 +58,6 @@ const messages = ref([
 ]);
 
 const input = ref('');
-
-const typingUsers = ref([
-  { id: 2, nickname: 'Gosho' },
-  { id: 3, nickname: 'Sasho' },
-  { id: 4, nickname: 'Sasho' },
-]);
 </script>
 
 <template>
@@ -49,7 +69,7 @@ const typingUsers = ref([
         :sent="!!message.sent"
         :user="{ nickname: message.user.nickname }"
         :text="[message.text]"
-        :highlight="!message.sent && message.text.includes(currentUserNickname)"
+        :highlight="!message.sent && message.text.includes(`@${user?.nickname}`)"
       />
     </q-scroll-area>
     <div class="q-pa-sm chat-footer">

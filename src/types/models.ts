@@ -19,3 +19,7 @@ export interface Channel {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ChannelWithMembers extends Channel {
+  members: User[];
+}

@@ -3,6 +3,7 @@ import { useQuasar } from 'quasar';
 import HelpDialog from 'src/components/HelpDialog.vue';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { commands, validate } from 'src/lib/commands';
+import { socket } from 'src/services/socket';
 import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
 import { useNotifications } from 'src/stores/notifications';
@@ -103,6 +104,14 @@ async function onSubmit() {
 
   localValue.value = '';
 }
+
+function onInput(text: string | number | null) {
+  socket.emit('typing', {
+    text,
+    channelId: currentChannel?.id,
+    userId: user?.id,
+  });
+}
 </script>
 
 <template>
@@ -117,6 +126,7 @@ async function onSubmit() {
         placeholder="Type a message or command..."
         class="chat-input"
         input-style="max-height: 150px; font-size: 16px;"
+        @update:model-value="onInput"
         @keydown.enter.exact.prevent="onSubmit"
         @keydown.shift.enter.stop
       >

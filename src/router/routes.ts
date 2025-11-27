@@ -9,10 +9,10 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/DashboardPage.vue') }],
     meta: { auth: true },
     beforeEnter: async (to, from, next) => {
-      const { loadChannels, setCurrentChannel } = useChannels();
+      const { loadChannels, resetCurrentChannel } = useChannels();
 
       await loadChannels();
-      setCurrentChannel(null);
+      resetCurrentChannel();
 
       next();
     },
@@ -24,19 +24,14 @@ const routes: RouteRecordRaw[] = [
     meta: { auth: true },
     beforeEnter: async (to, from, next) => {
       try {
-        const { loadChannels, setCurrentChannel, channels } = useChannels();
+        const { loadChannels, loadChannel } = useChannels();
 
         await loadChannels();
-
-        if (!channels?.find((c) => c.id === Number(to.params.channelId))) {
-          next('/');
-          return;
-        }
-        setCurrentChannel(Number(to.params.channelId));
+        await loadChannel(Number(to.params.channelId));
 
         next();
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
         next(false);
       }
     },
