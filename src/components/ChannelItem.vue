@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 
 defineProps<{
   channel: Channel;
-  highlight?: boolean;
+  highlight?: boolean | undefined;
 }>();
 
 const router = useRouter();

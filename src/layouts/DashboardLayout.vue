@@ -51,7 +51,7 @@ const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
                 v-for="channel in channels"
                 :key="channel.id"
                 :channel
-                :highlight="channel.id === 1"
+                :highlight="channel.invitedRecently"
               />
             </q-list>
           </q-scroll-area>
