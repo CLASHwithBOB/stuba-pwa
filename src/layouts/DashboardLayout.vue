@@ -10,7 +10,7 @@ import { useRoute, useRouter } from 'vue-router';
 const $q = useQuasar();
 const router = useRouter();
 const route = useRoute();
-const channelStore = useChannels();
+const { currentChannel, channels } = useChannels();
 
 const selectedChannelId = computed(() => route.params?.channelId);
 const isDesktop = computed(() => $q.screen.width >= 830);
@@ -31,7 +31,7 @@ const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
         />
         <q-toolbar-title class="text-unselectable">PingMe</q-toolbar-title>
         <q-toolbar-title class="text-unselectable">
-          {{ channelStore.currentChannel?.name }}
+          {{ currentChannel?.name }}
         </q-toolbar-title>
         <OptionsDropdown :is-admin="true" />
       </q-toolbar>
@@ -48,7 +48,7 @@ const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
           <q-scroll-area class="col">
             <q-list>
               <ChannelItem
-                v-for="channel in channelStore.channels"
+                v-for="channel in channels"
                 :key="channel.id"
                 :channel
                 :highlight="channel.id === 1"

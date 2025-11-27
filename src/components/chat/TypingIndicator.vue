@@ -1,22 +1,43 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+
+export interface TypingUser {
+  id: number;
+  nickname: string;
+  message: string;
+}
 
 const props = defineProps<{
-  users: { id: number; nickname: string }[];
+  users: TypingUser[];
 }>();
 
-const selectedUser = ref<{ id: number; nickname: string } | null>(null);
+watch(
+  () => props.users,
+  () => {
+    if (selectedUser.value?.message === '') {
+      isPopupOpen.value = false;
+      selectedUserId.value = null;
+    }
+  },
+);
+
+const selectedUserId = ref<number | null>(null);
+const selectedUser = computed(() => props.users.find((u) => u.id === selectedUserId.value) || null);
+const isPopupOpen = ref(false);
 const popupLeft = ref(0);
 
 const displayUsers = computed(() => props.users.slice(0, 3));
 
 const typingVerb = computed(() => (props.users.length === 1 ? 'is' : 'are'));
 
-function togglePreview(user: { id: number; nickname: string }, event: MouseEvent) {
-  if (selectedUser.value?.id === user.id) {
-    selectedUser.value = null;
+function togglePreview(user: TypingUser, event: MouseEvent) {
+  if (selectedUserId.value === user.id && isPopupOpen.value) {
+    isPopupOpen.value = false;
+    selectedUserId.value = null;
   } else {
-    selectedUser.value = user;
+    selectedUserId.value = user.id;
+    isPopupOpen.value = true;
+
     const target = event.target as HTMLElement;
     const indicator = target.closest('.typing-indicator') as HTMLElement;
     if (indicator) {
@@ -29,7 +50,7 @@ function togglePreview(user: { id: number; nickname: string }, event: MouseEvent
 </script>
 
 <template>
-  <div v-if="users.length" class="typing-indicator">
+  <div v-if="users.length && users.some((user) => user.message)" class="typing-indicator">
     <div class="typing-text">
       <span v-if="users.length > 3">{{ users.length }} people are typing</span>
       <span v-else>
@@ -47,11 +68,22 @@ function togglePreview(user: { id: number; nickname: string }, event: MouseEvent
       </div>
     </div>
 
-    <div v-if="selectedUser" class="preview-popup" :style="{ left: `${popupLeft}px` }">
-      <q-chat-message :text="['This is a preview message']" text-color="white" bg-color="primary" />
+    <div
+      v-if="isPopupOpen && selectedUser"
+      class="preview-popup"
+      :style="{ left: `${popupLeft}px` }"
+    >
+      <q-chat-message :text="[selectedUser.message]" text-color="white" bg-color="primary" />
     </div>
 
-    <div v-if="selectedUser" class="preview-backdrop" @click="selectedUser = null" />
+    <div
+      v-if="isPopupOpen"
+      class="preview-backdrop"
+      @click="
+        isPopupOpen = false;
+        selectedUserId = null;
+      "
+    />
   </div>
 </template>
 

@@ -2,11 +2,10 @@ import type { CHANNEL_TYPE } from 'src/enums/channel-type';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { axios } from 'src/lib/axios';
 import { error, success } from 'src/lib/notifications';
-import { useChannels } from 'src/stores/channels';
-import type { Channel } from 'src/types/models';
+import type { Channel, ChannelWithMembers } from 'src/types/models';
 import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 
-export default { getAll, join, quit };
+export default { get, getAll, join, quit };
 
 function notifyError(message: string): NotificationResponse {
   return {
@@ -16,6 +15,16 @@ function notifyError(message: string): NotificationResponse {
       message,
     },
   };
+}
+
+async function get(id: number): Promise<ChannelWithMembers | undefined> {
+  try {
+    const res = await axios.get(`/api/channels/${id}`);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function getAll(): Promise<Channel[] | undefined> {
@@ -36,10 +45,6 @@ async function join(params: {
     const res = await axios.post(`/api/channels`, params);
     const channel = res.data as Channel;
 
-    const { addChannel } = useChannels();
-
-    addChannel(channel);
-
     return {
       type: RESPONSE_TYPE.REDIRECT,
       url: `/channels/${channel.id}`,
@@ -58,9 +63,6 @@ async function join(params: {
 async function quit(id: number): Promise<RedirectResponse | NotificationResponse> {
   try {
     await axios.delete(`/api/channels/${id}`);
-    const { removeChannel } = useChannels();
-
-    removeChannel(id);
 
     return {
       type: RESPONSE_TYPE.REDIRECT,
