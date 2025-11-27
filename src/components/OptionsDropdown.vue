@@ -1,12 +1,18 @@
 <script setup lang="ts">
-import { useQuasar } from 'quasar';
+import { api } from 'src/api/api';
+import { CHANNEL_TYPE } from 'src/enums/channel-type';
+import { RESPONSE_TYPE } from 'src/enums/response';
+import { useAuth } from 'src/stores/auth';
+import { useChannels } from 'src/stores/channels';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const $q = useQuasar();
+const router = useRouter();
+const { user } = useAuth();
+const { currentChannel } = useChannels();
+const isAdmin = currentChannel !== null && user?.id === currentChannel.userId;
 
-const props = defineProps<{ isAdmin: boolean }>();
-
-const options = props.isAdmin
+const options = isAdmin
   ? {
       label: 'Delete',
       icon: 'delete',
@@ -20,19 +26,17 @@ const options = props.isAdmin
       action: 'leave',
     };
 
-const showJoinDialog = ref(false);
 const showCreateTypeDialog = ref(false);
 const showCreateNameDialog = ref(false);
 const showDeleteDialog = ref(false);
 
-const joinChannelCode = ref('');
-const channelType = ref('public');
+const channelType = ref<CHANNEL_TYPE>(CHANNEL_TYPE.PUBLIC);
 const channelName = ref('');
 
-function handleAction(action: string) {
+async function handleAction(action: string) {
   switch (action) {
     case 'leave':
-      onLeave();
+      await onLeave();
       break;
     case 'delete':
       showDeleteDialog.value = true;
@@ -40,34 +44,17 @@ function handleAction(action: string) {
   }
 }
 
-function onLeave() {
-  $q.notify({
-    message: 'Leaving...',
-    color: 'primary',
-    position: 'top',
-    timeout: 2000,
-  });
-}
+async function onLeave() {
+  if (!currentChannel) return;
 
-function onJoinChannel() {
-  joinChannelCode.value = '';
-  showJoinDialog.value = true;
-}
-
-function handleJoinChannel() {
-  if (joinChannelCode.value) {
-    $q.notify({
-      message: `Joining channel: ${joinChannelCode.value}`,
-      color: 'positive',
-      position: 'top',
-      timeout: 2000,
-    });
-    showJoinDialog.value = false;
-  }
+  const res = await api.members.cancel(currentChannel.id);
+  if (res.type === RESPONSE_TYPE.REDIRECT) await router.push(res.url);
+  router.go(0);
+  showDeleteDialog.value = false;
 }
 
 function onCreateChannel() {
-  channelType.value = 'public';
+  channelType.value = CHANNEL_TYPE.PUBLIC;
   showCreateTypeDialog.value = true;
 }
 
@@ -77,25 +64,21 @@ function handleChannelTypeSelected() {
   showCreateNameDialog.value = true;
 }
 
-function handleCreateChannel() {
-  if (channelName.value) {
-    $q.notify({
-      message: `Creating ${channelType.value} channel: ${channelName.value}`,
-      color: 'positive',
-      position: 'top',
-      timeout: 2000,
-    });
-    showCreateNameDialog.value = false;
-  }
+async function handleCreateChannel() {
+  if (!channelName.value || !channelType.value) return;
+
+  const res = await api.channels.join({ name: channelName.value, type: channelType.value });
+  if (res.type === RESPONSE_TYPE.REDIRECT) await router.push(res.url);
+  router.go(0);
+  showCreateNameDialog.value = false;
 }
 
-function handleDeleteChannel() {
-  $q.notify({
-    message: 'Deleted successfully',
-    color: 'negative',
-    position: 'top',
-    timeout: 3000,
-  });
+async function handleDeleteChannel() {
+  if (!currentChannel) return;
+
+  const res = await api.channels.quit(currentChannel.id);
+  if (res.type === RESPONSE_TYPE.REDIRECT) await router.push(res.url);
+  router.go(0);
   showDeleteDialog.value = false;
 }
 </script>
@@ -118,16 +101,10 @@ function handleDeleteChannel() {
         <q-item-section class="text-primary"> Create Channel </q-item-section>
       </q-item>
 
-      <q-item class="q-pa-sm" v-close-popup clickable @click="onJoinChannel">
-        <q-item-section avatar>
-          <q-icon name="login" color="primary" />
-        </q-item-section>
-        <q-item-section class="text-primary"> Join Channel </q-item-section>
-      </q-item>
-
-      <q-separator />
+      <q-separator v-if="!!currentChannel" />
 
       <q-item
+        v-if="!!currentChannel"
         class="q-pa-sm"
         v-close-popup
         :key="options.action"
@@ -143,29 +120,6 @@ function handleDeleteChannel() {
       </q-item>
     </q-list>
   </q-btn-dropdown>
-
-  <q-dialog v-model="showJoinDialog" persistent>
-    <q-card style="min-width: 350px">
-      <q-card-section>
-        <div class="text-h6">Join Channel</div>
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        <q-input
-          v-model="joinChannelCode"
-          autofocus
-          dense
-          label="Channel code or name"
-          @keyup.enter="handleJoinChannel"
-        />
-      </q-card-section>
-
-      <q-card-actions align="right">
-        <q-btn v-close-popup flat label="Cancel" color="grey" />
-        <q-btn flat label="Join" color="primary" @click="handleJoinChannel" />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
 
   <q-dialog v-model="showCreateTypeDialog" persistent>
     <q-card style="min-width: 350px">
