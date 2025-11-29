@@ -6,19 +6,40 @@ import TypingIndicator from 'src/components/chat/TypingIndicator.vue';
 import { socket } from 'src/services/socket';
 import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
+import type { Message, MessageWithUser } from 'src/types/models';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 
-defineProps<{
-  isDesktop: boolean;
-}>();
+defineProps<{ isDesktop: boolean }>();
 
 const route = useRoute();
 const typingUsers = ref<TypingUser[]>([]);
 const { loadChannel, currentChannel } = useChannels();
 const { user } = useAuth();
 
+const messages = ref<MessageWithUser[]>([]);
+const input = ref('');
+const scrollArea = ref();
+
+function scrollToBottom() {
+  requestAnimationFrame(() => {
+    const area = scrollArea.value;
+    if (area) {
+      const { verticalSize } = area.getScroll();
+      area.setScrollPosition('vertical', verticalSize, 300);
+    }
+  });
+}
+
 onMounted(() => {
+  currentChannel?.messages.forEach((msg) => {
+    const member = currentChannel?.members.find((m) => m.id === msg.userId);
+    if (!member) return;
+    messages.value.push({ ...msg, user: member });
+  });
+
+  scrollToBottom();
+
   socket.emit('join-channel', Number(route.params.channelId));
 
   socket.on('typing', ({ channelId, text, userId }) => {
@@ -28,56 +49,62 @@ onMounted(() => {
     typingUsers.value = typingUsers.value.filter((u) => u.id !== userId);
     typingUsers.value.push({
       id: userId,
-      nickname:
-        currentChannel?.members.find((member) => member.id === userId)?.nickname || 'Unknown',
+      nickname: currentChannel?.members.find((m) => m.id === userId)?.nickname || 'Unknown',
       message: text,
     });
+  });
 
-    console.log(typingUsers.value);
+  socket.on('message', (message: Message) => {
+    if (message.channelId !== Number(route.params.channelId)) return;
+
+    const member = currentChannel?.members.find((m) => m.id === message.userId);
+    if (!member) return;
+
+    messages.value.push({ ...message, user: member });
+    scrollToBottom();
   });
 });
 
 onUnmounted(() => {
   socket.emit('leave-channel', Number(route.params.channelId));
   socket.off('typing');
+  socket.off('message');
 });
 
 onBeforeRouteUpdate(async (to) => {
   const channelId = Number(to.params.channelId);
-
   await loadChannel(channelId);
   socket.emit('join-channel', channelId);
+  requestAnimationFrame(scrollToBottom);
 });
-
-const messages = ref([
-  { id: 1, text: 'Hello!', user: { nickname: 'Gosho' } },
-  { id: 2, text: 'Hi!', sent: true, user: { nickname: user!.nickname } },
-  { id: 3, text: `Hey @${user!.nickname}, how are you doing?`, user: { nickname: 'Gosho' } },
-  { id: 4, text: 'I am doing great, thanks!', sent: true, user: { nickname: user!.nickname } },
-  { id: 5, text: 'Pesho, did you see the latest updates?', user: { nickname: 'Gosho' } },
-]);
-
-const input = ref('');
 </script>
 
 <template>
   <q-page v-if="user" class="col chat-page" style="display: flex; flex-direction: column">
-    <q-scroll-area class="q-px-sm q-pt-sm" style="height: 100%; width: 100%; max-height: 100%">
+    <q-scroll-area
+      ref="scrollArea"
+      class="q-px-sm q-pt-sm"
+      style="height: 100%; width: 100%; max-height: 100%"
+    >
       <ChatBubble
         v-for="message in messages"
         :key="message.id"
-        :sent="!!message.sent"
-        :user="{ nickname: message.user.nickname }"
-        :text="[message.text]"
-        :highlight="!message.sent && message.text.includes(`@${user?.nickname}`)"
+        :sent="message.userId === user?.id"
+        :user="{ nickname: message.user.nickname, avatar: message.user.avatar || '' }"
+        :text="[message.content]"
+        :highlight="
+          !(message.userId === user?.id) && message.content.includes(`@${user?.nickname}`)
+        "
       />
     </q-scroll-area>
+
     <div class="q-pa-sm chat-footer">
       <TypingIndicator :users="typingUsers" />
       <ChatInput v-model="input" />
     </div>
   </q-page>
 </template>
+
 <style lang="sass" scoped>
 .chat-page
   background-color: $bg-chat

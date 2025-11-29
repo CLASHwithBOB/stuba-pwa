@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { api } from 'src/api/api';
-import type { Channel, ChannelWithMembers } from 'src/types/models';
+import type { Channel, ChannelWithMembersWithMessages } from 'src/types/models';
 import { ref } from 'vue';
 
 export const useChannels = defineStore('channels', () => {
   const channels = ref<Channel[] | null>([]);
-  const currentChannel = ref<ChannelWithMembers | null>(null);
+  const currentChannel = ref<ChannelWithMembersWithMessages | null>(null);
 
   async function loadChannels() {
     const res = await api.channels.getAll();

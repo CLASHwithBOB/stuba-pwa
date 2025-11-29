@@ -2,7 +2,7 @@ import type { CHANNEL_TYPE } from 'src/enums/channel-type';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { axios } from 'src/lib/axios';
 import { error, success } from 'src/lib/notifications';
-import type { Channel, ChannelWithMembers } from 'src/types/models';
+import type { Channel, ChannelWithMembersWithMessages } from 'src/types/models';
 import type { NotificationResponse, RedirectResponse } from 'src/types/responses';
 
 export default { get, getAll, join, quit };
@@ -17,7 +17,7 @@ function notifyError(message: string): NotificationResponse {
   };
 }
 
-async function get(id: number): Promise<ChannelWithMembers | undefined> {
+async function get(id: number): Promise<ChannelWithMembersWithMessages | undefined> {
   try {
     const res = await axios.get(`/api/channels/${id}`);
 

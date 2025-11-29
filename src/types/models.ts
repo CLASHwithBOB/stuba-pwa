@@ -21,6 +21,20 @@ export interface Channel {
   updatedAt: string;
 }
 
-export interface ChannelWithMembers extends Channel {
+export interface Message {
+  id: number;
+  userId: number;
+  channelId: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MessageWithUser extends Message {
+  user: User;
+}
+
+export interface ChannelWithMembersWithMessages extends Channel {
   members: User[];
+  messages: MessageWithUser[];
 }

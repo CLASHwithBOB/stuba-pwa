@@ -99,7 +99,11 @@ async function onSubmit() {
       await router.push(res.url);
     } else if (res?.type === RESPONSE_TYPE.NOTIFICATION) $q.notify(res.notification);
   } else {
-    // Send message
+    socket.emit('message', {
+      text: trimmedText,
+      channelId: currentChannel?.id,
+      userId: user?.id,
+    });
   }
 
   localValue.value = '';
