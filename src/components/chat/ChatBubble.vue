@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  user: { nickname: string };
+  user: { nickname: string; avatar: string };
   text: string[];
   sent?: boolean;
   highlight?: boolean;
