@@ -18,7 +18,7 @@ const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
 </script>
 
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh Lpr lFf" style="height: 100vh">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -34,8 +34,8 @@ const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
       </q-toolbar>
     </q-header>
 
-    <q-page-container>
-      <div class="row no-wrap full-height">
+    <q-page-container class="fit">
+      <div class="row no-wrap fit">
         <q-page
           class="sidebar-page column"
           v-if="isDesktop || mobileView === 'list'"

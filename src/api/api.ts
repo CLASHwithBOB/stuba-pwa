@@ -1,6 +1,7 @@
 import auth from './auth';
 import channels from './channels';
 import members from './members';
+import messages from './messages';
 import user from './user';
 
 export const api = {
@@ -8,4 +9,5 @@ export const api = {
   user,
   channels,
   members,
+  messages,
 };

@@ -1,20 +1,25 @@
 <script setup lang="ts">
-defineProps<{
-  user: { nickname: string; avatar: string };
-  text: string[];
-  sent?: boolean;
-  highlight?: boolean;
+import { useAuth } from 'src/stores/auth';
+import type { MessageWithUser } from 'src/types/models';
+
+const props = defineProps<{
+  message: MessageWithUser;
 }>();
+
+const { user } = useAuth();
+
+const sent = props.message.userId === user?.id;
+const highlight = !sent && props.message.content.includes(`@${user?.nickname}`);
 </script>
 <template>
   <q-chat-message
-    :text
+    :text="[message.content]"
     :sent
     text-color="white"
     :bg-color="highlight ? 'info' : 'primary'"
     :class="{ 'highlighted-message': highlight }"
   >
-    <template v-slot:name>{{ user.nickname }}</template>
+    <template v-slot:name>{{ user?.nickname }}</template>
     <template v-slot:stamp>7 minutes ago</template>
     <template v-slot:avatar>
       <img
