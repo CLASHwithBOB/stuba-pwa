@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { api } from 'src/api/api';
 import ChatBubble from 'src/components/chat/ChatBubble.vue';
 import ChatInput from 'src/components/chat/ChatInput.vue';
 import type { TypingUser } from 'src/components/chat/TypingIndicator.vue';
@@ -7,7 +8,7 @@ import { socket } from 'src/services/socket';
 import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
 import type { Message, MessageWithUser } from 'src/types/models';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 defineProps<{ isDesktop: boolean }>();
@@ -19,27 +20,59 @@ const { user } = useAuth();
 
 const messages = ref<MessageWithUser[]>([]);
 const input = ref('');
-const scrollArea = ref();
+const infiniteScroll = ref();
 
-function scrollToBottom() {
-  requestAnimationFrame(() => {
-    const area = scrollArea.value;
-    if (area) {
-      const { verticalSize } = area.getScroll();
-      area.setScrollPosition('vertical', verticalSize, 300);
-    }
+async function onLoad(index: number, done: (stop?: boolean) => void) {
+  if (!currentChannel) {
+    done(true);
+    return;
+  }
+
+  const res = await api.messages.paginate({
+    channelId: currentChannel.id,
+    beforeId: messages.value[0]?.id,
   });
+
+  if (!res || res.length === 0) {
+    done(true);
+    return;
+  }
+
+  const newMessages: MessageWithUser[] = [];
+  res.forEach((msg) => {
+    const member = currentChannel.members.find((m) => m.id === msg.userId);
+    if (!member) return;
+    newMessages.push({ ...msg, user: member });
+  });
+
+  const wasEmpty = messages.value.length === 0;
+  messages.value = [...newMessages, ...messages.value];
+
+  if (wasEmpty) {
+    await nextTick(() => {
+      scrollToBottom('auto');
+    });
+  }
+
+  done();
+}
+
+function scrollToBottom(behavior: ScrollBehavior = 'smooth') {
+  if (infiniteScroll.value) {
+    const el = infiniteScroll.value.$el as HTMLElement;
+    if (el) {
+      el.scrollTo({ top: el.scrollHeight, behavior });
+
+      if (behavior === 'auto') {
+        setTimeout(() => {
+          el.scrollTop = el.scrollHeight;
+        }, 0);
+      }
+    }
+  }
 }
 
 onMounted(() => {
-  currentChannel?.messages.forEach((msg) => {
-    const member = currentChannel?.members.find((m) => m.id === msg.userId);
-    if (!member) return;
-    messages.value.push({ ...msg, user: member });
-  });
-
-  scrollToBottom();
-
   socket.emit('join-channel', Number(route.params.channelId));
 
   socket.on('typing', ({ channelId, text, userId }) => {
@@ -54,14 +87,17 @@ onMounted(() => {
     });
   });
 
-  socket.on('message', (message: Message) => {
+  socket.on('message', async (message: Message) => {
     if (message.channelId !== Number(route.params.channelId)) return;
 
     const member = currentChannel?.members.find((m) => m.id === message.userId);
     if (!member) return;
 
     messages.value.push({ ...message, user: member });
-    scrollToBottom();
+
+    await nextTick(() => {
+      scrollToBottom();
+    });
   });
 });
 
@@ -74,29 +110,48 @@ onUnmounted(() => {
 onBeforeRouteUpdate(async (to) => {
   const channelId = Number(to.params.channelId);
   await loadChannel(channelId);
+
+  messages.value = [];
+  if (currentChannel) {
+    const initialMessages: MessageWithUser[] = [];
+    currentChannel.messages.forEach((msg) => {
+      const member = currentChannel.members.find((m) => m.id === msg.userId);
+      if (!member) return;
+      initialMessages.push({ ...msg, user: member });
+    });
+    messages.value = initialMessages;
+  }
+
+  if (infiniteScroll.value) {
+    infiniteScroll.value.resume();
+  }
+
   socket.emit('join-channel', channelId);
-  requestAnimationFrame(scrollToBottom);
+  await nextTick(() => {
+    scrollToBottom('auto');
+  });
 });
 </script>
 
 <template>
-  <q-page v-if="user" class="col chat-page" style="display: flex; flex-direction: column">
-    <q-scroll-area
-      ref="scrollArea"
-      class="q-px-sm q-pt-sm"
-      style="height: 100%; width: 100%; max-height: 100%"
-    >
-      <ChatBubble
-        v-for="message in messages"
-        :key="message.id"
-        :sent="message.userId === user?.id"
-        :user="{ nickname: message.user.nickname, avatar: message.user.avatar || '' }"
-        :text="[message.content]"
-        :highlight="
-          !(message.userId === user?.id) && message.content.includes(`@${user?.nickname}`)
-        "
-      />
-    </q-scroll-area>
+  <q-page
+    v-if="user"
+    class="col chat-page"
+    style="display: flex; flex-direction: column; height: 100%; overflow: hidden"
+  >
+    <div class="col" style="overflow: hidden; display: flex; flex-direction: column; min-height: 0">
+      <q-infinite-scroll ref="infiniteScroll" @load="onLoad" reverse class="col scroll">
+        <template #loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner-dots color="primary" size="40px" />
+          </div>
+        </template>
+
+        <div v-for="message in messages" :key="message.id" class="q-px-sm q-pt-sm">
+          <ChatBubble :message="message" />
+        </div>
+      </q-infinite-scroll>
+    </div>
 
     <div class="q-pa-sm chat-footer">
       <TypingIndicator :users="typingUsers" />
