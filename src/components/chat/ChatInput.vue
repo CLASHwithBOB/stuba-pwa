@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
 import { useQuasar } from 'quasar';
 import HelpDialog from 'src/components/HelpDialog.vue';
 import { RESPONSE_TYPE } from 'src/enums/response';
@@ -19,10 +20,13 @@ const props = withDefaults(defineProps<{ modelValue: string; button?: boolean }>
 });
 
 const $q = useQuasar();
-const { user } = useAuth();
-const { currentChannel } = useChannels();
 const router = useRouter();
+const { user } = useAuth();
 const { setNotification } = useNotifications();
+
+const channelsStore = useChannels();
+const { loadChannels } = channelsStore;
+const { currentChannel } = storeToRefs(channelsStore);
 
 const localValue = ref(props.modelValue);
 const showEmojiPicker = ref(false);
@@ -96,12 +100,13 @@ async function onSubmit() {
     if (res?.type === RESPONSE_TYPE.REDIRECT) {
       if (res.notification) setNotification(res.notification);
 
+      await loadChannels();
       await router.push(res.url);
     } else if (res?.type === RESPONSE_TYPE.NOTIFICATION) $q.notify(res.notification);
   } else {
     socket.emit('message', {
       text: trimmedText,
-      channelId: currentChannel?.id,
+      channelId: currentChannel.value?.id,
       userId: user?.id,
     });
   }
@@ -112,7 +117,7 @@ async function onSubmit() {
 function onInput(text: string | number | null) {
   socket.emit('typing', {
     text,
-    channelId: currentChannel?.id,
+    channelId: currentChannel.value?.id,
     userId: user?.id,
   });
 }

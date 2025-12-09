@@ -3,6 +3,8 @@ import type { USER_STATUS } from 'src/enums/user-status';
 
 export interface User {
   id: number;
+  firstName?: string;
+  lastName?: string;
   nickname: string;
   email: string;
   status: USER_STATUS;

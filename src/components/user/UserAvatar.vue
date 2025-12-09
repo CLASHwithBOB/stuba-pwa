@@ -30,14 +30,13 @@ const initials = computed(() => {
   </div>
 </template>
 
-<style scoped>
-.status-indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid #2c2f33;
-  position: absolute;
-  bottom: 0px;
-  right: 4px;
-}
+<style lang="sass" scoped>
+.status-indicator
+  width: 12px
+  height: 12px
+  border-radius: 50%
+  border: 2px solid #2c2f33
+  position: absolute
+  bottom: 0px
+  right: 4px
 </style>
