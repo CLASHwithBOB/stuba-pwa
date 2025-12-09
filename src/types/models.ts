@@ -20,6 +20,10 @@ export interface Channel {
   name: string;
   type: CHANNEL_TYPE;
   invitedRecently?: boolean;
+  lastMessage?: {
+    content: string;
+    userNickname: string;
+  };
   createdAt: string;
   updatedAt: string;
 }
