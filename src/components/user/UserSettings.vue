@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
+import { api } from 'src/api/api';
 import { STATUSES } from 'src/constants/statuses';
+import { RESPONSE_TYPE } from 'src/enums/response';
 import { USER_STATUS } from 'src/enums/user-status';
 import { useAuth } from 'src/stores/auth';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const $q = useQuasar();
+const router = useRouter();
 const { user } = useAuth();
 
 const showDialog = ref(false);
-const editedUserName = ref(user?.nickname);
-const editedUserAvatar = ref('');
+const editedNickname = ref(user?.nickname);
+const editedAvatar = ref(user?.avatar);
 const editedUserStatus = ref(user?.status);
+const editedTaggedNotificationsOnly = ref(user?.taggedNotificationsOnly);
 
 const statusOptions = [
   {
@@ -31,27 +36,20 @@ const statusOptions = [
   },
 ];
 
-function handleSave() {
-  if (!editedUserName.value?.trim()) {
-    $q.notify({
-      message: 'Username cannot be empty',
-      color: 'negative',
-      position: 'top',
-      timeout: 2000,
-    });
+async function handleSave() {
+  const res = await api.user.update({
+    nickname: editedNickname.value,
+    avatar: editedAvatar.value,
+    status: editedUserStatus.value,
+    taggedNotificationsOnly: editedTaggedNotificationsOnly.value,
+  });
+
+  if (res.type === RESPONSE_TYPE.REDIRECT) {
+    router.go(0);
     return;
   }
 
-  $q.notify({
-    message: 'Settings saved successfully',
-    color: 'positive',
-    position: 'top',
-    timeout: 2000,
-  });
-}
-
-function handleCancel() {
-  showDialog.value = false;
+  $q.notify(res.notification);
 }
 
 defineExpose({
@@ -71,11 +69,11 @@ defineExpose({
           <div class="text-subtitle2 q-mb-sm">Avatar</div>
           <div class="row items-center q-gutter-md">
             <q-avatar size="64px" color="primary" text-color="white">
-              <img v-if="editedUserAvatar" :src="editedUserAvatar" alt="User avatar" />
-              <span v-else>{{ editedUserName?.charAt(0).toUpperCase() }}</span>
+              <img v-if="editedAvatar" :src="editedAvatar" alt="User avatar" />
+              <span v-else>{{ editedNickname?.charAt(0).toUpperCase() }}</span>
             </q-avatar>
             <div class="col">
-              <q-input v-model="editedUserAvatar" dense outlined label="Avatar URL" />
+              <q-input v-model="editedAvatar" dense outlined label="Avatar URL" />
             </div>
           </div>
         </div>
@@ -83,7 +81,7 @@ defineExpose({
         <div class="q-mb-md">
           <div class="text-subtitle2 q-mb-sm">Username</div>
           <q-input
-            v-model="editedUserName"
+            v-model="editedNickname"
             dense
             outlined
             label="Username"
@@ -115,10 +113,18 @@ defineExpose({
             </template>
           </q-option-group>
         </div>
+
+        <div class="q-mb-md">
+          <div class="text-subtitle2 q-mb-sm">Notifications</div>
+          <q-toggle
+            v-model="editedTaggedNotificationsOnly"
+            label="Notify only when mentioned (@nickname)"
+          />
+        </div>
       </q-card-section>
 
       <q-card-actions align="right">
-        <q-btn v-close-popup flat label="Cancel" color="grey" @click="handleCancel" />
+        <q-btn v-close-popup flat label="Cancel" color="grey" @click="showDialog = false" />
         <q-btn flat label="Save" color="primary" @click="handleSave" />
       </q-card-actions>
     </q-card>

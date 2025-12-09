@@ -6,6 +6,7 @@ export interface User {
   nickname: string;
   email: string;
   status: USER_STATUS;
+  taggedNotificationsOnly: boolean;
   avatar?: string;
   createdAt: string;
   updatedAt: string;
@@ -34,7 +35,10 @@ export interface MessageWithUser extends Message {
   user: User;
 }
 
-export interface ChannelWithMembersWithMessages extends Channel {
+export interface ChannelWithMembers extends Channel {
   members: User[];
+}
+
+export interface ChannelWithMembersWithMessages extends ChannelWithMembers {
   messages: MessageWithUser[];
 }

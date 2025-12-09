@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { STATUSES } from 'src/constants/statuses';
-import type { User } from 'src/types/models';
+import type { USER_STATUS } from 'src/enums/user-status';
 import { computed } from 'vue';
 
-const props = defineProps<{ user: User }>();
+const props = defineProps<{ nickname: string; avatar: string; status: USER_STATUS }>();
 
 const initials = computed(() => {
-  return props.user.nickname
+  return props.nickname
     ?.split(' ')
     .map((word) => word.charAt(0))
     .join('')
@@ -18,14 +18,14 @@ const initials = computed(() => {
 <template>
   <div class="avatar-container relative-position" style="width: 38px">
     <q-avatar size="32px" color="primary" text-color="white">
-      <q-img v-if="user.avatar" :src="user.avatar" :alt="user.nickname" />
+      <q-img v-if="avatar" :src="avatar" :alt="nickname" />
       <span v-else>{{ initials }}</span>
     </q-avatar>
 
     <div
-      v-if="user.status"
+      v-if="status"
       class="status-indicator absolute-bottom-right"
-      :class="`bg-${STATUSES[user.status].color}`"
+      :class="`bg-${STATUSES[status].color}`"
     />
   </div>
 </template>

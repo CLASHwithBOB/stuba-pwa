@@ -4,16 +4,16 @@ import ChatBubble from 'src/components/chat/ChatBubble.vue';
 import ChatInput from 'src/components/chat/ChatInput.vue';
 import type { TypingUser } from 'src/components/chat/TypingIndicator.vue';
 import TypingIndicator from 'src/components/chat/TypingIndicator.vue';
+import { USER_STATUS } from 'src/enums/user-status';
 import { socket } from 'src/services/socket';
 import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
 import type { Message, MessageWithUser } from 'src/types/models';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
-import { onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { onBeforeRouteUpdate } from 'vue-router';
 
 defineProps<{ isDesktop: boolean }>();
 
-const route = useRoute();
 const typingUsers = ref<TypingUser[]>([]);
 const { loadChannel, currentChannel } = useChannels();
 const { user } = useAuth();
@@ -73,10 +73,8 @@ function scrollToBottom(behavior: ScrollBehavior = 'smooth') {
 }
 
 onMounted(() => {
-  socket.emit('join-channel', Number(route.params.channelId));
-
   socket.on('typing', ({ channelId, text, userId }) => {
-    if (channelId !== Number(route.params.channelId)) return;
+    if (channelId !== currentChannel?.id) return;
     if (user!.id === userId) return;
 
     typingUsers.value = typingUsers.value.filter((u) => u.id !== userId);
@@ -88,7 +86,8 @@ onMounted(() => {
   });
 
   socket.on('message', async (message: Message) => {
-    if (message.channelId !== Number(route.params.channelId)) return;
+    if (message.channelId !== currentChannel?.id) return;
+    if (user && (user.status === USER_STATUS.DND || user.status === USER_STATUS.OFFLINE)) return;
 
     const member = currentChannel?.members.find((m) => m.id === message.userId);
     if (!member) return;
@@ -102,7 +101,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  socket.emit('leave-channel', Number(route.params.channelId));
   socket.off('typing');
   socket.off('message');
 });

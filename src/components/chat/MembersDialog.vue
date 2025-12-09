@@ -37,7 +37,11 @@ const model = computed({
                 align-items: center;
               "
             >
-              <UserAvatar :user="member" />
+              <UserAvatar
+                :nickname="member.nickname"
+                :avatar="member.avatar ?? ''"
+                :status="member.status"
+              />
               <span style="width: fit-content">{{ member.nickname }}</span>
               <span v-if="member.id === channel.userId" class="q-ml-sm" style="color: gray">
                 (Admin)
