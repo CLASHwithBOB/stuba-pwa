@@ -28,6 +28,7 @@ const highlight = !sent && props.message.content.includes(`@${user?.nickname}`);
         :nickname="message.user.nickname"
         :avatar="message.user.avatar ?? ''"
         :status="message.user.status"
+        :style="sent ? 'margin-left: 6px;' : 'margin-right: 6px;'"
       />
     </template>
   </q-chat-message>

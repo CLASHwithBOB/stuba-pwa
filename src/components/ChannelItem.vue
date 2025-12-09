@@ -24,8 +24,11 @@ const router = useRouter();
       </q-item-label>
 
       <q-item-label class="text-ellipsis" caption>
-        Secondary line text.Secondary line text.Secondary line text.Secondary line text.Secondary
-        line text.
+        {{
+          channel.lastMessage
+            ? `${channel.lastMessage.userNickname}: ${channel.lastMessage.content}`
+            : 'No messages yet.'
+        }}
       </q-item-label>
     </q-item-section>
 

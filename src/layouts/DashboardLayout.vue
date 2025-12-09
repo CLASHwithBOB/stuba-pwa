@@ -34,9 +34,11 @@ onMounted(async () => {
     channels.value.forEach((channel) => socket.emit('join-channel', channel.id));
   }
 
-  socket.on('message', (message: Message) => {
+  socket.on('message', async (message: Message) => {
     if (!channels.value) return;
     if (!user || user.status === USER_STATUS.DND || user.status === USER_STATUS.OFFLINE) return;
+
+    await loadChannels();
 
     let member = null;
     let messageChannelName = null;
@@ -58,7 +60,7 @@ onMounted(async () => {
           (user.taggedNotificationsOnly && message.content.includes(`@${user.nickname}`))
         )
           new Notification(`PingMe - ${messageChannelName}`, {
-            body: `${member.nickname}, ${user.nickname}: ${message.content}`,
+            body: `${member.nickname}: ${message.content}`,
           });
     }
   });
