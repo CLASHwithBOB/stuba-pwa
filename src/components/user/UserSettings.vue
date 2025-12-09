@@ -14,6 +14,8 @@ const { user } = useAuth();
 
 const showDialog = ref(false);
 const editedNickname = ref(user?.nickname);
+const editedFirstName = ref(user?.firstName);
+const editedLastName = ref(user?.lastName);
 const editedAvatar = ref(user?.avatar);
 const editedUserStatus = ref(user?.status);
 const editedTaggedNotificationsOnly = ref(user?.taggedNotificationsOnly);
@@ -39,6 +41,8 @@ const statusOptions = [
 async function handleSave() {
   const res = await api.user.update({
     nickname: editedNickname.value,
+    firstName: editedFirstName.value,
+    lastName: editedLastName.value,
     avatar: editedAvatar.value,
     status: editedUserStatus.value,
     taggedNotificationsOnly: editedTaggedNotificationsOnly.value,
@@ -87,6 +91,17 @@ defineExpose({
             label="Username"
             :rules="[(val) => (val && val.length > 0) || 'Username is required']"
           />
+        </div>
+
+        <div class="q-mb-md row q-gutter-md">
+          <div class="col">
+            <div class="text-subtitle2 q-mb-sm">First Name</div>
+            <q-input v-model="editedFirstName" dense outlined label="First Name" />
+          </div>
+          <div class="col">
+            <div class="text-subtitle2 q-mb-sm">Last Name</div>
+            <q-input v-model="editedLastName" dense outlined label="Last Name" />
+          </div>
         </div>
 
         <div class="q-mb-md">

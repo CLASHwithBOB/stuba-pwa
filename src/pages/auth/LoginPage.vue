@@ -13,7 +13,6 @@ const router = useRouter();
 
 const email = ref('');
 const password = ref('');
-const rememberMe = ref(false);
 
 async function onSubmit() {
   const res = await login({
@@ -64,13 +63,6 @@ async function onSubmit() {
                       </q-input>
                     </div>
                     <PasswordInput v-model="password" />
-
-                    <q-checkbox
-                      class="text-caption"
-                      v-model="rememberMe"
-                      label="Remember me"
-                      bordered
-                    />
 
                     <q-btn
                       class="full-width q-mt-xs q-mb-xs"

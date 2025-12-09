@@ -18,6 +18,8 @@ function notifyError(message: string): NotificationResponse {
 }
 
 async function update(params: {
+  firstName?: string | undefined;
+  lastName?: string | undefined;
   nickname?: string | undefined;
   status?: USER_STATUS | undefined;
   avatar?: string | undefined;

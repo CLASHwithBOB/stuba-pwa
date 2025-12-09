@@ -1,30 +1,35 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
 import { api } from 'src/api/api';
 import { CHANNEL_TYPE } from 'src/enums/channel-type';
 import { RESPONSE_TYPE } from 'src/enums/response';
 import { useAuth } from 'src/stores/auth';
 import { useChannels } from 'src/stores/channels';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const { user } = useAuth();
-const { currentChannel } = useChannels();
-const isAdmin = currentChannel !== null && user?.id === currentChannel.userId;
+const { currentChannel } = storeToRefs(useChannels());
 
-const options = isAdmin
-  ? {
-      label: 'Delete',
-      icon: 'delete',
-      color: 'negative',
-      action: 'delete',
-    }
-  : {
-      label: 'Leave',
-      icon: 'exit_to_app',
-      color: 'primary',
-      action: 'leave',
-    };
+const isAdmin = computed(
+  () => currentChannel.value !== null && user?.id === currentChannel.value?.userId,
+);
+const options = computed(() =>
+  isAdmin.value
+    ? {
+        label: 'Delete',
+        icon: 'delete',
+        color: 'negative',
+        action: 'delete',
+      }
+    : {
+        label: 'Leave',
+        icon: 'exit_to_app',
+        color: 'primary',
+        action: 'leave',
+      },
+);
 
 const showCreateTypeDialog = ref(false);
 const showCreateNameDialog = ref(false);
@@ -45,9 +50,9 @@ async function handleAction(action: string) {
 }
 
 async function onLeave() {
-  if (!currentChannel) return;
+  if (!currentChannel.value) return;
 
-  const res = await api.members.cancel(currentChannel.id);
+  const res = await api.members.cancel(currentChannel.value.id);
   if (res.type === RESPONSE_TYPE.REDIRECT) await router.push(res.url);
   router.go(0);
   showDeleteDialog.value = false;
@@ -74,9 +79,9 @@ async function handleCreateChannel() {
 }
 
 async function handleDeleteChannel() {
-  if (!currentChannel) return;
+  if (!currentChannel.value) return;
 
-  const res = await api.channels.quit(currentChannel.id);
+  const res = await api.channels.quit(currentChannel.value.id);
   if (res.type === RESPONSE_TYPE.REDIRECT) await router.push(res.url);
   router.go(0);
   showDeleteDialog.value = false;
@@ -188,10 +193,9 @@ async function handleDeleteChannel() {
     </q-card>
   </q-dialog>
 </template>
-<style scoped>
-.dropdown-menu > :nth-child(2) {
-  position: absolute;
-  top: 4.5px;
-  left: 4.5px;
-}
+<style lang="sass" scoped>
+.dropdown-menu > :nth-child(2)
+  position: absolute
+  top: 4.5px
+  left: 4.5px
 </style>

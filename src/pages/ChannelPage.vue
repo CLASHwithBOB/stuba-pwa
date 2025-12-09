@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
 import { api } from 'src/api/api';
 import ChatBubble from 'src/components/chat/ChatBubble.vue';
 import ChatInput from 'src/components/chat/ChatInput.vue';
@@ -15,7 +16,9 @@ import { onBeforeRouteUpdate } from 'vue-router';
 defineProps<{ isDesktop: boolean }>();
 
 const typingUsers = ref<TypingUser[]>([]);
-const { loadChannel, currentChannel } = useChannels();
+const channelsStore = useChannels();
+const { loadChannel } = channelsStore;
+const { currentChannel } = storeToRefs(channelsStore);
 const { user } = useAuth();
 
 const messages = ref<MessageWithUser[]>([]);
@@ -23,13 +26,13 @@ const input = ref('');
 const infiniteScroll = ref();
 
 async function onLoad(index: number, done: (stop?: boolean) => void) {
-  if (!currentChannel) {
+  if (!currentChannel.value) {
     done(true);
     return;
   }
 
   const res = await api.messages.paginate({
-    channelId: currentChannel.id,
+    channelId: currentChannel.value.id,
     beforeId: messages.value[0]?.id,
   });
 
@@ -40,7 +43,7 @@ async function onLoad(index: number, done: (stop?: boolean) => void) {
 
   const newMessages: MessageWithUser[] = [];
   res.forEach((msg) => {
-    const member = currentChannel.members.find((m) => m.id === msg.userId);
+    const member = currentChannel.value?.members.find((m) => m.id === msg.userId);
     if (!member) return;
     newMessages.push({ ...msg, user: member });
   });
@@ -72,24 +75,26 @@ function scrollToBottom(behavior: ScrollBehavior = 'smooth') {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await loadMessages();
+
   socket.on('typing', ({ channelId, text, userId }) => {
-    if (channelId !== currentChannel?.id) return;
+    if (channelId !== currentChannel.value?.id) return;
     if (user!.id === userId) return;
 
     typingUsers.value = typingUsers.value.filter((u) => u.id !== userId);
     typingUsers.value.push({
       id: userId,
-      nickname: currentChannel?.members.find((m) => m.id === userId)?.nickname || 'Unknown',
+      nickname: currentChannel.value?.members.find((m) => m.id === userId)?.nickname || 'Unknown',
       message: text,
     });
   });
 
   socket.on('message', async (message: Message) => {
-    if (message.channelId !== currentChannel?.id) return;
+    if (message.channelId !== currentChannel.value?.id) return;
     if (user && (user.status === USER_STATUS.DND || user.status === USER_STATUS.OFFLINE)) return;
 
-    const member = currentChannel?.members.find((m) => m.id === message.userId);
+    const member = currentChannel.value?.members.find((m) => m.id === message.userId);
     if (!member) return;
 
     messages.value.push({ ...message, user: member });
@@ -98,6 +103,13 @@ onMounted(() => {
       scrollToBottom();
     });
   });
+
+  socket.on('user-updated', async (userId) => {
+    if (currentChannel.value?.members.some((m) => m.id === userId)) {
+      await loadChannel(currentChannel.value.id);
+      await loadMessages();
+    }
+  });
 });
 
 onUnmounted(() => {
@@ -105,15 +117,12 @@ onUnmounted(() => {
   socket.off('message');
 });
 
-onBeforeRouteUpdate(async (to) => {
-  const channelId = Number(to.params.channelId);
-  await loadChannel(channelId);
-
+async function loadMessages() {
   messages.value = [];
-  if (currentChannel) {
+  if (currentChannel.value) {
     const initialMessages: MessageWithUser[] = [];
-    currentChannel.messages.forEach((msg) => {
-      const member = currentChannel.members.find((m) => m.id === msg.userId);
+    currentChannel.value.messages?.forEach((msg) => {
+      const member = currentChannel.value?.members.find((m) => m.id === msg.userId);
       if (!member) return;
       initialMessages.push({ ...msg, user: member });
     });
@@ -124,10 +133,16 @@ onBeforeRouteUpdate(async (to) => {
     infiniteScroll.value.resume();
   }
 
-  socket.emit('join-channel', channelId);
   await nextTick(() => {
     scrollToBottom('auto');
   });
+}
+
+onBeforeRouteUpdate(async (to) => {
+  const channelId = Number(to.params.channelId);
+  await loadChannel(channelId);
+  await loadMessages();
+  socket.emit('join-channel', channelId);
 });
 </script>
 

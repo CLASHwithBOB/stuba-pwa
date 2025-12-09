@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
 import { useQuasar } from 'quasar';
 import ChannelItem from 'src/components/ChannelItem.vue';
 import OptionsDropdown from 'src/components/OptionsDropdown.vue';
@@ -14,8 +15,11 @@ import { useRoute, useRouter } from 'vue-router';
 const $q = useQuasar();
 const router = useRouter();
 const route = useRoute();
-const { channels } = useChannels();
 const { user } = useAuth();
+
+const channelsStore = useChannels();
+const { loadChannels } = channelsStore;
+const { currentChannel, channels } = storeToRefs(channelsStore);
 
 const selectedChannelId = computed(() => route.params?.channelId);
 const isDesktop = computed(() => $q.screen.width >= 830);
@@ -24,18 +28,20 @@ const mobileView = computed(() => (selectedChannelId.value ? 'chat' : 'list'));
 onMounted(async () => {
   if (Notification.permission !== 'granted') await Notification.requestPermission();
 
-  if (channels?.length) {
-    channels.forEach((channel) => socket.emit('join-channel', channel.id));
+  socket.emit('register', user?.id);
+
+  if (channels.value?.length) {
+    channels.value.forEach((channel) => socket.emit('join-channel', channel.id));
   }
 
   socket.on('message', (message: Message) => {
-    if (!channels) return;
+    if (!channels.value) return;
     if (!user || user.status === USER_STATUS.DND || user.status === USER_STATUS.OFFLINE) return;
 
     let member = null;
     let messageChannelName = null;
 
-    for (const channel of channels) {
+    for (const channel of channels.value) {
       member = channel.members.find((m) => m.id === message.userId);
 
       if (member) {
@@ -56,6 +62,9 @@ onMounted(async () => {
           });
     }
   });
+
+  socket.on('channel-invitation', async () => await loadChannels());
+  socket.on('channel-kick', () => router.go(0));
 });
 </script>
 
@@ -72,6 +81,9 @@ onMounted(async () => {
           @click="router.push('/')"
         />
         <q-toolbar-title class="text-unselectable">PingMe</q-toolbar-title>
+        <q-toolbar-title v-if="currentChannel" class="text-unselectable">
+          {{ currentChannel?.name }}
+        </q-toolbar-title>
         <OptionsDropdown />
       </q-toolbar>
     </q-header>
