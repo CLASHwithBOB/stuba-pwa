@@ -7,7 +7,7 @@ defineProps<{ user: User }>();
 
 <template>
   <div class="user-profile row items-center q-pa-sm cursor-pointer">
-    <UserAvatar :user />
+    <UserAvatar :nickname="user.nickname" :avatar="user.avatar ?? ''" :status="user.status" />
 
     <div style="flex: 1">
       <div class="text-weight-medium">{{ user.nickname }}</div>

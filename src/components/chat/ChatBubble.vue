@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { timeAgo } from 'src/lib/date';
 import { useAuth } from 'src/stores/auth';
 import type { MessageWithUser } from 'src/types/models';
+import UserAvatar from '../user/UserAvatar.vue';
 
 const props = defineProps<{
   message: MessageWithUser;
@@ -19,13 +21,13 @@ const highlight = !sent && props.message.content.includes(`@${user?.nickname}`);
     :bg-color="highlight ? 'info' : 'primary'"
     :class="{ 'highlighted-message': highlight }"
   >
-    <template v-slot:name>{{ user?.nickname }}</template>
-    <template v-slot:stamp>7 minutes ago</template>
+    <template v-slot:name>{{ message.user.nickname }}</template>
+    <template v-slot:stamp>{{ timeAgo(message.createdAt) }}</template>
     <template v-slot:avatar>
-      <img
-        class="q-message-avatar"
-        src="https://cdn.quasar.dev/img/avatar4.jpg"
-        :class="sent ? 'q-message-avatar--sent' : 'q-message-avatar--received'"
+      <user-avatar
+        :nickname="message.user.nickname"
+        :avatar="message.user.avatar ?? ''"
+        :status="message.user.status"
       />
     </template>
   </q-chat-message>
